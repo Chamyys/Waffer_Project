@@ -7,8 +7,8 @@
   "version": "0.0.1",
   "scripts": {
     "prestart": "node ./aspnetcore-https.js",
-    "dev": "npm format && npm lint && npm prestart && vite",
-    "build": "npm prestart && vite build",
+    "dev": "npm run format && npm run lint && npm run prestart && vite",
+    "build": "npm run prestart && vite build",
     "serve": "npm run format && npm run lint && vite preview",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "format": "prettier .  --write"

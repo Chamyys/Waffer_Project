@@ -29,9 +29,12 @@ export default defineConfig({
       key: readFileSync(keyFilePath),
       cert: readFileSync(certFilePath),
     },
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       '^/api/.*': {
-        target: 'https://localhost:7053',
+        target: 'https://localhost:5001', //если рутинг веб апи - вернуть назад
         changeOrigin: true,
         secure: false,
         // rewrite: (path) => path.replace(/^\/api/, '/'),

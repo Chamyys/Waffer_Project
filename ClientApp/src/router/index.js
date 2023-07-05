@@ -24,6 +24,7 @@ const scrollBehavior = (to, from, savedPosition) => {
 }
 
 const routes = [
+  // обработка рутов(которыек не апи)
   {
     path: '/',
     name: 'Home',

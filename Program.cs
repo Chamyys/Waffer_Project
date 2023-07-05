@@ -60,7 +60,7 @@ if (app.Environment.IsDevelopment())
   app.MapToVueCliProxy(
       "{*path}",
       new SpaOptions { SourcePath = "ClientApp" },
-      npmScript: "dev",
+      npmScript: "serve",
       regex: "Compiled successfully!");
 }
 
@@ -71,6 +71,6 @@ app.UseSpa(spa =>
   spa.Options.SourcePath = "ClientApp";
 });
 
-app.MapFallbackToFile("index.html"); ;
+app.MapFallbackToFile("index.html"); ;// все запросы проксируются тут 
 
 app.Run();

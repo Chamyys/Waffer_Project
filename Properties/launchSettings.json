@@ -11,7 +11,7 @@
     "aspnet_core_vite_base_template": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7053;http://localhost:5255",
+      "applicationUrl": "https://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"

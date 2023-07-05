@@ -10,7 +10,7 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <Authors>Sqeel404</Authors>
     <Company>GionDesign</Company>
-    <SpaProxyServerUrl>https://localhost:4173</SpaProxyServerUrl>
+    <SpaProxyServerUrl>https://localhost:8080</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm run serve</SpaProxyLaunchCommand>
     <RootNamespace>aspnet_core_vite_base_template</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -46,7 +46,7 @@
     </Exec>
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
     <Message Importance="high" Text="Restoring dependencies using 'yarn'. This may take several minutes..." />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="yarn" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run" />
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
