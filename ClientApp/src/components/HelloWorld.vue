@@ -35,6 +35,6 @@ const count = ref(0)
 
 <style scoped>
 a {
-  color: #40b983;
+  color: #42b983;
 }
 </style>

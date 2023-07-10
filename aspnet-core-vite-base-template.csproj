@@ -10,8 +10,8 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <Authors>Sqeel404</Authors>
     <Company>GionDesign</Company>
-    <SpaProxyServerUrl>https://localhost:8080</SpaProxyServerUrl>
-    <SpaProxyLaunchCommand>npm run serve</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>https://localhost:3000</SpaProxyServerUrl>
+    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <RootNamespace>aspnet_core_vite_base_template</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>

@@ -1,4 +1,4 @@
-﻿using aspnet_core_vite_base_template.Models.Examples;
+﻿using AspNetCoreVueStarter.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aspnet_core_vite_base_template.Controllers;

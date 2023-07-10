@@ -12,7 +12,7 @@ import './assets/css/style.css'
 const app = createApp(App)
 app.use(store)
 app.use(router)
-//app.use(Vue3Mq)
+app.use(Vue3Mq)
 app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios)
 
