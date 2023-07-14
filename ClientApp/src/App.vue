@@ -1,17 +1,52 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
-import axios from 'axios'
+<template>
+  <div class="wrapper">
+    <div class="wrapper-content">
+      <div class="view">
+        <div class="container">
+          <Hello v-if="!getResult()" @change="onChange" />
 
-const getRequest = async () =>
-  console.log(await axios.get('/api/weatherforecast'))
+          <MyTable v-if="getResult()" :localprop="nmberofpushedbtn" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref, onBeforeMount, onUpdated } from 'vue'
+import MyTable from './vues/Table.vue'
+
+import Hello from './vues/HelloUser.vue'
+
+export default {
+  components: { MyTable, Hello },
+
+  setup() {
+    let nmberofpushedbtn = ref('12')
+    const changed = ref(false)
+    //let currentComponent = ref();
+
+    const onChange = (btnnumber) => {
+      changed.value = !changed.value
+
+      // alert(btnnumber.btnnumber)
+      nmberofpushedbtn.value = btnnumber //выбранное количество строчек
+      console.log(nmberofpushedbtn)
+    }
+    function getResult() {
+      let a = changed.value
+      return a
+    }
+    return {
+      MyTable,
+      Hello,
+      onChange,
+      getResult,
+      changed,
+      nmberofpushedbtn,
+    }
+  },
+}
 </script>
 
-<template>
-  <img class="m-auto" alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
-  <!-- Uncomment the below router-view tag to use vue-router -->
-  <!-- <router-view /> -->
-  <button @click.prevent="getRequest">Click me</button>
-</template>
+<!--<component :is="currentComponent" :key="tab" @change="onChange" />-->
