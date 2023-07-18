@@ -8,6 +8,7 @@ import App from '@/App.vue'
 import { ref, onBeforeMount, toRefs, watch, reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import store from '@/store/index'
+import { useRoute } from 'vue-router'
 
 const arr = ref([])
 const counter = ref(0)
@@ -22,15 +23,36 @@ export default {
   },
 
   setup(props) {
+    //const router = useRouter()
+
+
+
+  
+
+    // router.push('/Table')
     // Now you can access params like:
 
     // let  myPropValue = ref(props.localprop)
     const store = useStore()
 
+
+
+
+
     let currentrows = 5
+
+
+
+    /* Передача количества строк при помощи пропсов!!!!
     let myPropValue = ref(props.localprop)
     currentrows = myPropValue.value.btnnumber
     exportnumber.value = currentrows
+*/
+
+
+
+
+
     // const { localprop: myPropValue } = toRefs(props)
 
     // let myPropValue = ref(10)
@@ -40,6 +62,10 @@ export default {
       // другие переменные состояния
     })
 */
+const route = useRoute()
+    let myPropValue = ref(Number(route.params.btnnumber))
+    currentrows = myPropValue.value
+    exportnumber.value = currentrows
     /*
     watch(
       () => props.localprop,
@@ -50,7 +76,7 @@ export default {
     */
 
     const axiosTest = async () => {
-      const promise = axios.get('api/WeatherForecast/get')
+      const promise = axios.get('https://localhost:3000/api/WeatherForecast/get')
       console.log(promise)
 
       const dataPromise = await promise.then((response) => response.data)
@@ -106,14 +132,17 @@ export default {
 }
 </script>
 <template>
-
   <!-- <router-link to="/">Home</router-link> |-->
   <!--  <router-link to="/bugaga">Table</router-link>
 -->
   <p>{{ myPropValue.btnnumber }}</p>
   <CreationData></CreationData>
 
-  <v-data-table v-model:items-per-page="itemsPerPage">
+
+
+
+
+  <v-data-table  v-model:items-per-page="itemsPerPage">
     <thead>
       <tr>
         <th class="text-left">Номер</th>
@@ -133,8 +162,19 @@ export default {
       </tr>
     </tbody>
   </v-data-table>
-  <div style="height: 50px; width: 100%"></div>
+
+
+
+
+
+
+
+
+
   <div>
+        <div style="height: 50px; width: 100%"></div>
+  <div>
+
     <div>
       <Counter
         style="
@@ -148,6 +188,7 @@ export default {
         @updateColor="onUpdateColor"
       ></Counter>
     </div>
+    
     <div>
       <v-btn
         variant="outlined"
@@ -162,19 +203,51 @@ export default {
         Update Table
       </v-btn>
     </div>
+
+        
+
+
   </div>
 
+</div>
+<div style="height: 50px; width: 100%"></div>
+<footer>
+ 
+  <div style="width: 50%; margin: 0 auto;">
 
+<router-link :to="'/'" >Назад</router-link>
+
+</div>
+
+</footer>
 </template>
+
+<!--
+
+  
+-->
 <style>
-th {
-  text-align: left; /* Выравнивание по левому краю */
-  background: #ccc; /* Цвет фона ячеек */
-  padding: 5px; /* Поля вокруг содержимого ячеек */
-  border: 1px solid black; /* Граница вокруг ячеек */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 }
+
+th {
+  text-align: left;
+  padding: 16px;
+  font-weight: 500;
+  color: #212121;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
 td {
-  padding: 5px; /* Поля вокруг содержимого ячеек */
-  border: 1px solid black; /* Граница вокруг ячеек */
+  text-align: left;
+  padding: 16px;
+  color: #424242;
+  border-bottom: 1px solid #e0e0e0;
 }
 </style>

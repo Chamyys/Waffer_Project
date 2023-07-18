@@ -28,30 +28,35 @@ const scrollBehavior = (to, from, savedPosition) => {
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-    //components: {
-    //default: Home,
-    //},
-    meta: { scrollToTop: true },
-    // props: {
-    //   title: 'Heading',
-    //   subTitle: 'Base Template',
-    //   description: 'version: Sqeel alpha 0.0.1',
-    // },
-  
-  
+    component: HelloUser,
   },
-
   {
-    path: '/bugaga',
-    name: 'Counter',
-    component: () => import('../vues/Table.vue'),
+    path: '/Home',
+    component: Home,
+  },
+  {
+    path: '/Table/:btnnumber',
+    name: 'Table',
+    component: Table,
   },
   {
     path: '/:catchAll(.*)',
     component: NotFound,
   },
+  /*
+  {
+    path: '/',
+    component: HelloUser,
+  },
+  {
+    path: '/table',
+    component: Table,
+  },
+  {
+    path: '/:catchAll(.*)',
+    component: NotFound,
+  },
+  */
 ]
 
 const router = createRouter({
