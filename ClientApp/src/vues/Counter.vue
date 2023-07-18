@@ -1,4 +1,3 @@
-@@ -0,0 +1,33 @@
 <template>
   <v-select
     id="select-id"
@@ -13,9 +12,15 @@
 
 <script>
 export default {
+  props: {
+    defoultnumber: Number,
+  },
+
   data() {
+    // console.log(this.defoultnumber)
+    //alert(this.defoultnumber.value.currentrows)
     return {
-      selectedColor: 5,
+      selectedColor: this.defoultnumber,
     }
   },
   watch: {

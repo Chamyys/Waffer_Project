@@ -1,8 +1,25 @@
-import { createStore } from 'vuex' //общее хранилище
+import { createStore } from 'vuex'
 
-const debug = import.meta.env.DEV
-
-export default createStore({
-  modules: {},
-  strict: debug,
+const store = createStore({
+  state: {
+    title: 'Vuex Store',
+    arrayofWeather: [],
+  },
+  getters: {
+    getweatherarray(state) {
+      return state.arrayofWeather
+    },
+  },
+  mutations: {
+    SAVE_WEATHER_ARRAY(state, title) {
+      state.arrayofWeather.push(title)
+    },
+  },
+  actions: {
+    createWeatherArray({ commit }, title) {
+      commit('SAVE_WEATHER_ARRAY', title)
+    },
+  },
 })
+
+export default store

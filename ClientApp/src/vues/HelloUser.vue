@@ -1,5 +1,31 @@
 @@ -0,0 +1,60 @@
+
+<script>
+import { useRouter, useRoute } from 'vue-router'
+import router from '@/router'
+
+// Используем метод push для перехода на новый маршрут
+
+export default {
+  emits: ['change'],
+  setup(_, { emit }) {
+    const change = (data) => {
+      emit('change', {
+        btnnumber: data.target.innerText, // data.rangeParent.data
+      })
+     // router.push('/Table')
+    }
+
+    return { btnnumber: 0, change }
+  },
+}
+</script>
+
 <template>
+  <v-icon size="large" color="green-darken-2" icon="mdi-domain"></v-icon>
+
+
+
   <h1>Добрый День!</h1>
 
   <v-col cols="12" class="py-2">
@@ -45,17 +71,3 @@
 
   <v-btn icon="$vuetify" variant="plain"> Вернуться назад </v-btn>
 </template>
-<script>
-export default {
-  emits: ['change'],
-  setup(_, { emit }) {
-    const change = (data) => {
-      emit('change', {
-        btnnumber: data.rangeParent.data,
-      })
-    }
-
-    return { btnnumber: 0, change }
-  },
-}
-</script>

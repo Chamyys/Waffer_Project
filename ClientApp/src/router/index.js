@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../components/HelloWorld.vue'
-
+import Table from '../vues/Table.vue'
+import NotFound from '../vues/NotFound.vue'
+import HelloUser from '../vues/HelloUser.vue'
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
     return savedPosition
@@ -27,15 +29,28 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    components: {
-      default: Home,
-    },
+    component: Home,
+    //components: {
+    //default: Home,
+    //},
     meta: { scrollToTop: true },
     // props: {
     //   title: 'Heading',
     //   subTitle: 'Base Template',
     //   description: 'version: Sqeel alpha 0.0.1',
     // },
+  
+  
+  },
+
+  {
+    path: '/bugaga',
+    name: 'Counter',
+    component: () => import('../vues/Table.vue'),
+  },
+  {
+    path: '/:catchAll(.*)',
+    component: NotFound,
   },
 ]
 

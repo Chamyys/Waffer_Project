@@ -5,92 +5,114 @@ import Counter from './Counter.vue'
 import CreationData from './CreationData.vue'
 import { Forecast } from './Forecast'
 import App from '@/App.vue'
-import { ref, onBeforeMount, toRefs, watch, reactive } from 'vue'
+import { ref, onBeforeMount, toRefs, watch, reactive, computed } from 'vue'
+import { useStore } from 'vuex'
+import store from '@/store/index'
+
 const arr = ref([])
 const counter = ref(0)
 const mainArray = []
-let votes = axiosTest()
 
-let currentrows = 5
-
-async function axiosTest() {
-  const promise = axios.get('api/WeatherForecast/get')
-  console.log(promise)
-
-  const dataPromise = await promise.then((response) => response.data)
-  arr.value.length = 0
-
-  for (let i = 0; i < 5; i++) {
-    arr.value.push(dataPromise[i])
-    mainArray[i] = dataPromise[i]
-  }
-
-  console.log(arr)
-
-  return dataPromise
-}
+const exportnumber = ref(0)
 
 export default {
   components: { Counter, CreationData },
   props: {
-    localprop: String,
+    localprop: Number,
   },
 
   setup(props) {
+    // Now you can access params like:
+
     // let  myPropValue = ref(props.localprop)
-     const myPropValue = ref(props.localprop)
+    const store = useStore()
+
+    let currentrows = 5
+    let myPropValue = ref(props.localprop)
+    currentrows = myPropValue.value.btnnumber
+    exportnumber.value = currentrows
     // const { localprop: myPropValue } = toRefs(props)
 
-      watch(
-      () => props.localprop,
-      (newValue) => {
-        myPropValue.value = newValue
-      }
-    ) 
-    
-   // let myPropValue = ref(10)
+    // let myPropValue = ref(10)
     /*
     const state = reactive({
       myPropValue: props.localprop,
       // другие переменные состояния
     })
 */
+    /*
     watch(
       () => props.localprop,
       (newValue) => {
         state.myPropValue = newValue
       }
     )
-    const change = () => {}
+    */
+
+    const axiosTest = async () => {
+      const promise = axios.get('api/WeatherForecast/get')
+      console.log(promise)
+
+      const dataPromise = await promise.then((response) => response.data)
+      arr.value.length = 0
+      store.dispatch('createWeatherArray', dataPromise) //заполнение vuex
+
+      for (let i = 0; i < 5; i++) {
+        arr.value.push(dataPromise[i])
+      }
+
+      arr.value.length = currentrows
+      console.log(arr)
+
+      //const totalNotes = store.state.arrayofWeather //получение из vuex
+
+      // console.log(totalNotes[0][0].date) //вызов поля объекта
+
+      //store.dispatch('createWeatherArray', mainArray) //заполнение vuex
+
+      return dataPromise
+    }
+
     const vote = () => {
       axiosTest()
       arr.value.length = currentrows
       console.log(myPropValue)
     }
     const createrows = (rowsToCreate) => {
-      for (let i = 0; i < rowsToCreate; i++) {
-        arr.value.push(mainArray[5 - rowsToCreate + i])
+      //for (let i = 0; i < rowsToCreate; i++) {
+      // arr.value.push(mainArray[5 - rowsToCreate + i])
+      //}
+      arr.value.length = 0
+      for (let i = 0; i < currentrows; i++) {
+        //  arr.value.push(store.state.arrayofWeather[0][i])
+        arr.value.push(store.getters.getweatherarray[0][i])
       }
     }
+
     const onUpdateColor = (data) => {
-      if (data.selectedColor > currentrows && data.length < createrows) {
+      currentrows = data.selectedColor
+      if (data.selectedColor >= currentrows) {
         createrows(data.selectedColor - currentrows)
       } else {
-        console.log('child component said login', data)
+        // console.log('child component said login', data)
         arr.value.length = data.selectedColor
       }
-      currentrows = data.selectedColor
     }
 
     const votes = ref([])
     arr.value.push(axiosTest())
-    return { arr, vote, onUpdateColor, myPropValue } //labels
+    return { arr, vote, onUpdateColor, myPropValue, exportnumber } //labels
   },
 }
 </script>
 <template>
-  <p>{{ myPropValue }}</p>
+
+  <!-- <router-link to="/">Home</router-link> |-->
+  <!--  <router-link to="/bugaga">Table</router-link>
+-->
+  <p>{{ myPropValue.btnnumber }}</p>
   <CreationData></CreationData>
+
   <v-data-table v-model:items-per-page="itemsPerPage">
     <thead>
       <tr>
@@ -122,6 +144,7 @@ export default {
           padding-left: 17em;
           padding-right: 17em;
         "
+        :defoultnumber="exportnumber"
         @updateColor="onUpdateColor"
       ></Counter>
     </div>
@@ -140,6 +163,8 @@ export default {
       </v-btn>
     </div>
   </div>
+
+
 </template>
 <style>
 th {

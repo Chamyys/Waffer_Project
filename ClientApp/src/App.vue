@@ -3,6 +3,7 @@
     <div class="wrapper-content">
       <div class="view">
         <div class="container">
+
           <Hello v-if="!getResult()" @change="onChange" />
 
           <MyTable v-if="getResult()" :localprop="nmberofpushedbtn" />
@@ -13,9 +14,9 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, onUpdated } from 'vue'
+import { ref, onBeforeMount, onUpdated,computed } from 'vue'
 import MyTable from './vues/Table.vue'
-
+import {useRoute} from 'vue-router'
 import Hello from './vues/HelloUser.vue'
 
 export default {
@@ -25,6 +26,12 @@ export default {
     let nmberofpushedbtn = ref('12')
     const changed = ref(false)
     //let currentComponent = ref();
+
+
+    const route=useRoute();                //router
+    const path = computed(() =>route.path)
+
+
 
     const onChange = (btnnumber) => {
       changed.value = !changed.value
