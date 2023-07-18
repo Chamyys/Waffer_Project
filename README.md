@@ -91,6 +91,7 @@ Response: `[{"date":"2022-06-13T10:22:03.425049+10:00","temperatureC":10,"temper
 ## Dockerize Application [ Work In Progress ]
 
 ### Requirements
+-INSTALL VITE IN CLIENTAPP
 
 - [Docker installed](https://docs.docker.com/get-docker/)
 
