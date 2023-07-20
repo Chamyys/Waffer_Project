@@ -1,7 +1,9 @@
 ﻿using AspNetCoreVueStarter.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Repository;
+namespace Controllers;
 
-namespace aspnet_core_vite_base_template.Controllers;
 
 [ApiController]
 [Route("/api/[controller]/[action]")]
@@ -12,12 +14,19 @@ public class WeatherForecastController : Controller
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-  private readonly ILogger<WeatherForecastController> _logger;
+ 
+  private readonly IMongoRepository _mongoRepository;
+    public WeatherForecastController(IMongoRepository mongoRepository)//
+    {
+        _mongoRepository = mongoRepository;
+    }
 
-  public WeatherForecastController(ILogger<WeatherForecastController> logger)
-  {
-    _logger = logger;
-  }
+ [HttpPost]
+public void Post([FromBody] Entity entity)
+{
+    _mongoRepository.Create(entity);
+}
+
 
   [HttpGet]
   public IEnumerable<WeatherForecast> Get()

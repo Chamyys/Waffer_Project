@@ -3,7 +3,6 @@
 import axios from 'axios'
 import Counter from './Counter.vue'
 import CreationData from './CreationData.vue'
-import { Forecast } from './Forecast'
 import App from '@/App.vue'
 import { ref, onBeforeMount, toRefs, watch, reactive, computed } from 'vue'
 import { useStore } from 'vuex'
@@ -25,33 +24,19 @@ export default {
   setup(props) {
     //const router = useRouter()
 
-
-
-  
-
     // router.push('/Table')
     // Now you can access params like:
 
     // let  myPropValue = ref(props.localprop)
     const store = useStore()
 
-
-
-
-
     let currentrows = 5
-
-
 
     /* Передача количества строк при помощи пропсов!!!!
     let myPropValue = ref(props.localprop)
     currentrows = myPropValue.value.btnnumber
     exportnumber.value = currentrows
 */
-
-
-
-
 
     // const { localprop: myPropValue } = toRefs(props)
 
@@ -62,7 +47,7 @@ export default {
       // другие переменные состояния
     })
 */
-const route = useRoute()
+    const route = useRoute()
     let myPropValue = ref(Number(route.params.btnnumber))
     currentrows = myPropValue.value
     exportnumber.value = currentrows
@@ -76,7 +61,9 @@ const route = useRoute()
     */
 
     const axiosTest = async () => {
-      const promise = axios.get('https://localhost:3000/api/WeatherForecast/get')
+      const promise = axios.get(
+        'https://localhost:3000/api/WeatherForecast/get'
+      )
       console.log(promise)
 
       const dataPromise = await promise.then((response) => response.data)
@@ -138,11 +125,7 @@ const route = useRoute()
   <p>{{ myPropValue.btnnumber }}</p>
   <CreationData></CreationData>
 
-
-
-
-
-  <v-data-table  v-model:items-per-page="itemsPerPage">
+  <v-data-table v-model:items-per-page="itemsPerPage">
     <thead>
       <tr>
         <th class="text-left">Номер</th>
@@ -163,63 +146,45 @@ const route = useRoute()
     </tbody>
   </v-data-table>
 
-
-
-
-
-
-
-
-
   <div>
-        <div style="height: 50px; width: 100%"></div>
-  <div>
-
+    <div style="height: 50px; width: 100%"></div>
     <div>
-      <Counter
-        style="
-          width: 50%;
-          height: 140px;
-          float: left;
-          padding-left: 17em;
-          padding-right: 17em;
-        "
-        :defoultnumber="exportnumber"
-        @updateColor="onUpdateColor"
-      ></Counter>
+      <div>
+        <Counter
+          style="
+            width: 50%;
+            height: 140px;
+            float: left;
+            padding-left: 17em;
+            padding-right: 17em;
+          "
+          :defoultnumber="exportnumber"
+          @updateColor="onUpdateColor"
+        ></Counter>
+      </div>
+
+      <div>
+        <v-btn
+          variant="outlined"
+          style="
+            width: 15%;
+            height: 90px;
+            padding-left: 30em;
+            padding-right: 30em;
+          "
+          @click="vote"
+        >
+          Update Table
+        </v-btn>
+      </div>
     </div>
-    
-    <div>
-      <v-btn
-        variant="outlined"
-        style="
-          width: 15%;
-          height: 90px;
-          padding-left: 30em;
-          padding-right: 30em;
-        "
-        @click="vote"
-      >
-        Update Table
-      </v-btn>
-    </div>
-
-        
-
-
   </div>
-
-</div>
-<div style="height: 50px; width: 100%"></div>
-<footer>
- 
-  <div style="width: 50%; margin: 0 auto;">
-
-<router-link :to="'/'" >Назад</router-link>
-
-</div>
-
-</footer>
+  <div style="height: 50px; width: 100%"></div>
+  <footer>
+    <div style="width: 50%; margin: 0 auto">
+      <router-link :to="'/'">Назад</router-link>
+    </div>
+  </footer>
 </template>
 
 <!--

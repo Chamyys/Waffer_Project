@@ -5,6 +5,7 @@ import store from './store'
 import router from './router'
 import VueAxios from 'vue-axios'
 import { Vue3Mq } from 'vue3-mq'
+import { VDataTable } from 'vuetify/labs/VDataTable'
 //import { createStore } from 'vuex'
 // import styling
 import style from './assets/scss/style.scss'
@@ -36,6 +37,7 @@ const vuex = createStore({
 const vuetify = createVuetify({
   components,
   directives,
+  VDataTable,
   style,
   ssr: true,
 })

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SpaServices;
 using VueCliMiddleware;
-
+using MongoDB.Driver;
+using Repository;
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,9 @@ builder.Services.AddCors(options =>
       );
 });
 
+builder.Services.AddTransient<IMongoRepository, MongoRepository>();
+builder.Services.Configure<IMongoRepository>(builder.Configuration.GetSection("Mongo"));
+builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();

@@ -4,6 +4,10 @@ import Home from '../components/HelloWorld.vue'
 import Table from '../vues/Table.vue'
 import NotFound from '../vues/NotFound.vue'
 import HelloUser from '../vues/HelloUser.vue'
+import EnterVue from '../components/EnterVue.vue'
+import Login from '../components/Login.vue'
+import Measurer from '../components/Measurer.vue'
+
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
     return savedPosition
@@ -26,18 +30,29 @@ const scrollBehavior = (to, from, savedPosition) => {
 }
 
 const routes = [
+  /*
   {
     path: '/',
     component: HelloUser,
   },
+*/
+  {
+    path: '/',
+    component: EnterVue,
+  },
+  {
+    path: '/Measurer',
+    component: Measurer,
+  },
+
   {
     path: '/Home',
     component: Home,
   },
   {
-    path: '/Table/:btnnumber',
-    name: 'Table',
-    component: Table,
+    path: '/Login/:role',
+    name: 'Login',
+    component: Login,
   },
   {
     path: '/:catchAll(.*)',

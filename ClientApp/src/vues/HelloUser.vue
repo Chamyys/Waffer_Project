@@ -28,7 +28,7 @@ export default {
     const change = (data) => {
       let a = data.target.innerText
       // Переходим на маршрут "/results" с параметром "numberOfPushedBtn"
-      router.push({ name: 'Table', params: { btnnumber: a } })
+      router.push({ name: 'NotFound', params: { btnnumber: a } })
     }
 
     return {
