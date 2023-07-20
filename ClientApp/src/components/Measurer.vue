@@ -10,10 +10,11 @@
       >
         <v-list-item
           prepend-avatar="https://katalog-rek.ru/upload/iblock/dbc/SVR-LOGO.png"
-          title="Имя сотрудника"
+          title=""
           nav
         >
           <template #append>
+            {{ username }}
             <v-btn
               variant="text"
               icon="mdi-chevron-left"
@@ -44,65 +45,70 @@
       </v-navigation-drawer>
       <v-main style="height: 80em">
         <div>
-        <h1>Номер пластины</h1>
-        <div style="height: 5em;"></div>
-        <div class="right">
-
-          <div style="border-style: solid;">
-            <Datepicker  inputFormat="dd.MM.yyyy" v-model="date" />
+          <h1>Номер пластины</h1>
+          <div style="height: 5em"></div>
+          <div class="right">
+            <div style="border-style: solid">
+              <Datepicker v-model="date" input-format="dd.MM.yyyy" />
+            </div>
           </div>
-          
 
-        </div>
-       
-        <div class="left">
-        <v-data-table>
-         
-          <thead>
-            <tr>
-              <th class="text-left">Значение</th>
-              <th class="text-left">Этап 1</th>
-              <th class="text-left">Этап 2</th>
-              <th class="text-left">Этап 3</th>
-              <th class="text-left">Этап 4</th>
-            </tr>
-          </thead>
-          
-          <tbody>
-            <tr v-for="(item, index) in arr" :key="item.date">
-              <td>{{ index + 1 }}</td>
-              <td>{{ item.temperatureC }}</td>
-              <td>{{ item.temperatureF }}</td>
-              <td>{{ item.summary }}</td>
-              <td>{{ item.date }}</td>
-            </tr>
-          </tbody>
-        </v-data-table>
-        <div style="height: 5em;"></div>
+          <div class="left">
+            <v-data-table>
+              <thead>
+                <tr>
+                  <th class="text-left">Значение</th>
+                  <th class="text-left">Этап 1</th>
+                  <th class="text-left">Этап 2</th>
+                  <th class="text-left">Этап 3</th>
+                  <th class="text-left">Этап 4</th>
+                </tr>
+              </thead>
 
-      </div>
+              <tbody>
+                <tr v-for="(item, index) in arr" :key="item.date">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ item.temperatureC }}</td>
+                  <td>{{ item.temperatureF }}</td>
+                  <td>{{ item.summary }}</td>
+                  <td>{{ item.date }}</td>
+                </tr>
+              </tbody>
+            </v-data-table>
+            <div style="height: 5em"></div>
 
-        <div>
+            <v-select
+              id="select-id"
+              v-model="currentTechnologistName"
+              label="Ответственный технолог"
+              :items="['А.С. Иванов', 'Б.А. Пушкин', 'В.И.Ленин', 'К.С.Имя']"
+              @change="getCurrentTechnologistName($event)"
+            >
+              {{ item.Text }}
+            </v-select>
+          </div>
+
           <div>
-            <div></div>
+            <div>
+              <div></div>
 
-            <div></div>
+              <div></div>
+            </div>
           </div>
-        </div>
-        <div style="height: 5em"></div>
-        
-        <v-sheet width="400" class="mx-auto">
-          
-          <v-btn type="submit" block class="mt-2" @click="postInfo"
-            >Отправить что-то на сервер</v-btn
-          >
-          <v-btn type="submit" block class="mt-2" @click="getInfo"
-            >Получить что-то с сервера</v-btn
-          >
-          <v-btn type="submit" block class="mt-10" @click="goBack">Выход</v-btn>
-        </v-sheet>
+          <div style="height: 5em"></div>
 
-      </div>
+          <v-sheet width="400" class="mx-auto">
+            <v-btn type="submit" block class="mt-2" @click="postInfo"
+              >Отправить что-то на сервер</v-btn
+            >
+            <v-btn type="submit" block class="mt-2" @click="getInfo"
+              >Получить что-то с сервера</v-btn
+            >
+            <v-btn type="submit" block class="mt-10" @click="goBack"
+              >Выход</v-btn
+            >
+          </v-sheet>
+        </div>
       </v-main>
     </v-layout>
   </v-card>
@@ -113,6 +119,7 @@
   
 -->
 <script>
+import { v4 as uuidv4 } from 'uuid'
 import Datepicker from 'vue3-datepicker'
 import { ref } from 'vue'
 import axios from 'axios'
@@ -122,31 +129,40 @@ import { useRouter } from 'vue-router'
 export default {
   components: { Datepicker },
   setup() {
-    
+    let currentTechnologistName = ref('')
+
+    const getCurrentTechnologistName = (name) => {
+      currentTechnologistName.value = name
+    }
+
     const date = ref(new Date())
     const rail = ref(true)
     const drawer = ref(true)
     const store = useStore()
     const arr = ref([])
     const router = useRouter()
+    const username = (
+      store.getters.getFirstName +
+      ' ' +
+      store.getters.getSecondName
+    ).toString()
 
     let currentrows = 5
 
-    const entity = {
-      id: '12',
-      name: 'finally',
-
-      temperature: 15,
-
-      location: 'Moskow',
-
-      isRainyToday: true,
+    const createWELCOMEBACK = () => {
+      let entity = {
+        id: uuidv4().toString(),
+        Technologist: currentTechnologistName.value,
+        returnedTime: date.value,
+      }
+      return entity
     }
+
     const postInfo = async () => {
       try {
         const response = await axios.post(
           'https://localhost:3000/api/WeatherForecast/Post',
-          entity
+          createWELCOMEBACK()
         )
         console.log(response)
       } catch (error) {
@@ -193,21 +209,23 @@ export default {
       rail,
       date,
       Datepicker,
+      username,
+      currentTechnologistName,
+      getCurrentTechnologistName,
     }
   },
 }
 </script>
 
 <style>
-  
-    div.left {
-      float: right;
-    }
-    div.right{
-      float: right;
-      margin-right: 25%; 
-      padding: 2em; 
-    }
+div.left {
+  float: right;
+}
+div.right {
+  float: right;
+  margin-right: 25%;
+  padding: 2em;
+}
 
 table {
   width: 100%;

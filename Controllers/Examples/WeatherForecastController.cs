@@ -22,7 +22,7 @@ public class WeatherForecastController : Controller
     }
 
  [HttpPost]
-public void Post([FromBody] Entity entity)
+public void Post([FromBody] WELCOMEBACK entity)
 {
     _mongoRepository.Create(entity);
 }
