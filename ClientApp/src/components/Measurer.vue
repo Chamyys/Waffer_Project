@@ -43,8 +43,21 @@
         </v-list>
       </v-navigation-drawer>
       <v-main style="height: 80em">
+        <div>
         <h1>Номер пластины</h1>
+        <div style="height: 5em;"></div>
+        <div class="right">
+
+          <div style="border-style: solid;">
+            <Datepicker  inputFormat="dd.MM.yyyy" v-model="date" />
+          </div>
+          
+
+        </div>
+       
+        <div class="left">
         <v-data-table>
+         
           <thead>
             <tr>
               <th class="text-left">Значение</th>
@@ -54,6 +67,7 @@
               <th class="text-left">Этап 4</th>
             </tr>
           </thead>
+          
           <tbody>
             <tr v-for="(item, index) in arr" :key="item.date">
               <td>{{ index + 1 }}</td>
@@ -64,6 +78,9 @@
             </tr>
           </tbody>
         </v-data-table>
+        <div style="height: 5em;"></div>
+
+      </div>
 
         <div>
           <div>
@@ -73,7 +90,9 @@
           </div>
         </div>
         <div style="height: 5em"></div>
+        
         <v-sheet width="400" class="mx-auto">
+          
           <v-btn type="submit" block class="mt-2" @click="postInfo"
             >Отправить что-то на сервер</v-btn
           >
@@ -82,6 +101,8 @@
           >
           <v-btn type="submit" block class="mt-10" @click="goBack">Выход</v-btn>
         </v-sheet>
+
+      </div>
       </v-main>
     </v-layout>
   </v-card>
@@ -92,13 +113,17 @@
   
 -->
 <script>
+import Datepicker from 'vue3-datepicker'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 export default {
+  components: { Datepicker },
   setup() {
+    
+    const date = ref(new Date())
     const rail = ref(true)
     const drawer = ref(true)
     const store = useStore()
@@ -166,12 +191,24 @@ export default {
       arr,
       drawer,
       rail,
+      date,
+      Datepicker,
     }
   },
 }
 </script>
 
 <style>
+  
+    div.left {
+      float: right;
+    }
+    div.right{
+      float: right;
+      margin-right: 25%; 
+      padding: 2em; 
+    }
+
 table {
   width: 100%;
   border-collapse: collapse;

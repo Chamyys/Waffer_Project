@@ -1,10 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
+
 import store from './store'
 import router from './router'
 import VueAxios from 'vue-axios'
 import { Vue3Mq } from 'vue3-mq'
+import { VDatePicker } from 'vuetify/labs/VDatePicker'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 //import { createStore } from 'vuex'
 // import styling
@@ -38,6 +40,7 @@ const vuetify = createVuetify({
   components,
   directives,
   VDataTable,
+  VDatePicker,
   style,
   ssr: true,
 })
