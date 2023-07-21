@@ -49,24 +49,32 @@
             <h1 style="float: none">Прием пластины</h1>
 
             <div style="float: left">
-              <v-alert v-if="DeliverySuccsess" closable text="Данные успешно загружены на сервер" type="success"   style=" margin-left: 5em;"></v-alert>
+              <v-alert
+                v-if="FormNotComplitedAlert"
+                text="Данные внесены некорректно"
+                type="error"
+                style="margin-left: 5em ; margin-bottom: 2em;"
+              ></v-alert>
+              <v-alert
+                v-if="DeliverySuccsess"
+                closable
+                text="Данные успешно загружены на сервер"
+                type="success"
+                style="margin-left: 5em"
+              ></v-alert>
               <v-alert
                 v-if="renderHashAlert"
-                style=" margin-left: 5em;"
+                style="margin-left: 5em"
                 title="Ваш код для подтверждения операции:"
               >
                 {{ hashCode }}
               </v-alert>
               <v-text-field
                 v-if="renderHashAlert"
-                style="
-                 text-align: center;
-                  margin-top: 2em;
-                  margin-left: 5em;
-                "
+                v-model="textfieldhashconfirmcode"
+                style="text-align: center; margin-top: 2em; margin-left: 5em"
                 label="Введите код поддтверждения"
                 :rules="rules"
-                v-model="textfieldhashconfirmcode"
                 hide-details="auto"
               ></v-text-field>
             </div>
@@ -174,6 +182,7 @@ export default {
     const dynamicServerPushButtonText = ref('Получить код')
     const renderHashAlert = ref(false)
     const DeliverySuccsess = ref(false)
+    const FormNotComplitedAlert = ref(false)
     const date = ref(new Date())
     const rail = ref(true)
     const textfieldhashconfirmcode = ref('')
@@ -184,11 +193,11 @@ export default {
     const hashCode = ref('')
     const router = useRouter()
     let entity = {
-        id: "",
-        Technologist: "",
-        returnedTime: "",
-        Measurer: "",
-      }
+      id: '',
+      Technologist: '',
+      returnedTime: '',
+      Measurer: '',
+    }
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
@@ -197,8 +206,14 @@ export default {
 
     let currentrows = 5
     const isAllFieldsComplitedCheck = (entity) => {
-        if (!entity.id || !entity.Technologist|| !entity.Measurer || hashCode.value != textfieldhashconfirmcode.value) return false
-        else return true
+      if (
+        !entity.id ||
+        !entity.Technologist ||
+         entity.Measurer.length < 2 ||
+        hashCode.value != textfieldhashconfirmcode.value
+      )
+        return false
+      else return true
     }
     const createHashCode = () => {
       if (!isHashGot) {
@@ -207,10 +222,13 @@ export default {
         renderHashAlert.value = true
         dynamicServerPushButtonText.value = 'Отправить данные на сервер'
       } else {
-        if(isAllFieldsComplitedCheck(createWELCOMEBACK()))  postInfo(entity)
-      
+        if (isAllFieldsComplitedCheck(createWELCOMEBACK())) {
+          postInfo(entity)
+      } else {
+          FormNotComplitedAlert.value = true
       }
     }
+  }
     const createWELCOMEBACK = () => {
       const Time = new Date()
       date.value.setHours(Time.getHours() + 3)
@@ -224,20 +242,20 @@ export default {
       }
       return entity
     }
-    
+
     const postInfo = async () => {
       try {
         const response = await axios.post(
           'https://localhost:3000/api/WeatherForecast/Post',
           createWELCOMEBACK()
         )
+        FormNotComplitedAlert.value = false
         renderHashAlert.value = false
         console.log(response)
       } catch (error) {
         console.error(error)
       }
       DeliverySuccsess.value = true
-
     }
 
     const goBack = () => {
@@ -281,6 +299,7 @@ export default {
       date,
       Datepicker,
       username,
+      FormNotComplitedAlert,
       currentTechnologistName,
       getCurrentTechnologistName,
       createHashCode,
@@ -290,11 +309,16 @@ export default {
       DeliverySuccsess,
       rules: [
         (value) => !!value || 'Поле не может быть пустым.',
-        (value) => (value && value.length == hashCode.value.length) || 'Длины кодов подтверждения не совпадают',
-        (value) => (value && (textfieldhashconfirmcode.value == hashCode.value)) || 'Код подтверждения не совпадает',
+        (value) =>
+          (value && value.length == hashCode.value.length) ||
+          'Длины кодов подтверждения не совпадают',
+        (value) =>
+          (value && textfieldhashconfirmcode.value == hashCode.value) ||
+          'Код подтверждения не совпадает',
       ],
     }
   },
+  
 }
 </script>
 
