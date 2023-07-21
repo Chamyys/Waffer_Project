@@ -154,7 +154,7 @@
             <v-btn type="submit" block class="mt-2" @click="createWELCOMEBACK"
               >Получить что-то с сервера</v-btn
             >
-            <v-btn type="submit" block class="mt-10" @click="postInfo"
+            <v-btn type="submit" block class="mt-10" @click="goBack"
               >Выход</v-btn
             >
           </v-sheet>
@@ -217,6 +217,7 @@ export default {
     }
     const createHashCode = () => {
       if (!isHashGot) {
+        DeliverySuccsess.value = false
         isHashGot = true
         hashCode.value = crc32(new Date().toString()).toString(16)
         renderHashAlert.value = true
@@ -255,7 +256,15 @@ export default {
       } catch (error) {
         console.error(error)
       }
+      restartPageLife()
+    }
+
+    const restartPageLife = () => {
       DeliverySuccsess.value = true
+      dynamicServerPushButtonText.value = 'Получить код'
+      isHashGot = false
+      textfieldhashconfirmcode.value = ""
+       FormNotComplitedAlert.value = false
     }
 
     const goBack = () => {
