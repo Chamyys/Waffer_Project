@@ -3,9 +3,10 @@ namespace Models;
 public class  WAFFERINLAB : Entity
 {
   
-    public string Technologist { get; set; } = null!;
-    public string returnedTime { get; set; } = null!;
-    public string Measurer { get; set; } = null!;
-    //id + list stages + в формате стека
+    public WELCOMEBACK WelcomeBack { get; set; } = null!;
+    public string LabEntryStage { get; set; } = null!;
+    public string MStartStage { get; set; } = null!;
+    public string UploadingStage { get; set; } = null!;
+    //id + list stages + в формате
 
 }

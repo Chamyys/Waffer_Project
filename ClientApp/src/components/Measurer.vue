@@ -47,8 +47,9 @@
         <div>
           <div>
             <h1 style="float: none">Прием пластины</h1>
-
+           
             <div style="float: left">
+              
               <v-alert
                 v-if="FormNotComplitedAlert"
                 text="Данные внесены некорректно"
@@ -62,13 +63,16 @@
                 type="success"
                 style="margin-left: 5em"
               ></v-alert>
+            
               <v-alert
                 v-if="renderHashAlert"
+                
                 style="margin-left: 5em"
                 title="Ваш код для подтверждения операции:"
               >
                 {{ hashCode }}
               </v-alert>
+            
               <v-text-field
                 v-if="renderHashAlert"
                 v-model="textfieldhashconfirmcode"
@@ -77,7 +81,9 @@
                 :rules="rules"
                 hide-details="auto"
               ></v-text-field>
+          
             </div>
+          
           </div>
           <div style="height: 5em"></div>
           <!-- <div class="right">-->
