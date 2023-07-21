@@ -7,4 +7,6 @@ public class  WELCOMEBACK : Entity
 
     public DateTime returnedTime { get; set; }
 
+      public string Measurer { get; set; } = null!;
+
 }

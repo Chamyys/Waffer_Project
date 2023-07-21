@@ -40,7 +40,8 @@ export default {
     const path = computed(() => route.path)
 
     const enterInAccount = () => {
-      store.dispatch('createUser', firstName.value + " " + lastName.value)
+      window.localStorage.setItem('firstName', firstName.value)
+      window.localStorage.setItem('lastName', lastName.value)
       router.push('/' + path.value.split('/')[2])
     }
 

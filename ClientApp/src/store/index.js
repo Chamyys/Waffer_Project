@@ -11,12 +11,12 @@ const store = createStore({
     getweatherarray(state) {
       return state.arrayofWeather
     },
-    getFirstName(state){
+    getFirstName(state) {
       return state.firstname
     },
-    getSecondName(state){
+    getSecondName(state) {
       return state.secondname
-    }
+    },
   },
 
   mutations: {

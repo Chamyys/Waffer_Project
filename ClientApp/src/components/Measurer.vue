@@ -45,15 +45,56 @@
       </v-navigation-drawer>
       <v-main style="height: 80em">
         <div>
-          <h1>Номер пластины</h1>
-          <div style="height: 5em"></div>
-          <div class="right">
-            <div style="border-style: solid">
-              <Datepicker v-model="date" input-format="dd.MM.yyyy" />
+          <div>
+            <h1 style="float: none">Прием пластины</h1>
+
+            <div style="float: left">
+              <v-alert v-if="DeliverySuccsess" closable text="Данные успешно загружены на сервер" type="success"   style=" margin-left: 5em;"></v-alert>
+              <v-alert
+                v-if="renderHashAlert"
+                style=" margin-left: 5em;"
+                title="Ваш код для подтверждения операции:"
+              >
+                {{ hashCode }}
+              </v-alert>
+              <v-text-field
+                v-if="renderHashAlert"
+                style="
+                 text-align: center;
+                  margin-top: 2em;
+                  margin-left: 5em;
+                "
+                label="Введите код поддтверждения"
+                :rules="rules"
+                v-model="textfieldhashconfirmcode"
+                hide-details="auto"
+              ></v-text-field>
             </div>
           </div>
+          <div style="height: 5em"></div>
+          <!-- <div class="right">-->
 
-          <div class="left">
+          <v-sheet width="400" class="mx-auto">
+            <div>
+              <Datepicker
+                v-model="date"
+                style="
+                  text-align: center;
+                  border-style: solid;
+                  border-color: black;
+                  border-radius: 0.3em;
+                "
+                input-format="dd.MM.yyyy"
+              />
+            </div>
+
+            <!-- </div> -->
+
+            <!--  <div class="left">-->
+
+            <!-- </div>-->
+            <!-- 
+
             <v-data-table>
               <thead>
                 <tr>
@@ -75,6 +116,7 @@
                 </tr>
               </tbody>
             </v-data-table>
+            -->
             <div style="height: 5em"></div>
 
             <v-select
@@ -86,7 +128,7 @@
             >
               {{ item.Text }}
             </v-select>
-          </div>
+          </v-sheet>
 
           <div>
             <div>
@@ -98,13 +140,13 @@
           <div style="height: 5em"></div>
 
           <v-sheet width="400" class="mx-auto">
-            <v-btn type="submit" block class="mt-2" @click="postInfo"
-              >Отправить что-то на сервер</v-btn
-            >
-            <v-btn type="submit" block class="mt-2" @click="getInfo"
+            <v-btn type="submit" block class="mt-2" @click="createHashCode">{{
+              dynamicServerPushButtonText
+            }}</v-btn>
+            <v-btn type="submit" block class="mt-2" @click="createWELCOMEBACK"
               >Получить что-то с сервера</v-btn
             >
-            <v-btn type="submit" block class="mt-10" @click="goBack"
+            <v-btn type="submit" block class="mt-10" @click="postInfo"
               >Выход</v-btn
             >
           </v-sheet>
@@ -114,18 +156,13 @@
   </v-card>
 </template>
 
-<!--
-
-  
--->
 <script>
-import { v4 as uuidv4 } from 'uuid'
 import Datepicker from 'vue3-datepicker'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-
+import crc32 from 'crc/crc32'
 export default {
   components: { Datepicker },
   setup() {
@@ -134,40 +171,73 @@ export default {
     const getCurrentTechnologistName = (name) => {
       currentTechnologistName.value = name
     }
-
+    const dynamicServerPushButtonText = ref('Получить код')
+    const renderHashAlert = ref(false)
+    const DeliverySuccsess = ref(false)
     const date = ref(new Date())
     const rail = ref(true)
+    const textfieldhashconfirmcode = ref('')
+    let isHashGot = false
     const drawer = ref(true)
     const store = useStore()
     const arr = ref([])
+    const hashCode = ref('')
     const router = useRouter()
+    let entity = {
+        id: "",
+        Technologist: "",
+        returnedTime: "",
+        Measurer: "",
+      }
     const username = (
-      store.getters.getFirstName +
+      window.localStorage.getItem('firstName') +
       ' ' +
-      store.getters.getSecondName
+      window.localStorage.getItem('lastName')
     ).toString()
 
     let currentrows = 5
-
+    const isAllFieldsComplitedCheck = (entity) => {
+        if (!entity.id || !entity.Technologist|| !entity.Measurer || hashCode.value != textfieldhashconfirmcode.value) return false
+        else return true
+    }
+    const createHashCode = () => {
+      if (!isHashGot) {
+        isHashGot = true
+        hashCode.value = crc32(new Date().toString()).toString(16)
+        renderHashAlert.value = true
+        dynamicServerPushButtonText.value = 'Отправить данные на сервер'
+      } else {
+        if(isAllFieldsComplitedCheck(createWELCOMEBACK()))  postInfo(entity)
+      
+      }
+    }
     const createWELCOMEBACK = () => {
-      let entity = {
-        id: uuidv4().toString(),
+      const Time = new Date()
+      date.value.setHours(Time.getHours() + 3)
+      date.value.setMinutes(Time.getMinutes())
+      date.value.setSeconds(Time.getSeconds())
+      entity = {
+        id: hashCode.value,
         Technologist: currentTechnologistName.value,
         returnedTime: date.value,
+        Measurer: username,
       }
       return entity
     }
-
+    
     const postInfo = async () => {
       try {
         const response = await axios.post(
           'https://localhost:3000/api/WeatherForecast/Post',
           createWELCOMEBACK()
         )
+        renderHashAlert.value = false
         console.log(response)
       } catch (error) {
         console.error(error)
       }
+      DeliverySuccsess.value = true
+
     }
 
     const goBack = () => {
@@ -201,6 +271,7 @@ export default {
     getInfo()
 
     return {
+      renderHashAlert,
       postInfo,
       goBack,
       getInfo,
@@ -212,6 +283,16 @@ export default {
       username,
       currentTechnologistName,
       getCurrentTechnologistName,
+      createHashCode,
+      hashCode,
+      dynamicServerPushButtonText,
+      textfieldhashconfirmcode,
+      DeliverySuccsess,
+      rules: [
+        (value) => !!value || 'Поле не может быть пустым.',
+        (value) => (value && value.length == hashCode.value.length) || 'Длины кодов подтверждения не совпадают',
+        (value) => (value && (textfieldhashconfirmcode.value == hashCode.value)) || 'Код подтверждения не совпадает',
+      ],
     }
   },
 }
