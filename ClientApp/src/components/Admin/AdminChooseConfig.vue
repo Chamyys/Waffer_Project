@@ -81,6 +81,7 @@
           :technologists-delete="technologists"
           @remove="userWasRemoved"
           @handleSubmit="userWasEdited"
+          @add="userWasAdded"
         ></router-view>
       </div>
 
@@ -193,7 +194,7 @@ export default {
         })
     }
     const addUser = () => {
-      router.push('/Admin/AddUser')
+      router.push('/Admin/AdminChooseConfig/AddUser')
     }
     /*
     const userWasRemoved = (data) => {
@@ -233,6 +234,12 @@ export default {
         isUserExists.value = true
       } else isUserExists.value = false
     }
+    const userWasAdded = (data) => {
+      actionText.value = data.message
+      ActionSuccessesfullyFlag.value = true
+      chooseNewEditCollection(data.role).push(data.newUser)
+      isUserExists.value = true
+    }
     let dasdasd = {
       id: 'ddaaadddd',
       firstName: 'dsada',
@@ -261,6 +268,7 @@ export default {
     // getInfo()
 
     return {
+      userWasAdded,
       technologists,
       measurers,
       switchmodel,
