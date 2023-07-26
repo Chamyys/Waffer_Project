@@ -9,14 +9,13 @@ namespace Controllers;
 [Route("/api/[controller]/[action]")]
 public class WeatherForecastController : Controller
 {
-  private static readonly string[] Summaries = new[]
+    private static readonly string[] Summaries = new[]
   {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
- 
-  private readonly IMongoRepository _mongoRepository;
-    public WeatherForecastController(IMongoRepository mongoRepository)//
+  private readonly IMongoRepository<WELCOMEBACK> _mongoRepository;
+    public WeatherForecastController(IMongoRepository<WELCOMEBACK> mongoRepository)//
     {
         _mongoRepository = mongoRepository;
     }
@@ -24,8 +23,11 @@ public class WeatherForecastController : Controller
  [HttpPost]
 public void Post([FromBody] WELCOMEBACK entity)
 {
+
+    _mongoRepository.setCollectionName("WELCOMEBACK");
     _mongoRepository.Create(entity);
 }
+
 
 
   [HttpGet]
@@ -42,23 +44,3 @@ public void Post([FromBody] WELCOMEBACK entity)
 }
 
 
-
-
-
-/*
-  [HttpGet]
-  public List<WeatherForecast> Get()
-  {
-    List<WeatherForecast> list = new List<WeatherForecast>();
-    for (int i = 0;i<50;i++){ list.Add(new WeatherForecast
-    {
-      Date = new DateTime(),
-      TemperatureC = Random.Shared.Next(-20, 55),
-      Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-    });
-
-    }
-     return list; 
-  }
-}
-*/

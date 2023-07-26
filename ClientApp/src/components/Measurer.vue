@@ -1,4 +1,3 @@
-@@ -0,0 +1,181 @@
 <template>
   <v-card>
     <v-layout>
@@ -47,14 +46,13 @@
         <div>
           <div>
             <h1 style="float: none">Прием пластины</h1>
-           
+
             <div style="float: left">
-              
               <v-alert
                 v-if="FormNotComplitedAlert"
                 text="Данные внесены некорректно"
                 type="error"
-                style="margin-left: 5em ; margin-bottom: 2em;"
+                style="margin-left: 5em; margin-bottom: 2em"
               ></v-alert>
               <v-alert
                 v-if="DeliverySuccsess"
@@ -63,16 +61,15 @@
                 type="success"
                 style="margin-left: 5em"
               ></v-alert>
-            
+
               <v-alert
                 v-if="renderHashAlert"
-                
                 style="margin-left: 5em"
                 title="Ваш код для подтверждения операции:"
               >
                 {{ hashCode }}
               </v-alert>
-            
+
               <v-text-field
                 v-if="renderHashAlert"
                 v-model="textfieldhashconfirmcode"
@@ -81,9 +78,7 @@
                 :rules="rules"
                 hide-details="auto"
               ></v-text-field>
-          
             </div>
-          
           </div>
           <div style="height: 5em"></div>
           <!-- <div class="right">-->
@@ -198,12 +193,7 @@ export default {
     const arr = ref([])
     const hashCode = ref('')
     const router = useRouter()
-    let entity = {
-      id: '',
-      Technologist: '',
-      returnedTime: '',
-      Measurer: '',
-    }
+
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
@@ -215,7 +205,7 @@ export default {
       if (
         !entity.id ||
         !entity.Technologist ||
-         entity.Measurer.length < 2 ||
+        entity.Measurer.length < 2 ||
         hashCode.value != textfieldhashconfirmcode.value
       )
         return false
@@ -230,18 +220,18 @@ export default {
         dynamicServerPushButtonText.value = 'Отправить данные на сервер'
       } else {
         if (isAllFieldsComplitedCheck(createWELCOMEBACK())) {
-          postInfo(entity)
-      } else {
+          postInfo()
+        } else {
           FormNotComplitedAlert.value = true
+        }
       }
     }
-  }
     const createWELCOMEBACK = () => {
       const Time = new Date()
       date.value.setHours(Time.getHours() + 3)
       date.value.setMinutes(Time.getMinutes())
       date.value.setSeconds(Time.getSeconds())
-      entity = {
+      let entity = {
         id: hashCode.value,
         Technologist: currentTechnologistName.value,
         returnedTime: date.value,
@@ -269,8 +259,8 @@ export default {
       DeliverySuccsess.value = true
       dynamicServerPushButtonText.value = 'Получить код'
       isHashGot = false
-      textfieldhashconfirmcode.value = ""
-       FormNotComplitedAlert.value = false
+      textfieldhashconfirmcode.value = ''
+      FormNotComplitedAlert.value = false
     }
 
     const goBack = () => {
@@ -333,7 +323,6 @@ export default {
       ],
     }
   },
-  
 }
 </script>
 

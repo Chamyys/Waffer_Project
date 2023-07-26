@@ -4,13 +4,15 @@ using Models;
 using System.Net;
 using FluentResults;
 
-namespace Repository
-{
-public interface IMongoRepository
-{
-     public  Task<string> Create(Entity entity);
-    public Result Delete(Entity entity);
-    public Task<Entity> Get(Entity entity);
-}
-}
+namespace Repository{
 
+public interface IMongoRepository<T> where T : Entity
+{
+    public void setCollectionName(string name);
+    public Task<string> Create(T car);
+    public Result Delete(T entity);
+    public Task<T> Get(T entity);
+    public Task<List<T>> GetAll();
+       public  Task Update(dynamic entity);
+}
+}

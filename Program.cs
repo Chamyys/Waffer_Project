@@ -23,9 +23,41 @@ builder.Services.AddCors(options =>
       );
 });
 
+
+
+
+
+/*
+builder.Services.AddSingleton<IMongoRepository>(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    var databaseName = "YourDatabaseName"; конфигурация для нескольких таблиц
+    var collectionName = "YourCollectionName";
+    return new MongoRepository(client, databaseName, collectionName);
+});
+*/ 
+
+
+  builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+  builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
+
+
+
+/*
+Регистрация Монги на 1 тип репозитория без T
 builder.Services.AddTransient<IMongoRepository, MongoRepository>();
-builder.Services.Configure<IMongoRepository>(builder.Configuration.GetSection("Mongo"));
+builder.Services.Configure<IMongoRepository>(builder.Configuration.GetSection("Mongo")); 
 builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
+
+*/
+
+
+
+
+
+
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
