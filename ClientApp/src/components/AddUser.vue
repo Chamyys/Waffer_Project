@@ -100,7 +100,7 @@ const login = useField('login')
 const password = useField('password')
 const select = useField('select')
 
-const items = ref(['Админ', 'Измеритель', 'Технолог'])
+const items = ref(['Администратор', 'Измеритель', 'Технолог'])
 const upload = (values) => {
   let worker = {
     firstName: values.name,
