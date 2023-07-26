@@ -14,6 +14,8 @@ import AdminChooseConfig from '@/components/Admin/AdminChooseConfig.vue'
 import AddUser from '@/components/Admin/AddUser.vue'
 import Delete from '@/components/Admin/Delete.vue'
 import Edit from '@/components/Admin/EditUser.vue'
+import AddNewMT from '@/components/AddNewMT.vue'
+
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
     return savedPosition
@@ -52,7 +54,7 @@ const routes = [
     children: [
       {
         path: '/Measurer/WelcomeBack',
-        name: 'Welcomeback',
+        name: 'MeasurerWelcomeback',
         component: Welcomeback,
       },
     ],
@@ -63,8 +65,13 @@ const routes = [
     children: [
       {
         path: '/Technologist/WelcomeBack',
-        name: 'Welcomeback',
+        name: 'TechnologistWelcomeback',
         component: Welcomeback,
+      },
+      {
+        path: '/Technologist/AddNewMT',
+        name: 'AddNewMT',
+        component: AddNewMT,
       },
     ],
   },

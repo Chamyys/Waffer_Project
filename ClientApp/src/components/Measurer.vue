@@ -37,8 +37,9 @@
           ></v-list-item>
           <v-list-item
             prepend-icon="mdi-help"
-            title="Этот пункт в разработке"
+            title="Текущие задачи"
             value="users"
+            @click="missions"
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -58,16 +59,23 @@ export default {
     const rail = ref(true)
     const drawer = ref(true)
     const router = useRouter()
+    const missions = () => {
+      router.push('/Measurer/Missions')
+    }
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
       window.localStorage.getItem('lastName')
     ).toString()
+
     router.push('/Measurer/WelcomeBack')
+
     return {
       drawer,
       rail,
       username,
+      missions,
+
     }
   },
 }

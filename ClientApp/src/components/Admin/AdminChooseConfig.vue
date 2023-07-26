@@ -240,32 +240,12 @@ export default {
       chooseNewEditCollection(data.role).push(data.newUser)
       isUserExists.value = true
     }
-    let dasdasd = {
-      id: 'ddaaadddd',
-      firstName: 'dsada',
-      secondName: 'wdasdaasdasd',
-      login: 'dasdasdsada',
-      password: ' sad13sadasd',
-      role: 'Измеритель',
-    }
     const onScroll = (e) => {
       offsetTop.value = e.target.scrollTop
     }
-    const postInfo = async () => {
-      try {
-        const response = await axios.post(
-          'https://localhost:3000/api/WorkerData/Post',
-          dasdasd
-        )
-        console.log(response)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    postInfo()
+
     getInfoTechnologists()
     getInfoMeasurers()
-    // getInfo()
 
     return {
       userWasAdded,
