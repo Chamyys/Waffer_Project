@@ -23,11 +23,9 @@ public class WeatherForecastController : Controller
  [HttpPost]
 public void Post([FromBody] WELCOMEBACK entity)
 {
-
     _mongoRepository.setCollectionName("WELCOMEBACK");
     _mongoRepository.Create(entity);
 }
-
 
 
   [HttpGet]
@@ -41,6 +39,8 @@ public void Post([FromBody] WELCOMEBACK entity)
     })
     .ToArray();
   }
+
+
 }
 
 

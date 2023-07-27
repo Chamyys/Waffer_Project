@@ -3,7 +3,6 @@ namespace Models;
 public class  Worker : Entity
 {
   
-    
     public string firstName { get; set; } = null!;
     public string secondName { get; set; } = null!;
     public string login { get; set; } = null!;

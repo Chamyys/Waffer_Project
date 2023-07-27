@@ -15,7 +15,9 @@ import AddUser from '@/components/Admin/AddUser.vue'
 import Delete from '@/components/Admin/Delete.vue'
 import Edit from '@/components/Admin/EditUser.vue'
 import AddNewMT from '@/components/AddNewMT.vue'
-
+import Missions from '@/components/Missions.vue'
+import CreateMonitor from '@/components/CreateMonitor.vue'
+import WaferTimeLine from '@/components/WaferTimeLine.vue'
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
     return savedPosition
@@ -57,6 +59,21 @@ const routes = [
         name: 'MeasurerWelcomeback',
         component: Welcomeback,
       },
+      {
+        path: '/Measurer/Missions',
+        name: 'MeasurerMissions',
+        component: Missions,
+      },
+      {
+        path: '/Measurer/CreateMonitor',
+        name: 'MeasurerCreateMonitor',
+        component: CreateMonitor,
+      },
+      {
+        path: '/Measurer/WaferTimeLine',
+        name: 'MeasurerWaferTimeLine',
+        component: WaferTimeLine,
+      },
     ],
   },
   {
@@ -72,6 +89,11 @@ const routes = [
         path: '/Technologist/AddNewMT',
         name: 'AddNewMT',
         component: AddNewMT,
+      },
+      {
+        path: '/Technologist/WaferTimeLine',
+        name: 'TechnologistWaferTimeLine',
+        component: WaferTimeLine,
       },
     ],
   },
@@ -109,6 +131,7 @@ const routes = [
     path: '/Home',
     component: Home,
   },
+
   {
     path: '/Login/:role',
     name: 'Login',

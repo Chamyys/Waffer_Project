@@ -27,19 +27,27 @@
         <v-list density="compact" nav>
           <v-list-item
             prepend-icon="mdi-magnify"
-            title="Поиск пластины"
+            title="Прием пластины"
             value="home"
+            @click="createWafel"
           ></v-list-item>
           <v-list-item
             prepend-icon="mdi-download"
-            title="Загрузка измерений"
+            title="Создание монитора"
             value="account"
+            @click="createMonitor"
           ></v-list-item>
           <v-list-item
             prepend-icon="mdi-help"
             title="Текущие задачи"
             value="users"
             @click="missions"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-download"
+            title="Поиск пластины"
+            value="account"
+            @click="searchWafer"
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -59,8 +67,18 @@ export default {
     const rail = ref(true)
     const drawer = ref(true)
     const router = useRouter()
+    const createWafel = () => {
+      router.push('/Measurer/WelcomeBack')
+    }
+    const createMonitor = () => {
+      router.push('/Measurer/CreateMonitor')
+    }
+
     const missions = () => {
       router.push('/Measurer/Missions')
+    }
+    const searchWafer = () => {
+      router.push('/Measurer/WaferTimeLine')
     }
     const username = (
       window.localStorage.getItem('firstName') +
@@ -75,7 +93,9 @@ export default {
       rail,
       username,
       missions,
-
+      createWafel,
+      createMonitor,
+      searchWafer,
     }
   },
 }

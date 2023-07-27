@@ -78,9 +78,7 @@
       <v-btn type="submit" block class="mt-2" @click="createHashCode">{{
         dynamicServerPushButtonText
       }}</v-btn>
-      <v-btn type="submit" block class="mt-2" @click="createWELCOMEBACK"
-        >Получить что-то с сервера</v-btn
-      >
+
       <v-btn type="submit" block class="mt-10" @click="goBack">Выход</v-btn>
     </v-sheet>
   </div>
@@ -153,6 +151,7 @@ export default {
       date.value.setSeconds(Time.getSeconds())
       let entity = {
         id: hashCode.value,
+        stageName: 'WelcomeBack',
         Technologist: currentTechnologistName.value,
         returnedTime: date.value,
         Measurer: username,
@@ -169,10 +168,34 @@ export default {
         FormNotComplitedAlert.value = false
         renderHashAlert.value = false
         console.log(response)
+        postWaferInLab()
       } catch (error) {
         console.error(error)
       }
       restartPageLife()
+    }
+    const createWaferInLAb = () => {
+      let waferInLab = {
+        id: 'myid',
+        stages: [],
+        LabEntryStage: 'stingscsa',
+        MStartStage: 'sss',
+        UploadingStage: 'sad',
+      }
+      waferInLab.stages.push(createWELCOMEBACK())
+      return waferInLab
+    }
+    const postWaferInLab = async () => {
+      try {
+        const response = await axios.post(
+          'https://localhost:3000/api/WaferInLab/Post',
+          createWaferInLAb()
+        )
+
+        console.log(response)
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     const restartPageLife = () => {
@@ -214,6 +237,7 @@ export default {
     getInfo()
 
     return {
+      postWaferInLab,
       renderHashAlert,
       postInfo,
       goBack,

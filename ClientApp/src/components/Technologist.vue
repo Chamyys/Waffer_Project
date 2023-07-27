@@ -27,13 +27,15 @@
         <v-list density="compact" nav>
           <v-list-item
             prepend-icon="mdi-magnify"
-            title="Поиск пластины"
+            title="Создать измерение"
             value="home"
+            @click="createMT"
           ></v-list-item>
           <v-list-item
             prepend-icon="mdi-download"
-            title="Загрузка измерений"
+            title="Прием пластины"
             value="account"
+            @click="createWaffer"
           ></v-list-item>
           <v-list-item
             prepend-icon="mdi-help"
@@ -45,17 +47,7 @@
       <v-main style="height: 80em">
         <router-view></router-view>
         <v-col cols="12">
-          <v-btn-toggle v-model="text" rounded="0" group>
-            <v-btn value="add" @click="createMT"> Создать измерение</v-btn>
-
-            <v-btn value="edit" @click="editUser">
-              Изменить пользователя
-            </v-btn>
-
-            <v-btn value="remove" @click="deleteUser">
-              Удалить пользователя
-            </v-btn>
-          </v-btn-toggle>
+          <v-btn-toggle v-model="text" rounded="0" group> </v-btn-toggle>
         </v-col>
       </v-main>
     </v-layout>
@@ -79,12 +71,16 @@ export default {
     const createMT = () => {
       router.push('/Technologist/AddNewMT')
     }
+    const createWaffer = () => {
+      router.push('/Technologist/WelcomeBack')
+    }
     router.push('/Technologist/WelcomeBack')
     return {
       drawer,
       rail,
       username,
       createMT,
+      createWaffer,
     }
   },
 }
