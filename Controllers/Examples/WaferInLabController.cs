@@ -23,10 +23,11 @@ public void Post([FromBody] WAFFERINLAB<WELCOMEBACK> entity)
     _mongoRepository.setCollectionName("WAFFERINLAB");
     _mongoRepository.Create(entity);
 }
-  public  IList<WAFFERINLAB<WELCOMEBACK>>  Get()
+  public  WAFFERINLAB<WELCOMEBACK>  GetById(string id)
   {
     _mongoRepository.setCollectionName("WAFFERINLAB");
-     return _mongoRepository.GetAll().Result;
+    var a = _mongoRepository.GetById(id).Result;
+     return  a;
   }
 }
 

@@ -4,50 +4,108 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 export default {
   setup() {
+    const stagesNames = ref(['Пластина зарегистрирована','Пластина убыла на измерения','Пластина измеряется','Измерения окончены','Пластина готова'])
     const loading = ref(false)
-
+    const wafelNumber = ref()
     const router = useRouter()
     const dialog = ref(true)
     const stages = ref([''])
+    const click2 = ref(false)
+    const stageOne = ref([])
+    const choosedIndex = ref(0)
+    const getNumberOfStages = (stages) => {
+      return stages.length
+    }
+    const dialogText = ref(
+      'Введите номер пластины для отслеживания истории ее состояний'
+    )
+    const parseData = (data) => {
+      let dateString = data
+      let dateObj = new Date(dateString)
+      let day = dateObj.getUTCDate().toString().padStart(2, '0')
+      let month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
+      let year = dateObj.getUTCFullYear().toString()
+      let hours = dateObj.getUTCHours().toString().padStart(2, '0')
+      let minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
+      return `${day}-${month}-${year} ${hours}:${minutes}`
+    }
     const goBack = () => {
       router.push(router.options.history.state.back)
     }
-
+    const getStage = (key) => {
+      choosedIndex.value = key
+    }
     const getCurentWafferInfo = async () => {
       try {
         const promise = await axios.get(
-          'https://localhost:3000/api/WaferInLab/Get'
+          'https://localhost:3000/api/WaferInLab/GetById',
+          {
+            params: {
+              id: wafelNumber.value,
+            },
+          }
         )
 
         console.log(promise)
         const dataPromise = await promise
-        stages.value = [...dataPromise.data]
-        loading.value = true
+        stages.value = dataPromise.data
+        
+        if(dataPromise.status === 204){
+          dialogText.value = "Такой пластины не существует, пожалуйста проверьте номер"
+        } else{
+            stagesNames.value = [...stagesNames.value.slice(0,getNumberOfStages(stages.value.stages))]
+            let a = stagesNames.value
+            dialog.value = false
+            stageOne.value = stages.value.stages[0]
+
+            loading.value = true
+        }
+      
       } catch (error) {
         console.error(error)
       }
     }
-    getCurentWafferInfo()
+
     return {
+      choosedIndex,
       dialog,
       loading,
       goBack,
       getCurentWafferInfo,
       stages,
+      click2,
+      wafelNumber,
+      stageOne,
+      dialogText,
+      parseData,
+      stagesNames,
+      getStage,
+      
     }
   },
 }
 </script>
 <template>
+
+ 
+<v-card v-if="loading">
+      
+      <v-tabs    fixed-tabs  bg-color="green-darken-1">
+      <v-tab v-for="(name,index) in stagesNames" :key="index" @click="getStage(index)">{{ name }}</v-tab>
+      </v-tabs>
+  </v-card>
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent width="auto">
       <template #activator="{ props }"> </template>
       <v-card>
-        <v-card-title class="text-h8">
-          Введите номер пластины для отслеживания истории ее состояний
+        <v-card-title   class="text-h8">
+         {{ dialogText }}
         </v-card-title>
 
-        <v-text-field label="Номер пластины"></v-text-field>
+        <v-text-field
+          v-model="wafelNumber"
+          label="Номер пластины"
+        ></v-text-field>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -60,7 +118,7 @@ export default {
           <v-btn
             color="green-darken-1"
             variant="text"
-            @click=";(dialog = false), getCurentWafferInfo()"
+            @click=" getCurentWafferInfo()"
           >
             Готово
           </v-btn>
@@ -69,60 +127,85 @@ export default {
     </v-dialog>
   </v-row>
 
-    <v-timeline v-if="loading">
-      <v-timeline-item>
-        <template #opposite>
-          Пластина создана - {{ stages[0].stages[0].returnedTime }}
-        </template>
-        <div>
-          <div class="text-h6">Content title</div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-      </v-timeline-item>
 
-      <v-timeline-item>
-        <template #opposite> Opposite content </template>
-        <div>
-          <div class="text-h6">Content title</div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-      </v-timeline-item>
 
-      <v-timeline-item>
-        <template #opposite> Opposite content </template>
-        <div>
-          <div class="text-h6">Content title</div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-      </v-timeline-item>
-      <v-timeline-item>
-        <template #opposite> Opposite content </template>
-        <div>
-          <div class="text-h6">Content title</div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-      </v-timeline-item>
-      <v-timeline-item>
-        <template #opposite> Opposite content </template>
-        <div>
-          <div class="text-h6">Content title</div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-      </v-timeline-item>
-    </v-timeline>
+  <div style="height: 10em;"></div>
+  <v-row justify="center">
+  <v-timeline v-if="loading"  >
+    <v-timeline-item>
+    <template #opposite>
+      <div style="width: 28em; height: auto;"></div>  <!--Костыль убрать по возможности-->
+      </template>
+      <v-card >
+        <v-card-title :class="['text-h6', `bg-green-lighten-3`]">
+         Пластина зарегистрирована
+        </v-card-title>
+        <v-card-text class="bg-white text--primary">
+          <div class="text-h6">Информация по этапу:</div>
+        <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>  
+        <p>Технолог - {{ stageOne.technologist }}</p>
+        <p>Измеритель - {{ stageOne.measurer }}</p>
+        </v-card-text>
+      </v-card>
+    </v-timeline-item>
+
+
+    <v-timeline-item v-if="choosedIndex>0">
+      <v-card>
+        <v-card-title :class="['text-h6', `bg-green-lighten-3`]">
+          Пластина убыла на измерения
+        </v-card-title>
+        <v-card-text class="bg-white text--primary">
+          <div class="text-h6">Информация по этапу:</div>
+          <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>  
+          <p>Технолог - {{ stageOne.technologist }}</p>
+        <p>Измеритель - {{ stageOne.measurer }}</p>
+        </v-card-text>
+      </v-card>
+    </v-timeline-item>
+
+
+
+
+    <v-timeline-item v-if="choosedIndex>1">
+      <v-card>
+        <v-card-title :class="['text-h6', `bg-green-lighten-3`]">
+          Пластина измеряется
+        </v-card-title>
+        <v-card-text class="bg-white text--primary">
+          <div class="text-h6">Информация по этапу:</div>
+          <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>  
+          <p>Технолог - {{ stageOne.technologist }}</p>
+        <p>Измеритель - {{ stageOne.measurer }}</p>
+        </v-card-text>
+      </v-card>
+    </v-timeline-item>
+    <v-timeline-item v-if="choosedIndex>2">
+      <v-card>
+        <v-card-title :class="['text-h6', `bg-green-lighten-3`]">
+        Измерения окончены
+        </v-card-title>
+        <v-card-text class="bg-white text--primary">
+          <div class="text-h6">Информация по этапу:</div>
+          <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>  
+          <p>Технолог - {{ stageOne.technologist }}</p>
+        <p>Измеритель - {{ stageOne.measurer }}</p>
+        </v-card-text>
+      </v-card>
+    </v-timeline-item>
+    <v-timeline-item v-if="choosedIndex>3">
+      <v-card>
+        <v-card-title :class="['text-h6', `bg-green-lighten-3`]">
+         Пластина готова
+        </v-card-title>
+        <v-card-text class="bg-white text--primary">
+          <div class="text-h6">Информация по этапу:</div>
+          <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>  
+          <p>Технолог - {{ stageOne.technologist }}</p>
+        <p>Измеритель - {{ stageOne.measurer }}</p>
+        </v-card-text>
+      </v-card>
+    </v-timeline-item>
+  </v-timeline>
+</v-row>
 </template>

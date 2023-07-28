@@ -66,7 +66,17 @@ public MongoRepository(IMongoClient client, string databaseName, string collecti
                 if (car.Result.id == null) car.Result.id = "Not Found";
                 return car.Result; 
         }
-
+        public async Task<T> GetById(string Id)
+         {
+            
+                var filter = Builders<T>.Filter.Eq(c => c.id, Id);
+                var car = _weathercollection.Find(filter).FirstOrDefaultAsync();
+                   if (car == null)
+                        {
+                          return default(T); 
+                         }
+                return car.Result; 
+        }
 
 
       public async Task Update(dynamic entity)
