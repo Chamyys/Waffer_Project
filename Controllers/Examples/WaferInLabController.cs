@@ -29,5 +29,14 @@ public void Post([FromBody] WAFFERINLAB<WELCOMEBACK> entity)
     var a = _mongoRepository.GetById(id).Result;
      return  a;
   }
+   [HttpGet]
+  
+  public  IList<WAFFERINLAB<WELCOMEBACK> >  Get( )
+  {
+
+    _mongoRepository.setCollectionName("WAFFERINLAB");
+     // return ((IList<Worker>)_mongoRepository.GetAllWorkersAsync(curentRole));
+     return _mongoRepository.GetAll().Result;
+  }
 }
 
