@@ -4,7 +4,8 @@ namespace Models;
 
 public class  MT : Entity
 {
-  public MeasurementRecording  measurementRecording {get ; set;} = null!;
+        public string status {get ; set;} = null!;
+        public MeasurementRecording  measurementRecording {get ; set;} = null!;
         public Wafer wafer {get ; set;} = null!;
         public string technologist{get ; set;} = null!;
         public Stage stage  {get ; set;} = null!;

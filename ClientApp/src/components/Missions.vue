@@ -6,6 +6,7 @@ export default {
   setup() {
     const router = useRouter()
     const createWafelMissions = ref([])
+    const creeateMeasursMissions = ref([])
     const createMonitorMissions = ref([])
     const missions = ref([])
     const parseData = (data) => {
@@ -23,6 +24,9 @@ export default {
     }
     const createMonitor = () => {
       router.push('/Measurer/CreateMonitor')
+    }
+    const createMeasur = () => {
+      router.push('/Measurer/CreateMeasur')
     }
     const getMissions = async () => {
       try {
@@ -47,19 +51,63 @@ export default {
       createMonitorMissions.value = missions.value.filter(
         (obj) => obj.type === 'generateNewMonitor'
       )
+      creeateMeasursMissions.value = missions.value.filter(
+        (obj) => obj.type === 'generateMeasur'
+      )
     }
     return {
       createWafelMissions,
       createMonitorMissions,
+      creeateMeasursMissions,
       createWafel,
       parseData,
       createMonitor,
+      createMeasur,
     }
   },
 }
 </script>
 
 <template>
+  <div style="height: 5em"></div>
+
+  <v-data-table>
+    <div style="height: 5em"></div>
+    <h2>Создать новое измерение</h2>
+    <thead>
+      <tr>
+        <th class="text-left"></th>
+        <th class="text-left">Данные технолога</th>
+        <th class="text-left">Дата выставления задачи</th>
+        <th class="text-left">Номер пластины</th>
+        <th class="text-left">Технологический этап</th>
+        <th class="text-left">Этап</th>
+        <th class="text-left">Номер запуска</th>
+        <th class="text-left">Схема/монитор</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="(item, index) in creeateMeasursMissions"
+        :key="item.creationTime"
+      >
+        <td>{{ index + 1 }}</td>
+        <td>{{ item.number }}</td>
+        <td>{{ parseData(item.creationTime) }}</td>
+        <td class="text-center">
+          <v-btn
+            size="small"
+            density="compact"
+            variant="plain"
+            icon="mdi-plus"
+            @click="createMeasur"
+            >Измерить</v-btn
+          >
+        </td>
+      </tr>
+    </tbody>
+  </v-data-table>
+
   <div style="height: 5em"></div>
   <v-data-table>
     <h2>Создать новую пластину</h2>

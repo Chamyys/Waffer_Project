@@ -176,11 +176,11 @@ export default {
     }
     const createWaferInLAb = () => {
       let waferInLab = {
-        id: 'myid',
+        id: hashCode.value,
         stages: [],
-        LabEntryStage: 'stingscsa',
-        MStartStage: 'sss',
-        UploadingStage: 'sad',
+        LabEntryStage: 'stingscsa',// APISVR2.0
+        MStartStage: 'sss',// APISVR2.0
+        UploadingStage: 'sad',// APISVR2.0
       }
       waferInLab.stages.push(createWELCOMEBACK())
       return waferInLab

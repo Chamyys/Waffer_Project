@@ -16,7 +16,15 @@ public class WaferInLabController : Controller
     {
         _mongoRepository = mongoRepository;
     }
+   [HttpGet]
+  
+  public  IList<WAFFERINLAB<WELCOMEBACK> >  Get( )
+  {
 
+    _mongoRepository.setCollectionName("WAFFERINLAB");
+     // return ((IList<Worker>)_mongoRepository.GetAllWorkersAsync(curentRole));
+     return _mongoRepository.GetAll().Result;
+  }
  [HttpPost]
 public void Post([FromBody] WAFFERINLAB<WELCOMEBACK> entity)
 {
@@ -28,15 +36,6 @@ public void Post([FromBody] WAFFERINLAB<WELCOMEBACK> entity)
     _mongoRepository.setCollectionName("WAFFERINLAB");
     var a = _mongoRepository.GetById(id).Result;
      return  a;
-  }
-   [HttpGet]
-  
-  public  IList<WAFFERINLAB<WELCOMEBACK> >  Get( )
-  {
-
-    _mongoRepository.setCollectionName("WAFFERINLAB");
-     // return ((IList<Worker>)_mongoRepository.GetAllWorkersAsync(curentRole));
-     return _mongoRepository.GetAll().Result;
   }
 }
 

@@ -18,6 +18,8 @@ import AddNewMT from '@/components/AddNewMT.vue'
 import Missions from '@/components/Missions.vue'
 import CreateMonitor from '@/components/CreateMonitor.vue'
 import WaferTimeLine from '@/components/WaferTimeLine.vue'
+import axios from 'axios'
+
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
     return savedPosition
@@ -53,6 +55,7 @@ const routes = [
   {
     path: '/Measurer',
     component: Measurer,
+    meta: { requiresMeasurer: true },
     children: [
       {
         path: '/Measurer/WelcomeBack',
@@ -79,6 +82,7 @@ const routes = [
   {
     path: '/Technologist',
     component: Technologist,
+    meta: { requiresTechnologist: true },
     children: [
       {
         path: '/Technologist/WelcomeBack',
@@ -100,12 +104,12 @@ const routes = [
   {
     path: '/Admin',
     component: Admin,
+    meta: { requiresAdmin: true },
     children: [
       {
         path: '/Admin/AdminChooseConfig',
         name: 'AdminChooseConfig',
         component: AdminChooseConfig,
-
         children: [
           {
             path: '/Admin/AdminChooseConfig/Delete',
@@ -161,6 +165,41 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior,
+})
+/*
+const postMission = async () => {
+  try {
+    const response = await axios.post(
+      'https://localhost:3000/api/WaferCreateMission/Post',
+      createMission()
+    )
+
+    console.log(response)
+  } catch (error) {
+    console.error(error)
+  }
+}
+*/
+router.beforeEach((to, from, next) => {
+  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin)
+  const requiresMeasurer = to.matched.some(
+    (record) => record.meta.requiresMeasurer
+  )
+  const requiresTechnologist = to.matched.some(
+    (record) => record.meta.requiresTechnologist
+  )
+
+  const userRole = localStorage.getItem('role') // Получение роли пользователя из localstorage - переделать на запрос к серверу
+
+  if (requiresAdmin && userRole !== 'Admin') {
+    next('/')
+  } else if (requiresMeasurer && userRole !== 'Measurer') {
+    next('/')
+  } else if (requiresTechnologist && userRole !== 'Technologist') {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router

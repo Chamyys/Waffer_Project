@@ -88,12 +88,14 @@ export default {
         'lastName',
         currentUsersArray.value[succsessUserIndex].secondName
       )
+      window.localStorage.setItem('role', path.value.split('/')[2])
       router.push('/' + path.value.split('/')[2])
     }
 
     const returnHome = () => {
       router.push('/')
     }
+
     const getRole = (path) => {
       switch (path.value) {
         case '/Login/Measurer':
