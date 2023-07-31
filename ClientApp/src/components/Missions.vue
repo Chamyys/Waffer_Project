@@ -42,17 +42,28 @@ export default {
         console.error(error)
       }
     }
+    const getMeasurMissions = async () => {
+      try {
+        const promise = await axios.get(
+          'https://localhost:3000/api/MT/Get'
+        )
+
+        console.log(promise)
+        const dataPromise = await promise
+        creeateMeasursMissions.value = [...dataPromise.data]
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
     getMissions()
+    getMeasurMissions()
     const createArreys = () => {
       createWafelMissions.value = missions.value.filter(
         (obj) => obj.type === 'generateNewWafel'
       )
       createMonitorMissions.value = missions.value.filter(
         (obj) => obj.type === 'generateNewMonitor'
-      )
-      creeateMeasursMissions.value = missions.value.filter(
-        (obj) => obj.type === 'generateMeasur'
       )
     }
     return {
@@ -67,10 +78,8 @@ export default {
   },
 }
 </script>
-
 <template>
   <div style="height: 5em"></div>
-
   <v-data-table>
     <div style="height: 5em"></div>
     <h2>Создать новое измерение</h2>
@@ -78,12 +87,12 @@ export default {
       <tr>
         <th class="text-left"></th>
         <th class="text-left">Данные технолога</th>
-        <th class="text-left">Дата выставления задачи</th>
         <th class="text-left">Номер пластины</th>
         <th class="text-left">Технологический этап</th>
         <th class="text-left">Этап</th>
         <th class="text-left">Номер запуска</th>
         <th class="text-left">Схема/монитор</th>
+        <th class="text-left">Действие</th>
       </tr>
     </thead>
     <tbody>
@@ -92,8 +101,12 @@ export default {
         :key="item.creationTime"
       >
         <td>{{ index + 1 }}</td>
-        <td>{{ item.number }}</td>
-        <td>{{ parseData(item.creationTime) }}</td>
+        <td>{{ item.technologist }}</td>
+        <td>{{ item.id }}</td>
+        <td>{{ item.measurementRecording.name }}</td>
+        <td>{{ item.stage.stageName }}</td>
+        <td>{{ item.parcel.name }}</td>
+        <td>{{ item.dieType.name }}</td>
         <td class="text-center">
           <v-btn
             size="small"
@@ -106,10 +119,14 @@ export default {
         </td>
       </tr>
     </tbody>
-  </v-data-table>
+  </v-data-table >
+
 
   <div style="height: 5em"></div>
-  <v-data-table>
+<div>
+  <div style="float: left; padding-left: 25%;">
+
+  <v-data-table >
     <h2>Создать новую пластину</h2>
     <thead>
       <tr>
@@ -137,8 +154,9 @@ export default {
       </tr>
     </tbody>
   </v-data-table>
-  <v-data-table>
-    <div style="height: 5em"></div>
+</div>
+<div>
+  <v-data-table style="float: right; padding-right: 25%;">
     <h2>Создать новый монитор</h2>
     <thead>
       <tr>
@@ -169,4 +187,8 @@ export default {
       </tr>
     </tbody>
   </v-data-table>
+</div>
+</div>
+
+
 </template>
