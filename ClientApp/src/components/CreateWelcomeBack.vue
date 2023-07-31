@@ -178,9 +178,9 @@ export default {
       let waferInLab = {
         id: hashCode.value,
         stages: [],
-        LabEntryStage: 'stingscsa',// APISVR2.0
-        MStartStage: 'sss',// APISVR2.0
-        UploadingStage: 'sad',// APISVR2.0
+        LabEntryStage: 'stingscsa', // APISVR2.0
+        MStartStage: 'sss', // APISVR2.0
+        UploadingStage: 'sad', // APISVR2.0
       }
       waferInLab.stages.push(createWELCOMEBACK())
       return waferInLab

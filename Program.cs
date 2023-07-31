@@ -58,6 +58,10 @@ builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Config
 
 
 
+
+
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();

@@ -14,11 +14,7 @@ export default {
       'Второй монитор',
       GenerateNewMonitorString,
     ])
-    const startupNumbers = ref([
-      'Первый запуск',
-      'Второй запуск',
-       
-    ])
+    const startupNumbers = ref(['Первый запуск', 'Второй запуск'])
     const textArea = ref()
     const dynamicServerPushButtonText = ref('Получить код')
     const statusDialog = ref(false)
@@ -63,13 +59,14 @@ export default {
       }
       return wafer
     }
-    const getPreviousMeasurementRecording = () => { // APISVR2.0
+    const getPreviousMeasurementRecording = () => {
+      // APISVR2.0
       let returnedResult = 1000
-      if(measurementRecording.value >= returnedResult)
-        return measurementRecording.value; else FormNotComplitedAlert.value = true
+      if (measurementRecording.value >= returnedResult)
+        return measurementRecording.value
+      else FormNotComplitedAlert.value = true
     }
     const fillMeasurementRecording = () => {
-      
       let measurementRecordingObj = {
         id: 12, // // APISVR2.0
         name: 'name', // APISVR2.0
@@ -101,19 +98,16 @@ export default {
       return dieType
     }
 
-
     const checkStatus = () => {
-     //4 этап лк технолога 
-     // APISVR2.0
-     //if(someFunc) return "NEW"; else return "ReWork"
+      //4 этап лк технолога
+      // APISVR2.0
+      //if(someFunc) return "NEW"; else return "ReWork"
     }
-
-
 
     const createNewMtObject = () => {
       let newMtObject = {
-        id:  generatedHashCode.value,
-        status: "NEW",
+        id: generatedHashCode.value,
+        status: 'NEW',
         wafer: fillWafelPole(),
         technologist: technologistName,
         measurementRecording: fillMeasurementRecording(),
@@ -196,14 +190,16 @@ export default {
     const removeWafersWithInappropriateType = () => {
       //get array of  WaferCycle with InWork and Stored status, name of array is cycle
       waferNumbers.value = cycle.map(function (item) {
-        if(item.cycleStatus === 'InWork' || item.cycleStatus === 'Stored')
+        if (item.cycleStatus === 'InWork' || item.cycleStatus === 'Stored')
           return item.waferId
-        })
+      })
     }
     const checkIfWaferInLabCycleEnded = (waferId) => {
-      let numberOfEndedStages = AllWaffelsInLabArray.value.find(obj => obj.id === waferId).stages.length
-     if(numberOfEndedStages < 3)
-     return true; else return false
+      let numberOfEndedStages = AllWaffelsInLabArray.value.find(
+        (obj) => obj.id === waferId
+      ).stages.length
+      if (numberOfEndedStages < 3) return true
+      else return false
     }
     const cleanCheckbox = () => {
       createNewMonitor.value = ''
@@ -239,7 +235,6 @@ export default {
       }
     }
     const postMT = async () => {
-     
       try {
         const response = await axios.post(
           'https://localhost:3000/api/MT/Post',
@@ -250,7 +245,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    } 
+    }
 
     // Вызов функции при определенном значении createNew
     watch(createNewMonitor, (newVal, oldVal) => {
@@ -369,15 +364,17 @@ export default {
           {{ dialogText }}
         </v-card-title>
 
-        <v-textarea v-model="textArea" label="Причина проведения повторного измерения"></v-textarea>
-
+        <v-textarea
+          v-model="textArea"
+          label="Причина проведения повторного измерения"
+        ></v-textarea>
 
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             color="green-darken-1"
             variant="text"
-            @click=";(statusDialog = false)"
+            @click="statusDialog = false"
           >
             Назад
           </v-btn>
@@ -425,7 +422,7 @@ export default {
         label="Монитор для измерения"
         :items="monitors"
       ></v-autocomplete>
-    
+
       <v-sheet v-if="createNewMonitor !== ''" width="500" class="mx-auto">
         <v-row width="10em">
           <v-checkbox label="Checkbox"></v-checkbox>

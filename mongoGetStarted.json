@@ -1,0 +1,229 @@
+
+[
+
+
+
+
+
+  {
+"collection" : "Missions",
+"data": 
+[{
+  "_id": "af958980",
+  "type": "generateNewMonitor",
+  "creationTime": {
+    "$date": "2023-07-27T12:25:38.505Z"
+  },
+  "number": "123"
+},
+{
+  "_id": "f0bf4686",
+  "type": "generateNewWafel",
+  "creationTime": {
+    "$date": "2023-07-27T12:26:32.906Z"
+  },
+  "number": "12324"
+},
+{
+  "_id": "89d68e9b",
+  "type": "generateNewMonitor",
+  "creationTime": {
+    "$date": "2023-07-27T12:26:44.201Z"
+  },
+  "number": "123241111111"
+},
+{
+  "_id": "8afb5155",
+  "type": "generateNewMonitor",
+  "creationTime": {
+    "$date": {
+      "$numberLong": "-1892372117000"
+    }
+  },
+  "number": "111"
+},
+{
+  "_id": "8c08164a",
+  "type": "generateNewMonitor",
+  "creationTime": {
+    "$date": "2023-07-31T10:07:47.264Z"
+  },
+  "number": "00000"
+},
+{
+  "_id": "d73fda7e",
+  "type": "generateNewWafel",
+  "creationTime": {
+    "$date": "2023-07-31T10:12:26.426Z"
+  },
+  "number": "57222"
+}]
+  },
+
+
+  {
+    "collection" : "MT",
+    "data": [{
+        "_id": "MtId",
+        "measurementRecording": {
+          "_id": 12,
+          "name": "1234",
+          "stageId": 12,
+          "measurementDate": {
+            "$date": "2023-07-31T11:14:30.329Z"
+          }
+        },
+        "wafer": {
+          "_id": "id",
+          "waferId": "myid",
+          "codeProductId": 12,
+          "parcelId": 12
+        },
+        "technologist": "aaaaa asdasd",
+        "stage": {
+          "stageId": 12,
+          "codeProductId": 12,
+          "stageName": "name"
+        },
+        "parcel": {
+          "_id": 12,
+          "name": "name"
+        },
+        "dieType": {
+          "dieTypeId": 12,
+          "name": "Первый монитор"
+        }
+      },
+      {
+        "_id": "ef8e5a76",
+        "measurementRecording": {
+          "_id": 12,
+          "name": "name",
+          "stageId": 12,
+          "measurementDate": {
+            "$date": "2023-07-31T12:36:17.696Z"
+          }
+        },
+        "wafer": {
+          "_id": "id",
+          "waferId": "42e781cb",
+          "codeProductId": 12,
+          "parcelId": 12
+        },
+        "technologist": "aaaaa asdasd",
+        "stage": {
+          "stageId": 0,
+          "codeProductId": 12,
+          "stageName": "name"
+        },
+        "parcel": {
+          "_id": 12,
+          "name": "name"
+        },
+        "dieType": {
+          "dieTypeId": 12,
+          "name": "Первый монитор"
+        }
+      },
+      {
+        "_id": "118a5074",
+        "measurementRecording": {
+          "_id": 12,
+          "name": "name",
+          "stageId": 12,
+          "measurementDate": {
+            "$date": "2023-07-31T12:37:10.003Z"
+          }
+        },
+        "wafer": {
+          "_id": "id",
+          "waferId": "42e781cb",
+          "codeProductId": 12,
+          "parcelId": 12
+        },
+        "technologist": "aaaaa asdasd",
+        "stage": {
+          "stageId": 0,
+          "codeProductId": 12,
+          "stageName": "name"
+        },
+        "parcel": {
+          "_id": 12,
+          "name": "name"
+        },
+        "dieType": {
+          "dieTypeId": 12,
+          "name": "Второй монитор"
+        }
+      }]
+  },
+  {
+    "collection" : "Администратор",
+    "data": [{
+        "_id": "adminId",
+        "firstName": "admin",
+        "secondName": "admin",
+        "login": "admin",
+        "password": "admin",
+        "role": "Администратор"
+      }]
+        
+  },
+  {
+    "collection" : "Измеритель",
+    "data": [{
+        "_id": "measurerId",
+        "firstName": "Иван",
+        "secondName": "Измерительнов",
+        "login": "11111",
+        "password": "11111",
+        "role": "Измеритель"
+      }]
+  },
+  {
+    "collection" : "Технолог",
+    "data": [{
+        "_id": "technologistId",
+        "firstName": "Павель",
+        "secondName": "Технологов",
+        "login": "22222",
+        "password": "22222",
+        "role": "Технолог"
+      }]
+  },
+  {
+    "collection" : "WAFFERINLAB",
+    "data": [{
+            "_id": "42e781cb",
+            "LabEntryStage": "stingscsa",
+            "MStartStage": "sss",
+            "UploadingStage": "sad",
+            "Stages": [
+              {
+                "_id": "42e781cb",
+                "stageName": "WelcomeBack",
+                "Technologist": "А.С. Иванов",
+                "returnedTime": {
+                  "$date": "2023-07-31T14:24:16.278Z"
+                },
+                "Measurer": "aaaaa asdasd"
+              }
+            ]
+          }]
+  },
+  {
+    "collection" : "WELCOMEBACK",
+    "data": [{
+        "_id": "42e781cb",
+        "stageName": "WelcomeBack",
+        "Technologist": "А.С. Иванов",
+        "returnedTime": {
+          "$date": "2023-07-31T14:24:16.278Z"
+        },
+        "Measurer": "aaaaa asdasd"
+      }]
+  }
+  
+
+
+]
