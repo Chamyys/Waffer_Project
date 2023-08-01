@@ -18,6 +18,7 @@ import AddNewMT from '@/components/AddNewMT.vue'
 import Missions from '@/components/Missions.vue'
 import CreateMonitor from '@/components/CreateMonitor.vue'
 import WaferTimeLine from '@/components/WaferTimeLine.vue'
+import CreateLabEntry from '@/components/CreateLabEntry.vue'
 import axios from 'axios'
 
 const scrollBehavior = (to, from, savedPosition) => {
@@ -61,6 +62,11 @@ const routes = [
         path: '/Measurer/WelcomeBack',
         name: 'MeasurerWelcomeback',
         component: Welcomeback,
+      },
+      {
+        path: '/Measurer/LabEntry',
+        name: 'MeasurerCreateLabEntry',
+        component: CreateLabEntry,
       },
       {
         path: '/Measurer/Missions',

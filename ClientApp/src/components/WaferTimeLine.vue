@@ -41,7 +41,7 @@ export default {
     const getStage = (key) => {
       choosedIndex.value = key
     }
-    const getCurentWafferInfo = async () => {
+    const getCurentWaferInfo = async () => {
       try {
         const promise = await axios.get(
           'https://localhost:3000/api/WaferInLab/GetById',
@@ -65,10 +65,8 @@ export default {
               getNumberOfStages(stages.value.stages)
             ),
           ]
-          let a = stagesNames.value
           dialog.value = false
           stageOne.value = stages.value.stages[0]
-
           loading.value = true
         }
       } catch (error) {
@@ -80,7 +78,7 @@ export default {
       dialog,
       loading,
       goBack,
-      getCurentWafferInfo,
+      getCurentWaferInfo,
       stages,
       click2,
       wafelNumber,
@@ -134,7 +132,7 @@ export default {
           <v-btn
             color="green-darken-1"
             variant="text"
-            @click="getCurentWafferInfo()"
+            @click="getCurentWaferInfo()"
           >
             Готово
           </v-btn>

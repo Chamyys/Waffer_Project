@@ -16,7 +16,7 @@ export default {
     ])
     const startupNumbers = ref(['Первый запуск', 'Второй запуск'])
     const textArea = ref()
-    const dynamicServerPushButtonText = ref('Получить код')
+    const dynamicServerPushButtonText = ref('Отправить данные')
     const statusDialog = ref(false)
     const renderHashAlert = ref(false)
     const DeliverySuccsess = ref(false)
@@ -44,8 +44,7 @@ export default {
       if (
         !createNewMonitor.value ||
         !createNewWafel.value ||
-        !measurementRecording.value ||
-        generatedHashCode.value != textfieldhashconfirmcode.value
+        !measurementRecording.value
       )
         return false
       else return true
@@ -117,21 +116,16 @@ export default {
       }
       return newMtObject
     }
-    const createHashCode = () => {
-      if (!isHashGot.value) {
-        DeliverySuccsess.value = false
-        isHashGot.value = true
-        generatedHashCode.value = crc32(new Date().toString()).toString(16)
-        renderHashAlert.value = true
-        dynamicServerPushButtonText.value = 'Отправить данные на сервер'
+    const sendToServer = () => {
+      // DeliverySuccsess.value = false
+      generatedHashCode.value = crc32(new Date().toString()).toString(16)
+
+      if (isAllFieldsComplitedCheck()) {
+        FormNotComplitedAlert.value = false
+        renderHashAlert.value = false
+        postMT()
       } else {
-        if (isAllFieldsComplitedCheck()) {
-          FormNotComplitedAlert.value = false
-          DeliverySuccsess.value = true
-          postMT()
-        } else {
-          FormNotComplitedAlert.value = true
-        }
+        FormNotComplitedAlert.value = true
       }
     }
 
@@ -228,11 +222,11 @@ export default {
           'https://localhost:3000/api/WaferCreateMission/Post',
           createMission()
         )
-
         console.log(response)
       } catch (error) {
         console.error(error)
       }
+      DeliverySuccsess.value = true
     }
     const postMT = async () => {
       try {
@@ -242,6 +236,7 @@ export default {
         )
 
         console.log(response)
+        DeliverySuccsess.value = true
       } catch (error) {
         console.error(error)
       }
@@ -286,12 +281,13 @@ export default {
       dialogText,
       delegateDialogText,
       cleanCheckbox,
-      createHashCode,
+      sendToServer,
       textfieldhashconfirmcode,
       dynamicServerPushButtonText,
       renderHashAlert,
       generatedHashCode,
       FormNotComplitedAlert,
+      DeliverySuccsess,
       goBack,
       appendChangeStstatusInfo,
       textArea,
@@ -314,6 +310,7 @@ export default {
       type="error"
       style="margin-left: 5em; margin-bottom: 2em"
     ></v-alert>
+
     <v-alert
       v-if="DeliverySuccsess"
       closable
@@ -321,22 +318,6 @@ export default {
       type="success"
       style="margin-left: 5em"
     ></v-alert>
-
-    <v-alert
-      v-if="renderHashAlert"
-      style="margin-left: 5em"
-      title="Ваш код для подтверждения операции:"
-    >
-      {{ generatedHashCode }}
-    </v-alert>
-    <v-text-field
-      v-if="renderHashAlert"
-      v-model="textfieldhashconfirmcode"
-      style="text-align: center; margin-top: 2em; margin-left: 5em"
-      label="Введите код поддтверждения"
-      :rules="rules"
-      hide-details="auto"
-    ></v-text-field>
   </div>
   <div>
     <v-dialog v-model="dialog" width="50em">
@@ -406,7 +387,6 @@ export default {
       <v-form disabled>
         <v-text-field v-model="technologistName"></v-text-field>
       </v-form>
-
       <v-autocomplete
         v-model="createNewWafel"
         label="Номер пластины"
@@ -446,7 +426,7 @@ export default {
     </v-sheet>
   </div>
   <v-sheet width="400" class="mx-auto">
-    <v-btn type="submit" block class="mt-2" @click="createHashCode">{{
+    <v-btn type="submit" block class="mt-2" @click="sendToServer">{{
       dynamicServerPushButtonText
     }}</v-btn>
 

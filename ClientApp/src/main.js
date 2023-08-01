@@ -56,3 +56,6 @@ app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios)
 
 app.mount('#app')
+app.config.errorHandler = (err) => {
+  alert(err)
+}

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SpaServices;
 using VueCliMiddleware;
 using MongoDB.Driver;
 using Repository;
+ 
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,11 +52,11 @@ builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Config
 
 */
 
+builder.Services.AddHostedService<RabbitMqListener>();
 
 
 
-
-Seeder.Seed(builder.Configuration.GetConnectionString("Mongo"),"Test_Mongo");
+//Seeder.Seed(builder.Configuration.GetConnectionString("Mongo"),"Test_Mongo"); Раскоментить для копирования Бд
 
 
 

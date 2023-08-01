@@ -81,6 +81,7 @@
 
       <v-btn type="submit" block class="mt-10" @click="goBack">Выход</v-btn>
     </v-sheet>
+    <v-btn style="float: right" @click="goNextStage">Следующий этап</v-btn>
   </div>
 </template>
 <script>
@@ -158,6 +159,9 @@ export default {
       }
       return entity
     }
+    const goNextStage = () => {
+      router.push(router.currentRoute.value.matched[0].path + '/LabEntry')
+    }
 
     const postInfo = async () => {
       try {
@@ -209,6 +213,7 @@ export default {
     const goBack = () => {
       router.push('/')
     }
+
     const getInfo = async () => {
       const promise = axios.get(
         'https://localhost:3000/api/WeatherForecast/get'
@@ -237,6 +242,7 @@ export default {
     getInfo()
 
     return {
+      goNextStage,
       postWaferInLab,
       renderHashAlert,
       postInfo,
