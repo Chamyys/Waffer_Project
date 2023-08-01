@@ -55,7 +55,7 @@ builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Config
 
 
 
-
+Seeder.Seed(builder.Configuration.GetConnectionString("Mongo"),"Test_Mongo");
 
 
 

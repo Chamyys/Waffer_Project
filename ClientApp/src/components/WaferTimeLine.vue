@@ -51,7 +51,6 @@ export default {
             },
           }
         )
-
         console.log(promise)
         const dataPromise = await promise
         stages.value = dataPromise.data
@@ -76,7 +75,6 @@ export default {
         console.error(error)
       }
     }
-
     return {
       choosedIndex,
       dialog,
@@ -144,7 +142,6 @@ export default {
       </v-card>
     </v-dialog>
   </v-row>
-
   <div style="height: 10em"></div>
   <v-row justify="center">
     <v-timeline v-if="loading">
@@ -165,7 +162,6 @@ export default {
           </v-card-text>
         </v-card>
       </v-timeline-item>
-
       <v-timeline-item v-if="choosedIndex > 0">
         <v-card>
           <v-card-title :class="['text-h6', `bg-green-lighten-3`]">
