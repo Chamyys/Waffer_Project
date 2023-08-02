@@ -51,11 +51,6 @@ app.use(router)
 app.use(vuetify)
 app.use(Vue3Mq)
 app.use(VueAxios, axios)
-
 //app.use(vuex)
 app.provide('axios', app.config.globalProperties.axios)
-
 app.mount('#app')
-app.config.errorHandler = (err) => {
-  alert(err)
-}

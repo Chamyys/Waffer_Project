@@ -5,7 +5,7 @@
     :size="100"
   ></v-progress-circular>
   <div v-if="isStageAvailable">
-    <p>{{ response.data }}</p>
+    <p>Текст</p>
     <div>
       <v-btn style="float: left" @click="goBack">Предыдущий этап</v-btn>
       <v-btn style="float: right">Следующий этап</v-btn>
@@ -61,6 +61,8 @@
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { ref } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   setup() {
     const loading = ref(true)
@@ -81,7 +83,9 @@ export default {
       router.back()
     }
     // getData()
-    setInterval(getData, 2000)
+    //setInterval(getData, 2000)
+    //throwError()
+
     return {
       response,
       goBack,

@@ -2,12 +2,21 @@ import { createStore } from 'vuex'
 
 const store = createStore({
   state: {
+    myError: {
+      component: '',
+      method: '',
+      errorCode: '',
+      errorText: '',
+    },
     title: 'Vuex Store',
     arrayofWeather: [],
     firstname: '',
     secondname: '',
   },
   getters: {
+    getError(state) {
+      return state.myError
+    },
     getweatherarray(state) {
       return state.arrayofWeather
     },
@@ -20,6 +29,15 @@ const store = createStore({
   },
 
   mutations: {
+    THROW_NEW_ERROR(state, title) {
+      state.myError.component = title.component
+      state.myError.method = title.method
+      state.myError.errorCode = title.errorCode
+      state.myError.errorText = title.errorText
+    },
+    FORGET_CURRENT_ERROR(state) {
+      state.myError = ''
+    },
     SAVE_WEATHER_ARRAY(state, title) {
       state.arrayofWeather.push(title)
     },
@@ -32,6 +50,12 @@ const store = createStore({
     },
   },
   actions: {
+    throwError({ commit }, myError) {
+      commit('THROW_NEW_ERROR', myError)
+    },
+    forgetError({ commit }) {
+      commit('FORGET_CURRENT_ERROR')
+    },
     createUser({ commit }, fullname) {
       commit('CREATE_LOCAL_USER', fullname)
     },
