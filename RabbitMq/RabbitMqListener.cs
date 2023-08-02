@@ -6,13 +6,14 @@ using Microsoft.Extensions.Hosting;
 using System.Text;
 using System.Diagnostics;
 using System;
-
+using Microsoft.AspNetCore.Mvc.Controllers;
+using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 
 public class RabbitMqListener : BackgroundService
 {
 	private IConnection _connection;
 	private IModel _channel;
-    public string _currentContent = "test";
 	public RabbitMqListener()
 	{
 		// Не забудьте вынести значения "localhost" и "MyQueue"
@@ -35,8 +36,8 @@ public class RabbitMqListener : BackgroundService
 			// Каким-то образом обрабатываем полученное сообщение
 			Debug.WriteLine($"Получено сообщение: {content}");
             //отправить что-то на сервак 
-            
-             _currentContent = content;
+			object[] myData = {content};
+			  InvokeController("RabbitMq", "GetMessage", myData);
 			_channel.BasicAck(ea.DeliveryTag, false);
 		};
 
@@ -51,4 +52,20 @@ public class RabbitMqListener : BackgroundService
 		_connection.Close();
 		base.Dispose();
 	}
+	public void InvokeController(string controllerName, string methodName, object[] parameters)
+{
+	 var controllerType = Type.GetType($"{controllerName}Controller");
+    var controllerInstance = Activator.CreateInstance(controllerType);
+    var method = controllerType.GetMethod(methodName);
+
+    if (method != null)
+    {
+        method.Invoke(controllerInstance, parameters);
+    }
+    else
+    {
+        Console.WriteLine("Метод не найден");
+    }
+}
+
 }

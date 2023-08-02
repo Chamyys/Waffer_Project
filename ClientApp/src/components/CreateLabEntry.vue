@@ -80,7 +80,7 @@ export default {
     const goBack = () => {
       router.back()
     }
-   // getData()
+    // getData()
     setInterval(getData, 2000)
     return {
       response,

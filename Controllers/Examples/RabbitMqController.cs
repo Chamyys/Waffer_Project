@@ -8,11 +8,7 @@ public class RabbitMqController : ControllerBase
 	//private readonly IRabbitMqService _mqService;
     private readonly RabbitMqListener _listener;
 
-	public RabbitMqController( IServiceProvider service)
-	{
-        _listener = service.GetService<RabbitMqListener>();
 
-	}
 
 /*
 	[HttpPost]
@@ -24,9 +20,8 @@ public class RabbitMqController : ControllerBase
 	}
     */
     [HttpGet]
-    public string GetMessage()
+    public string GetMessage([FromBody] string message)
 	{
-        return _listener == null ?"null" : _listener._currentContent;
-		//return _listener._currentContent;
-	}
+        return message;
+}
 }
