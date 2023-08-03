@@ -1,11 +1,9 @@
 <template>
   <div class="text-center">
-    <v-snackbar v-model="snackbar" :timeout="timeout">
+    <v-snackbar v-model="snackbar" :color="myColor" :timeout="timeout">
       {{ text }}
       <template #actions>
-        <v-btn color="blue" variant="text" @click="snackbar = false">
-          Close
-        </v-btn>
+        <v-btn variant="text" @click="snackbar = false"> Закрыть </v-btn>
       </template>
     </v-snackbar>
   </div>
@@ -13,69 +11,37 @@
 <script>
 import { useStore } from 'vuex'
 
-import { ref, toRefs, watch } from 'vue'
+import { ref } from 'vue'
 export default {
-
-  emits: ['handleError'],
-  setup(  emit ) {
+  setup() {
+    const text = ref()
+    const snackbar = ref(false)
+    const myColor = ref('error')
     const store = useStore()
     store.watch(
       (state) => {
-        // Check for the specific data in the store that you want to trigger the function on
-        return state.myError // Replace 'data' with the property name in your store
+        return state.myError
       },
       (newValue, oldValue) => {
-        // Call your function here
-        if (newValue !== oldValue) {
-          // Execute your function logic here
-          nyfunc()
+        if (newValue !== oldValue && newValue !== null) {
+          handleError()
         }
       }
     )
-    const text = ref()
-    const snackbar = ref(false)
-    // Создаем реактивную переменную для отслеживания пропсов
 
-    // const myPropValue = ref(props.what)
-    const nyfunc = () => {
+    const handleError = () => {
       let currentError = store.getters.getError
       snackbar.value = true
       text.value = currentError.errorText
-      store.dispatch('forgetError')
-      emit('handleError', {
-        //доделать эмит
-        component: currentError.component,
-        method: currentError.method,
-        errorCode: currentError.errorCode,
-        errorText: currentError.errorText,
-      })
-    }
-    // Используем хук watch для вызова функции при изменении пропсов
-
-    /*
-    watch(
-      () => {
-        return props.what
-      },
-      (newVal) => {
-        // Выполняем нужную функцию при изменении пропсов
-        myFunction(newVal)
-        // Обновляем значение реактивной переменной
-        myPropValue.value = newVal
-      }
-    )*/
-
-    // Функция, которая будет вызываться при изменении пропсов
-    function myFunction(value) {
-      snackbar.value = true
-      text.value = value.errorMessage
+      myColor.value = currentError.color
       store.dispatch('forgetError')
     }
 
     return {
-      timeout: 10000,
+      timeout: 5000,
       snackbar,
       text,
+      myColor,
     }
   },
 }

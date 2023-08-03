@@ -69,6 +69,7 @@ export default {
     const isStageAvailable = ref(true)
     const router = useRouter()
     const response = ref()
+    const store = useStore()
     const getData = async () => {
       try {
         response.value = await axios.get(
@@ -76,6 +77,7 @@ export default {
         )
       } catch (error) {
         console.error(error)
+        store.dispatch('throwError', 'noServerConnection')
       }
       loading.value = false
     }

@@ -10,9 +10,6 @@ namespace Controllers;
 [Route("/api/[controller]/[action]")]
 public class MTController : Controller{
 
-
-
- 
   private readonly IMongoRepository<MT> _mongoRepository;
     public MTController(IMongoRepository<MT> mongoRepository)//
     {
@@ -22,8 +19,6 @@ public class MTController : Controller{
  [HttpPost]
 public void Post([FromBody] MT entity)
 {
-       
-
     _mongoRepository.setCollectionName("MT");
     _mongoRepository.Create(entity);
 }

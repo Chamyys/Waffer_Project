@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import crc32 from 'crc/crc32'
-
+import {useStore} from 'vuex'
 export default {
   setup() {
     const GenerateNewWafelString = 'Создать новую пластину'
@@ -14,13 +14,11 @@ export default {
       'Второй монитор',
       GenerateNewMonitorString,
     ])
+    const store = useStore()
     const startupNumbers = ref(['Первый запуск', 'Второй запуск'])
     const textArea = ref()
     const dynamicServerPushButtonText = ref('Отправить данные')
     const statusDialog = ref(false)
-    const renderHashAlert = ref(false)
-    const DeliverySuccsess = ref(false)
-    const FormNotComplitedAlert = ref(false)
     const textfieldhashconfirmcode = ref('')
     const generatedHashCode = ref()
     const isHashGot = ref(false)
@@ -63,7 +61,7 @@ export default {
       let returnedResult = 1000
       if (measurementRecording.value >= returnedResult)
         return measurementRecording.value
-      else FormNotComplitedAlert.value = true
+        store.dispatch('throwError', 'FormNotComplited')
     }
     const fillMeasurementRecording = () => {
       let measurementRecordingObj = {
@@ -117,15 +115,12 @@ export default {
       return newMtObject
     }
     const sendToServer = () => {
-      // DeliverySuccsess.value = false
       generatedHashCode.value = crc32(new Date().toString()).toString(16)
 
       if (isAllFieldsComplitedCheck()) {
-        FormNotComplitedAlert.value = false
-        renderHashAlert.value = false
         postMT()
       } else {
-        FormNotComplitedAlert.value = true
+           store.dispatch('throwError', 'FormNotComplited')
       }
     }
 
@@ -226,7 +221,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-      DeliverySuccsess.value = true
+      store.dispatch('throwError', 'deliverySuccsess')
     }
     const postMT = async () => {
       try {
@@ -236,7 +231,7 @@ export default {
         )
 
         console.log(response)
-        DeliverySuccsess.value = true
+        store.dispatch('throwError', 'deliverySuccsess')
       } catch (error) {
         console.error(error)
       }
@@ -284,10 +279,7 @@ export default {
       sendToServer,
       textfieldhashconfirmcode,
       dynamicServerPushButtonText,
-      renderHashAlert,
       generatedHashCode,
-      FormNotComplitedAlert,
-      DeliverySuccsess,
       goBack,
       appendChangeStstatusInfo,
       textArea,
@@ -304,20 +296,6 @@ export default {
 
 <template>
   <div style="float: left">
-    <v-alert
-      v-if="FormNotComplitedAlert"
-      text="Данные внесены некорректно"
-      type="error"
-      style="margin-left: 5em; margin-bottom: 2em"
-    ></v-alert>
-
-    <v-alert
-      v-if="DeliverySuccsess"
-      closable
-      text="Данные успешно загружены на сервер"
-      type="success"
-      style="margin-left: 5em"
-    ></v-alert>
   </div>
   <div>
     <v-dialog v-model="dialog" width="50em">

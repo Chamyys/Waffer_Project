@@ -5,20 +5,6 @@
 
       <div style="float: left">
         <v-alert
-          v-if="FormNotComplitedAlert"
-          text="Данные внесены некорректно"
-          type="error"
-          style="margin-left: 5em; margin-bottom: 2em"
-        ></v-alert>
-        <v-alert
-          v-if="DeliverySuccsess"
-          closable
-          text="Данные успешно загружены на сервер"
-          type="success"
-          style="margin-left: 5em"
-        ></v-alert>
-
-        <v-alert
           v-if="renderHashAlert"
           style="margin-left: 5em"
           title="Ваш код для подтверждения операции:"
@@ -101,8 +87,6 @@ export default {
     }
     const dynamicServerPushButtonText = ref('Получить код')
     const renderHashAlert = ref(false)
-    const DeliverySuccsess = ref(false)
-    const FormNotComplitedAlert = ref(false)
     const date = ref(new Date())
     const rail = ref(true)
     const textfieldhashconfirmcode = ref('')
@@ -132,7 +116,6 @@ export default {
     }
     const createHashCode = () => {
       if (!isHashGot) {
-        DeliverySuccsess.value = false
         isHashGot = true
         hashCode.value = crc32(new Date().toString()).toString(16)
         renderHashAlert.value = true
@@ -141,7 +124,7 @@ export default {
         if (isAllFieldsComplitedCheck(createWELCOMEBACK())) {
           postInfo()
         } else {
-          FormNotComplitedAlert.value = true
+          store.dispatch('throwError', 'FormNotComplited')
         }
       }
     }
@@ -169,7 +152,6 @@ export default {
           'https://localhost:3000/api/WeatherForecast/Post',
           createWELCOMEBACK()
         )
-        FormNotComplitedAlert.value = false
         renderHashAlert.value = false
         console.log(response)
         postWaferInLab()
@@ -203,11 +185,10 @@ export default {
     }
 
     const restartPageLife = () => {
-      DeliverySuccsess.value = true
+      store.dispatch('throwError', 'deliverySuccsess')
       dynamicServerPushButtonText.value = 'Получить код'
       isHashGot = false
       textfieldhashconfirmcode.value = ''
-      FormNotComplitedAlert.value = false
     }
 
     const goBack = () => {
@@ -254,14 +235,12 @@ export default {
       date,
       Datepicker,
       username,
-      FormNotComplitedAlert,
       currentTechnologistName,
       getCurrentTechnologistName,
       createHashCode,
       hashCode,
       dynamicServerPushButtonText,
       textfieldhashconfirmcode,
-      DeliverySuccsess,
       rules: [
         (value) => !!value || 'Поле не может быть пустым.',
         (value) =>

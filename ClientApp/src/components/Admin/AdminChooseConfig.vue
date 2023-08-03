@@ -1,16 +1,4 @@
 <template>
-  <v-alert
-    v-if="ActionSuccessesfullyFlag"
-    :text="`${actionText}`"
-    type="success"
-    style="margin-left: 5em; float: left"
-  ></v-alert>
-  <v-alert
-    v-if="!isUserExists"
-    text="Такого пользователя не существует"
-    type="error"
-    style="margin-left: 5em; float: left"
-  ></v-alert>
   <div style="height: 5em"></div>
   <v-sheet width="400" class="mx-auto">
     <v-switch
@@ -109,37 +97,13 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 import { ref } from 'vue'
 import axios from 'axios'
 export default {
   setup() {
-    /*
-  const getInfo = async () => {
-      const promise = await axios.get(
-        'https://localhost:3000/api/WorkerData/get',
-        {
-          params: {
-            curentRole: 'Технолог',
-          },
-        }
-      )
-      .then(function (response) {
-       return(response.data)
-    })
-    .catch(function (error) {
-        console.error(error);
-    });   
-    }
-
-    
-
-    const fillTechnologistsArray = (a) => {
-    for(let i = 0; i < response.data.length; i++){
-          technologists.value.push(response.data[i])
-        }
-      }
-    */
+    const store = useStore()
     const actionText = ref('')
     const router = useRouter()
     const offsetTop = ref(0)
@@ -196,24 +160,13 @@ export default {
     const addUser = () => {
       router.push('/Admin/AdminChooseConfig/AddUser')
     }
-    /*
+
     const userWasRemoved = (data) => {
       if (data.isUserExists) {
-        isUserExists.value = true
-        if (data.role === 'Измеритель') {
-          measurers.value.splice(data.currentIndex, 1)
-        } else technologists.value.splice(data.currentIndex, 1)
-        userWasSuccessesfullyRemovedFlag.value = true
-      } else isUserExists.value = false
-    }
-    */
-    const userWasRemoved = (data) => {
-      if (data.isUserExists) {
-        actionText.value = data.message
+        store.dispatch('throwError', 'userDeletedSuccessesfully')
         isUserExists.value = true
         chooseNewEditCollection(data.role).splice(data.currentIndex, 1)
-        ActionSuccessesfullyFlag.value = true
-      } else isUserExists.value = false
+      } else store.dispatch('throwError', 'userDoesNotExist')
     }
     const chooseNewEditCollection = (role) => {
       if (role === 'Измеритель') return measurers.value
@@ -221,8 +174,7 @@ export default {
     }
     const userWasEdited = (data) => {
       if (data.isUserExists) {
-        actionText.value = data.message
-        ActionSuccessesfullyFlag.value = true
+        store.dispatch('throwError', 'userEditedSuccessesfully')
         if (data.role === data.baseRole) {
           //если роль не менялась
           chooseNewEditCollection(data.role)[data.index] = data.worker
@@ -232,11 +184,10 @@ export default {
           chooseNewEditCollection(data.role).push(data.worker)
         }
         isUserExists.value = true
-      } else isUserExists.value = false
+      } else store.dispatch('throwError', 'userDoesNotExist')
     }
     const userWasAdded = (data) => {
-      actionText.value = data.message
-      ActionSuccessesfullyFlag.value = true
+      store.dispatch('throwError', 'userAddedSuccessesfully')
       chooseNewEditCollection(data.role).push(data.newUser)
       isUserExists.value = true
     }

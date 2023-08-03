@@ -1,17 +1,106 @@
 import { createStore } from 'vuex'
+import crc32 from 'crc/crc32'
 
 const store = createStore({
   state: {
-    myError: {
-      component: '',
-      method: '',
-      errorCode: '',
-      errorText: '',
-    },
+    myError: Object,
     title: 'Vuex Store',
     arrayofWeather: [],
     firstname: '',
     secondname: '',
+    errors: [
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '500',
+        errorText: 'Что-то пошло не так',
+        name: 'error',
+        color: 'error',
+      },
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '200',
+        errorText: 'Все прошло успешно',
+        name: 'success',
+        color: 'success',
+      },
+      {
+        id: '',
+        component: '',
+        method: '',
+        errorCode: '500',
+        errorText:
+          'Ошибка при подключению к серверу, пожалуйста попробуйте позже',
+        name: 'noServerConnection',
+        color: 'error',
+      },
+      {
+        id: '',
+        component: '',
+        method: '',
+        errorCode: '401',
+        errorText: 'Неверный логин и/или пароль',
+        name: 'notCorrectLogin',
+        color: 'error',
+      },
+      {
+        id: '',
+        component: '',
+        method: '',
+        errorCode: '401',
+        errorText: 'Пожалуйста, закончите заполнение формы',
+        name: 'FormNotComplited',
+        color: 'error',
+      },
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '200',
+        errorText: 'Данные успешно загружены на сервер',
+        name: 'deliverySuccsess',
+        color: 'success',
+      },
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '200',
+        errorText: 'Пользователь успешно добавлен',
+        name: 'userAddedSuccessesfully',
+        color: 'success',
+      },
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '200',
+        errorText: 'Пользователь успешно изменен',
+        name: 'userEditedSuccessesfully',
+        color: 'success',
+      },
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '404',
+        errorText: 'Такого пользователя не существует',
+        name: 'userDoesNotExist',
+        color: 'error',
+      },
+      {
+        id: '',
+        component: 'app.vue',
+        method: 'returnDef',
+        errorCode: '200',
+        errorText: 'Пользователь успешно удален',
+        name: 'userDeletedSuccessesfully',
+        color: 'success',
+      },
+    ],
   },
   getters: {
     getError(state) {
@@ -30,13 +119,13 @@ const store = createStore({
 
   mutations: {
     THROW_NEW_ERROR(state, title) {
-      state.myError.component = title.component
-      state.myError.method = title.method
-      state.myError.errorCode = title.errorCode
-      state.myError.errorText = title.errorText
+      let error = state.errors.find((obj) => obj.name === title)
+      error.id = crc32(new Date().toString()).toString(16)
+
+      state.myError = error
     },
     FORGET_CURRENT_ERROR(state) {
-      state.myError = ''
+      state.myError = null
     },
     SAVE_WEATHER_ARRAY(state, title) {
       state.arrayofWeather.push(title)

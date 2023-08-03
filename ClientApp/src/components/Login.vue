@@ -1,11 +1,5 @@
 @@ -0,0 +1,90 @@
 <template>
-  <v-alert
-    v-if="!isLoginCorrect"
-    text="Неверный логин/пароль"
-    type="error"
-    style="margin-left: 5em; float: left"
-  ></v-alert>
   <div style="height: 20em"></div>
   <h1>Личный кабинет - {{ role }}</h1>
   <div style="height: 2em"></div>
@@ -47,7 +41,6 @@ export default {
     const router = useRouter()
     const path = computed(() => route.path)
     const currentUsersArray = ref([])
-    const isLoginCorrect = ref(true)
     const getCurrentRoleAccounts = async () => {
       await axios
         .get('https://localhost:3000/api/WorkerData/get', {
@@ -77,7 +70,7 @@ export default {
           currentUsersArray.value.find((obj) => obj.login === login.value)
         )
         enterInAccount()
-      } else isLoginCorrect.value = false
+      } else store.dispatch('throwError', 'notCorrectLogin')
     }
     const enterInAccount = () => {
       window.localStorage.setItem(
@@ -118,8 +111,6 @@ export default {
       returnHome,
       checkEnterData,
       path,
-      isLoginCorrect,
-
       role,
       login,
       firstNameRules: [
