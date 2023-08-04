@@ -183,9 +183,9 @@ const store = createStore({
         )
       }
     },
-    CREATE_LOCAL_USER(state, fullname) {
-      state.firstname = fullname.split(' ')[0]
-      state.secondname = fullname.split(' ')[1]
+    CREATE_LOCAL_USER(state, { firstname, secondname }) {
+      state.firstname = firstname
+      state.secondname = secondname
     },
   },
   actions: {
@@ -204,8 +204,8 @@ const store = createStore({
     forgetError({ commit }) {
       commit('FORGET_CURRENT_ERROR')
     },
-    createUser({ commit }, fullname) {
-      commit('CREATE_LOCAL_USER', fullname)
+    createUser({ commit }, { firstname, secondname }) {
+      commit('CREATE_LOCAL_USER', { firstname, secondname })
     },
     createWeatherArray({ commit }, title) {
       commit('SAVE_WEATHER_ARRAY', title)

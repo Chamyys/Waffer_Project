@@ -10,7 +10,6 @@
     width="30em"
   >
     {{ item.errorText }}
-    {{ item.id }}
     <template #actions>
       <v-btn variant="text" @click="deleteOnewSnackBar(item.id)">
         Закрыть
