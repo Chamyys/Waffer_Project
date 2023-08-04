@@ -70,7 +70,11 @@ export default {
           currentUsersArray.value.find((obj) => obj.login === login.value)
         )
         enterInAccount()
-      } else store.dispatch('throwError', 'notCorrectLogin')
+      } else {
+       // store.dispatch('throwError', 'notCorrectLogin')
+        store.dispatch('throwMessage', {type:'error' ,name: 'notCorrectLogin'})
+        store.dispatch('throwMessage', {type:'success' ,name: 'deliverySuccsess'})
+      }
     }
     const enterInAccount = () => {
       window.localStorage.setItem(

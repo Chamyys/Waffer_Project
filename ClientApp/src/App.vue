@@ -3,8 +3,8 @@
     <div class="wrapper-content">
       <div class="view">
         <div class="container">
-          <router-view></router-view>
           <ErrorComponent />
+          <router-view></router-view>
         </div>
       </div>
     </div>

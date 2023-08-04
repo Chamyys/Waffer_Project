@@ -1,27 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
-
-[Route("api/[controller]/[action]")]
+[Route("api/[controller]")]
 [ApiController]
 public class RabbitMqController : ControllerBase
+
 {
-	//private readonly IRabbitMqService _mqService;
-    private readonly RabbitMqListener _listener;
-
-
 
 /*
-	[HttpPost]
-	public void SendMessage([FromBody]string message)
-	{
-		_mqService.SendMessage(message);
-
-		
-	}
-    */
+	[Route("message/{message}")]
     [HttpGet]
-    public string GetMessage([FromBody] string message)
+    public dynamic GetMessage( [FromRoute] string message)
 	{
         return message;
-}
+	}
+    */
+   
+    [HttpGet]
+    public string GetMessage( [FromBody] string message)
+	{
+        return message;
+	}
 }

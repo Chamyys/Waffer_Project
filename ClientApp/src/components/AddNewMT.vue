@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import crc32 from 'crc/crc32'
-import {useStore} from 'vuex'
+import { useStore } from 'vuex'
 export default {
   setup() {
     const GenerateNewWafelString = 'Создать новую пластину'
@@ -61,7 +61,7 @@ export default {
       let returnedResult = 1000
       if (measurementRecording.value >= returnedResult)
         return measurementRecording.value
-        store.dispatch('throwError', 'FormNotComplited')
+      store.dispatch('throwError', 'FormNotComplited')
     }
     const fillMeasurementRecording = () => {
       let measurementRecordingObj = {
@@ -120,7 +120,7 @@ export default {
       if (isAllFieldsComplitedCheck()) {
         postMT()
       } else {
-           store.dispatch('throwError', 'FormNotComplited')
+        store.dispatch('throwError', 'FormNotComplited')
       }
     }
 
@@ -295,8 +295,7 @@ export default {
 </script>
 
 <template>
-  <div style="float: left">
-  </div>
+  <div style="float: left"></div>
   <div>
     <v-dialog v-model="dialog" width="50em">
       <v-card>

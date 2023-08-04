@@ -67,9 +67,6 @@ export default {
       ' ' +
       window.localStorage.getItem('lastName')
     ).toString()
-    const getDataMesurers = () => {}
-    const getDataTechnologists = () => {}
-
     const goBack = () => {
       router.push('/')
     }

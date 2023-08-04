@@ -169,8 +169,9 @@ export default {
       } else store.dispatch('throwError', 'userDoesNotExist')
     }
     const chooseNewEditCollection = (role) => {
-      if (role === 'Измеритель') return measurers.value
-      else return technologists.value
+      let a = role.value.value
+      if (a === 'Технолог') return technologists.value
+      else return measurers.value
     }
     const userWasEdited = (data) => {
       if (data.isUserExists) {
@@ -187,9 +188,9 @@ export default {
       } else store.dispatch('throwError', 'userDoesNotExist')
     }
     const userWasAdded = (data) => {
-      store.dispatch('throwError', 'userAddedSuccessesfully')
       chooseNewEditCollection(data.role).push(data.newUser)
       isUserExists.value = true
+      store.dispatch('throwError', 'userAddedSuccessesfully')
     }
     const onScroll = (e) => {
       offsetTop.value = e.target.scrollTop

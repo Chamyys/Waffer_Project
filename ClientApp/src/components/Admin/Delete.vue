@@ -28,9 +28,12 @@ export default {
     let deletedRole = ''
     let deletedIndex = ''
     let isCurrentUserExists = false
+
+    // eslint-disable-next-line vue/no-setup-props-destructure
     const workers = props.measurersDelete.concat(props.technologistsDelete)
     const Id = ref()
     const router = useRouter()
+    // eslint-disable-next-line vue/no-setup-props-destructure
     console.log(props.measurers)
     const remove = async () => {
       let workerToDelete = findWorkerById()

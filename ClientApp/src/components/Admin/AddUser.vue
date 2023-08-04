@@ -97,6 +97,7 @@ export default {
     const login = ref(useField('login'))
     const password = ref(useField('password'))
     const select = ref(useField('select'))
+    // eslint-disable-next-line vue/no-setup-props-destructure
     const workers = props.measurersDelete.concat(props.technologistsDelete)
     const logins = workers.map((obj) => {
       return obj.login
