@@ -13,108 +13,107 @@ const store = createStore({
     secondname: '',
     messages: [
       {
-      messageType: "error",
-      messageList: [
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '500',
-        errorText: 'Что-то пошло не так',
-        name: 'error',
-        color: 'error',
-        snackbar: true,
+        messageType: 'error',
+        messageList: [
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Что-то пошло не так',
+            name: 'error',
+            color: 'error',
+            snackbar: true,
+          },
+          {
+            component: '',
+            method: '',
+            errorCode: '500',
+            errorText:
+              'Ошибка при подключению к серверу, пожалуйста попробуйте позже',
+            name: 'noServerConnection',
+            color: 'error',
+            snackbar: true,
+          },
+          {
+            component: '',
+            method: '',
+            errorCode: '401',
+            errorText: 'Неверный логин и/или пароль',
+            name: 'notCorrectLogin',
+            color: 'error',
+            snackbar: true,
+          },
+          {
+            component: '',
+            method: '',
+            errorCode: '401',
+            errorText: 'Пожалуйста, закончите заполнение формы',
+            name: 'FormNotComplited',
+            color: 'error',
+            snackbar: true,
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '404',
+            errorText: 'Такого пользователя не существует',
+            name: 'userDoesNotExist',
+            color: 'error',
+            snackbar: true,
+          },
+        ],
       },
       {
-        component: '',
-        method: '',
-        errorCode: '500',
-        errorText:
-          'Ошибка при подключению к серверу, пожалуйста попробуйте позже',
-        name: 'noServerConnection',
-        color: 'error',
-        snackbar: true,
+        messageType: 'success',
+        messageList: [
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '200',
+            errorText: 'Все прошло успешно',
+            name: 'success',
+            color: 'success',
+            snackbar: true,
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '200',
+            errorText: 'Данные успешно загружены на сервер',
+            name: 'deliverySuccsess',
+            color: 'success',
+            snackbar: true,
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '200',
+            errorText: 'Пользователь успешно добавлен',
+            name: 'userAddedSuccessesfully',
+            color: 'success',
+            snackbar: true,
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '200',
+            errorText: 'Пользователь успешно изменен',
+            name: 'userEditedSuccessesfully',
+            color: 'success',
+            snackbar: true,
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '200',
+            errorText: 'Пользователь успешно удален',
+            name: 'userDeletedSuccessesfully',
+            color: 'success',
+            snackbar: true,
+          },
+        ],
       },
-      {
-        component: '',
-        method: '',
-        errorCode: '401',
-        errorText: 'Неверный логин и/или пароль',
-        name: 'notCorrectLogin',
-        color: 'error',
-        snackbar: true,
-      },
-      {
-        component: '',
-        method: '',
-        errorCode: '401',
-        errorText: 'Пожалуйста, закончите заполнение формы',
-        name: 'FormNotComplited',
-        color: 'error',
-        snackbar: true,
-      },
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '404',
-        errorText: 'Такого пользователя не существует',
-        name: 'userDoesNotExist',
-        color: 'error',
-        snackbar: true,
-      }
-    ]
-  }
-  ,
-  {
-       messageType: "success",
-       messageList: [
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '200',
-        errorText: 'Все прошло успешно',
-        name: 'success',
-        color: 'success',
-        snackbar: true,
-      },
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '200',
-        errorText: 'Данные успешно загружены на сервер',
-        name: 'deliverySuccsess',
-        color: 'success',
-        snackbar: true,
-      },
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '200',
-        errorText: 'Пользователь успешно добавлен',
-        name: 'userAddedSuccessesfully',
-        color: 'success',
-        snackbar: true,
-      },
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '200',
-        errorText: 'Пользователь успешно изменен',
-        name: 'userEditedSuccessesfully',
-        color: 'success',
-        snackbar: true,
-      },
-      {
-        component: 'app.vue',
-        method: 'returnDef',
-        errorCode: '200',
-        errorText: 'Пользователь успешно удален',
-        name: 'userDeletedSuccessesfully',
-        color: 'success',
-        snackbar: true,
-      }
-    ]
-  }
-]
+    ],
   },
   getters: {
     getError(state) {
@@ -132,7 +131,7 @@ const store = createStore({
     getSecondName(state) {
       return state.secondname
     },
-    getMyMessageCollection(state,type) {
+    getMyMessageCollection(state, type) {
       return state.type
     },
   },
@@ -158,11 +157,12 @@ const store = createStore({
     CLEAN_WEATHER_ARRAY(state) {
       state.arrayofWeather.length = 0
     },
-    THROW_NEW_MESSAGE(state, {type, name}) {
-
+    THROW_NEW_MESSAGE(state, { type, name }) {
       if (state.myErrorsArray.length < state.maxErrorsArraySize) {
         let id = crc32(new Date().toString()).toString(16) + Math.random(10)
-        let errorConfig = state.messages.find((obj)=>obj.messageType === type).messageList.find((obj) => obj.name === name)
+        let errorConfig = state.messages
+          .find((obj) => obj.messageType === type)
+          .messageList.find((obj) => obj.name === name)
         let currentError = { ...errorConfig, id }
         state.lastErrorId = currentError.id
         state.myError = currentError
@@ -189,11 +189,11 @@ const store = createStore({
     },
   },
   actions: {
-   /* throwError({ commit }, myError) {
+    /* throwError({ commit }, myError) {
       commit('THROW_NEW_ERROR', myError)
     },*/
-    throwMessage({ commit }, {type , name}) {
-      commit('THROW_NEW_MESSAGE', {type, name})
+    throwMessage({ commit }, { type, name }) {
+      commit('THROW_NEW_MESSAGE', { type, name })
     },
     deleteErrorInArrayById({ commit }, id) {
       commit('DELETE_ERROR_IN_ARRAY_BY_ID', id)

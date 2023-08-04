@@ -61,7 +61,10 @@ export default {
       let returnedResult = 1000
       if (measurementRecording.value >= returnedResult)
         return measurementRecording.value
-      store.dispatch('throwError', 'FormNotComplited')
+      store.dispatch('throwMessage', {
+        type: 'error',
+        name: 'FormNotComplited',
+      })
     }
     const fillMeasurementRecording = () => {
       let measurementRecordingObj = {
@@ -120,7 +123,10 @@ export default {
       if (isAllFieldsComplitedCheck()) {
         postMT()
       } else {
-        store.dispatch('throwError', 'FormNotComplited')
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'FormNotComplited',
+        })
       }
     }
 
@@ -221,7 +227,10 @@ export default {
       } catch (error) {
         console.error(error)
       }
-      store.dispatch('throwError', 'deliverySuccsess')
+      store.dispatch('throwMessage', {
+        type: 'success',
+        name: 'deliverySuccsess',
+      })
     }
     const postMT = async () => {
       try {
@@ -231,7 +240,10 @@ export default {
         )
 
         console.log(response)
-        store.dispatch('throwError', 'deliverySuccsess')
+        store.dispatch('throwMessage', {
+          type: 'success',
+          name: 'deliverySuccsess',
+        })
       } catch (error) {
         console.error(error)
       }

@@ -124,7 +124,10 @@ export default {
         if (isAllFieldsComplitedCheck(createWELCOMEBACK())) {
           postInfo()
         } else {
-          store.dispatch('throwError', 'FormNotComplited')
+          store.dispatch('throwMessage', {
+            type: 'error',
+            name: 'FormNotComplited',
+          })
         }
       }
     }
@@ -185,7 +188,11 @@ export default {
     }
 
     const restartPageLife = () => {
-      store.dispatch('throwError', 'deliverySuccsess')
+      store.dispatch('throwMessage', {
+        type: 'success',
+        name: 'deliverySuccsess',
+      })
+
       dynamicServerPushButtonText.value = 'Получить код'
       isHashGot = false
       textfieldhashconfirmcode.value = ''
@@ -204,8 +211,8 @@ export default {
       const dataPromise = await promise.then((response) => response.data)
 
       arr.value.length = 0
-      store.dispatch('cleanWeatherArray')
-      store.dispatch('createWeatherArray', dataPromise) //заполнение vuex
+      //store.dispatch('cleanWeatherArray')
+      //store.dispatch('createWeatherArray', dataPromise) //заполнение vuex
 
       arr.value = [...dataPromise.slice(0, currentrows)]
 

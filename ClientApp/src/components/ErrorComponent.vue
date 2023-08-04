@@ -60,7 +60,7 @@ export default {
       }
     }
     const getSnackbarStyle = (index) => {
-      const topOffset = index * 60 
+      const topOffset = index * 60
       return {
         position: 'absolute',
         top: `${topOffset}px`,

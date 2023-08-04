@@ -163,19 +163,28 @@ export default {
 
     const userWasRemoved = (data) => {
       if (data.isUserExists) {
-        store.dispatch('throwError', 'userDeletedSuccessesfully')
+        store.dispatch('throwMessage', {
+          type: 'success',
+          name: 'userDeletedSuccessesfully',
+        })
         isUserExists.value = true
         chooseNewEditCollection(data.role).splice(data.currentIndex, 1)
-      } else store.dispatch('throwError', 'userDoesNotExist')
+      } else
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'userDoesNotExist',
+        })
     }
     const chooseNewEditCollection = (role) => {
-      let a = role.value.value
-      if (a === 'Технолог') return technologists.value
+      if (role === 'Технолог') return technologists.value
       else return measurers.value
     }
     const userWasEdited = (data) => {
       if (data.isUserExists) {
-        store.dispatch('throwError', 'userEditedSuccessesfully')
+        store.dispatch('throwMessage', {
+          type: 'success',
+          name: 'userEditedSuccessesfully',
+        })
         if (data.role === data.baseRole) {
           //если роль не менялась
           chooseNewEditCollection(data.role)[data.index] = data.worker
@@ -185,12 +194,19 @@ export default {
           chooseNewEditCollection(data.role).push(data.worker)
         }
         isUserExists.value = true
-      } else store.dispatch('throwError', 'userDoesNotExist')
+      } else
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'userDoesNotExist',
+        })
     }
     const userWasAdded = (data) => {
-      chooseNewEditCollection(data.role).push(data.newUser)
+      chooseNewEditCollection(data.role.value.value).push(data.newUser)
       isUserExists.value = true
-      store.dispatch('throwError', 'userAddedSuccessesfully')
+      store.dispatch('throwMessage', {
+        type: 'success',
+        name: 'userAddedSuccessesfully',
+      })
     }
     const onScroll = (e) => {
       offsetTop.value = e.target.scrollTop

@@ -23,15 +23,8 @@ export default {
     const changed = ref(false)
     const route = useRoute()
     const path = computed(() => route.path)
-    const handleErrorType = () => {
-      //handlesomething
-    }
-    //Вызов ошибки
-    //const throwError = () => {
-    //эта хрень в конфиге ()нормальные имена
-    // store.dispatch('throwError', 'error')
-    //}
-    //setTimeout(throwError, 5000)
+    const handleErrorType = () => {}
+
     return {
       changed,
       path,

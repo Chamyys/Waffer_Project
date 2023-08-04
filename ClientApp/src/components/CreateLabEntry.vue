@@ -77,7 +77,10 @@ export default {
         )
       } catch (error) {
         console.error(error)
-        store.dispatch('throwError', 'noServerConnection')
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'noServerConnection',
+        })
       }
       loading.value = false
     }

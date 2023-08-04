@@ -71,9 +71,10 @@ export default {
         )
         enterInAccount()
       } else {
-       // store.dispatch('throwError', 'notCorrectLogin')
-        store.dispatch('throwMessage', {type:'error' ,name: 'notCorrectLogin'})
-        store.dispatch('throwMessage', {type:'success' ,name: 'deliverySuccsess'})
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'notCorrectLogin',
+        })
       }
     }
     const enterInAccount = () => {
