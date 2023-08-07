@@ -55,8 +55,6 @@
   "number": "57222"
 }]
   },
-
-
   {
     "collection" : "MT",
     "data": [{
@@ -206,6 +204,22 @@
               }
             ]
           }]
+  },
+  {
+    "collection" : "WaferRedis",
+    "data": [{
+            "_id": "42ea81cb",
+            "currentStage": "WELCOMEBACK"
+              },
+              {
+                "_id": "12e8a1cb",
+                "currentStage": "LAB_ENTRY_STAGE"
+              },
+              {
+                "_id": "99ea81tb",
+                "currentStage": "WELCOMEBACK"
+              }
+            ]
   },
   {
     "collection" : "WELCOMEBACK",

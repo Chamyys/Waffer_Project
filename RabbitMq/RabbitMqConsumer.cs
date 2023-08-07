@@ -50,7 +50,7 @@ public class RabbitMqConsumer
         _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
     }
 
-    private void OnMessageReceived(object model, BasicDeliverEventArgs args)
+    public void OnMessageReceived(object model, BasicDeliverEventArgs args)
     {
         var body = args.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);    

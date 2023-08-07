@@ -3,8 +3,10 @@ using VueCliMiddleware;
 using MongoDB.Driver;
 using Repository;
 using RabbitMQ.Client;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 using RabbitRepository;
-
+using Models;
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +41,13 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
     return new MongoRepository(client, databaseName, collectionName);
 });
 */ 
+  builder.Services.AddStackExchangeRedisCache(options => { //редис
+    options.Configuration = "localhost";
+    options.InstanceName = "wafer_id_in_redis-";
+});
 
+
+builder.Services.AddTransient<IWaferRedisService,WaferRedisService>();
 
   builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
   builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
@@ -111,6 +119,16 @@ else
 app.UseStaticFiles();
 app.UseSpaStaticFiles();
 app.UseRouting();
+app.UseWebSockets();
+/*
+
+app.MapGet("/user/{id}", async (string id, WorkerService workerService) =>    //рэдис
+{
+    Worker? user = await workerService.GetUser(id);
+    if (user != null) return $"User {user.firstName}  Id={user.secondName}  Age={user.id}";
+    return "User not found";
+});
+*/
 
 app.MapControllerRoute(
         name: "default",
@@ -133,5 +151,12 @@ app.UseSpa(spa =>
 });
 
 app.MapFallbackToFile("index.html"); ;// все запросы проксируются тут 
+
+
+
+
+
+
+
 
 app.Run();

@@ -13,9 +13,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RabbitRepository{
 
-public interface IRabbitMqListener
+public interface IRabbitMqConsumer
 {
- 		public void Listen();
-		public string GetLastMessage();
+ 		 public void StartListening();
+
+   		 public void OnMessageReceived(object model, BasicDeliverEventArgs args);
+   
+    	public void StopListening();
+   
 }		
 }
