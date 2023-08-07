@@ -25,18 +25,19 @@ using System;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-public class RabbitMqConsumer
+public class RabbitMqConsumer : IRabbitMqConsumer
 {
-    private readonly string _queueName;
+    private  string _queueName = "MyQueue";
+	private  string _hostName = "localhost";
     private readonly IConnection _connection;
     private readonly IModel _channel;
 
-    public RabbitMqConsumer(string queueName, string hostName)
+    public RabbitMqConsumer()
     {
-        _queueName = queueName;
+        //_queueName = queueName;
         var factory = new ConnectionFactory
         {
-            HostName = hostName,
+            HostName = _hostName,
         };
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
@@ -63,6 +64,10 @@ public class RabbitMqConsumer
         _channel.Close();
         _connection.Close();
     }
+	public void setSettings(string hostName, string queueName) {
+			_hostName = hostName;
+			_queueName = queueName;
+	}
 }
 
 

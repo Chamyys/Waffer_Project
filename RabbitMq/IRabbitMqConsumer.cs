@@ -19,7 +19,8 @@ public interface IRabbitMqConsumer
 
    		 public void OnMessageReceived(object model, BasicDeliverEventArgs args);
    
-    	public void StopListening();
-   
+    	 public void StopListening();
+		
+		public void setSettings(string hostName, string queueName);
 }		
 }

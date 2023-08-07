@@ -48,6 +48,7 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
 
 
 builder.Services.AddTransient<IWaferRedisService,WaferRedisService>();
+builder.Services.AddSingleton<IRabbitMqConsumer,RabbitMqConsumer>();
 
   builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
   builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
