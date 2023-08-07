@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.SpaServices;
 using VueCliMiddleware;
 using MongoDB.Driver;
 using Repository;
- 
+using RabbitMQ.Client;
+using RabbitRepository;
+
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,16 +45,34 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
   builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
 
 
-
 /*
 Регистрация Монги на 1 тип репозитория без T
 builder.Services.AddTransient<IMongoRepository, MongoRepository>();
 builder.Services.Configure<IMongoRepository>(builder.Configuration.GetSection("Mongo")); 
 builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
 
-*/
 
-builder.Services.AddHostedService<RabbitMqListener>();
+*/ // builder.Services.AddSingleton<IRabbitMqListener>();
+  //builder.Services.AddTransient(typeof(IRabbitMqListener), typeof(RabbitMqListener));
+
+
+ //builder.Services.AddSingleton<IRabbitMqListener, RabbitMqListener>();
+
+         //   builder.Services.AddHostedService<RabbitMqListener>(); //Рабочий Вариант с листенером из мануала
+
+
+      /*Подключение рэббит мку не рабочее
+
+           builder.Services.AddRabbitMqClient(clientConfiguration);
+          builder.Services.AddExchange("ExchangeName", isConsuming: true, exchangeConfiguration);
+    
+
+    services.AddSingleton<IHostedService, ConsumingService>();
+
+*/
+  // We will use different credentials for connections.
+    
+
 
 
 

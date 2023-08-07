@@ -5,6 +5,7 @@
   },
   "extends": [
     "google",
+    "eslint:recommended",
     "plugin:vue/vue3-essential",
     "plugin:vue/vue3-recommended"
   ],
@@ -15,6 +16,7 @@
   "plugins": ["vue"],
   "rules": {
     "semi": ["warning", "always"],
-    "quotes": ["warning", "double"]
+    "quotes": ["warning", "double"],
+    "eqeqeq": "warn"
   }
 }

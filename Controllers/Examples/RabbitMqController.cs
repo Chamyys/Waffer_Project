@@ -1,24 +1,13 @@
+using AspNetCoreVueStarter.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-
-[Route("api/[controller]")]
+using RabbitRepository;
 [ApiController]
+[Route("/api/[controller]/[action]")]
 public class RabbitMqController : ControllerBase
-
 {
 
-/*
-	[Route("message/{message}")]
-    [HttpGet]
-    public dynamic GetMessage( [FromRoute] string message)
-	{
-        return message;
-	}
-    */
-   
-    [HttpGet]
-    public string GetMessage( [FromBody] string message)
-	{
-        return message;
-	}
+    public void Consume()
+    {
+        new RabbitMqConsumer("MyQueue","localhost").StartListening();
+    }
 }

@@ -21,7 +21,6 @@ export default {
     const statusDialog = ref(false)
     const textfieldhashconfirmcode = ref('')
     const generatedHashCode = ref()
-    const isHashGot = ref(false)
     const createNewMonitor = ref('')
     const createNewWafel = ref()
     const dialogText = ref()

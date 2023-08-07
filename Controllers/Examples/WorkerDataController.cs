@@ -49,5 +49,6 @@ public void Update([FromBody] Worker entity)
      _mongoRepository.setCollectionName(curentRole);
      // return ((IList<Worker>)_mongoRepository.GetAllWorkersAsync(curentRole));
      return _mongoRepository.GetAll().Result;
+
   }
 }
