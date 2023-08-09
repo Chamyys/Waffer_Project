@@ -7,32 +7,23 @@ using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using RabbitRepository;
 using Models;
+using ChatHubSpace;
+using SignalRService;
+using Microsoft.AspNet;
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 
-builder.Services.AddCors(options =>
-{
-  options.AddPolicy(name: MyAllowSpecificOrigins,
-          builder =>
-          {
-            // To add custom origin sources replace AllowAnyOrigin with:
-
-            // WithOrigin("{{YOUR_CUSTOM_URL}}")
-
-            // You can also have multiple origins within this section, seperate with a comma
-            builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-          }
-      );
-});
 
 
 
 
+  builder.Services.AddSingleton<RabbitMqConsumer>(provider => new RabbitMqConsumer("localhost","MyQueue"));
 
-/*
+/* 
 builder.Services.AddSingleton<IMongoRepository>(sp =>
 {
     var client = sp.GetRequiredService<IMongoClient>();
@@ -48,10 +39,13 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
 
 
 builder.Services.AddTransient<IWaferRedisService,WaferRedisService>();
-builder.Services.AddSingleton<IRabbitMqConsumer,RabbitMqConsumer>();
+                                                   //builder.Services.AddSingleton<IRabbitMqConsumer,RabbitMqConsumer>();
 
   builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
   builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
+
+
+
 
 
 /*
@@ -89,12 +83,31 @@ builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Config
 
 
 
+ builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => 
+            {
+                builder.AllowCredentials()
+                .WithOrigins(
+                    "https://localhost:3000/","https://localhost:7001/","/","localhost")
+                .SetIsOriginAllowedToAllowWildcardSubdomains()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            });
+        });
+
+
+
+
+ builder.Services.AddSignalR();
+
+
 
 
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddRazorPages();
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {
@@ -103,7 +116,17 @@ builder.Services.AddSpaStaticFiles(configuration =>
 
 var app = builder.Build();
 
-app.UseCors(MyAllowSpecificOrigins);
+ app.UseCors("AllowAllOrigins");
+
+/*
+app.UseCors(builder =>
+    builder
+        .WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+);
+*/
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -119,10 +142,30 @@ else
 
 app.UseStaticFiles();
 app.UseSpaStaticFiles();
-app.UseRouting();
-app.UseWebSockets();
-/*
 
+
+
+
+
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+endpoints.MapHub<ChatHub>("/chat");
+});
+
+        
+    
+
+/*
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+app.UseWebSockets();
+*/
+/*
 app.MapGet("/user/{id}", async (string id, WorkerService workerService) =>    //рэдис
 {
     Worker? user = await workerService.GetUser(id);
@@ -144,7 +187,6 @@ if (app.Environment.IsDevelopment())
       regex: "Compiled successfully!");
 }
 
-app.MapRazorPages();
 
 app.UseSpa(spa =>
 {
@@ -154,10 +196,10 @@ app.UseSpa(spa =>
 app.MapFallbackToFile("index.html"); ;// все запросы проксируются тут 
 
 
-
-
-
-
-
+      //  WebSocketServer server = new WebSocketServer();
+       // server.Start("http://localhost:9000/");
+       // Console.WriteLine("WebSocket сервер запущен. Нажмите любую клавишу, чтобы остановить сервер.");
+        //Console.ReadLine();
+        //server.Stop();
 
 app.Run();

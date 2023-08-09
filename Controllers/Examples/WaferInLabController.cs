@@ -12,12 +12,15 @@ public class WaferInLabController : Controller
 
 
   private readonly IMongoRepository<WAFFERINLAB<WELCOMEBACK>> _mongoRepository;
+    
+    
     public WaferInLabController(IMongoRepository<WAFFERINLAB<WELCOMEBACK>> mongoRepository)//
     {
         _mongoRepository = mongoRepository;
     }
+
+
    [HttpGet]
-  
   public  IList<WAFFERINLAB<WELCOMEBACK> >  Get( )
   {
 

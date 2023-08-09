@@ -10,6 +10,8 @@ import { VDatePicker } from 'vuetify/labs/VDatePicker'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 //import { createStore } from 'vuex'
 // import styling
+import * as signalR from '@microsoft/signalr'
+
 import style from './assets/scss/style.scss'
 //import styletwo from './assets/css/style.css'
 import '@mdi/font/css/materialdesignicons.css' //иконки
@@ -46,6 +48,7 @@ const vuetify = createVuetify({
 })
 const app = createApp(App)
 app.use(store)
+app.config.globalProperties.$signalR = signalR
 
 app.use(router)
 app.use(vuetify)

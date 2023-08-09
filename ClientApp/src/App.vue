@@ -4,6 +4,7 @@
       <div class="view">
         <div class="container">
           <ErrorComponent />
+          <SeeChatComponent />
           <router-view></router-view>
         </div>
       </div>
@@ -15,8 +16,10 @@ import { useStore } from 'vuex'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import SeeChatComponent from '@/components/SeeChatComponent.vue'
+
 export default {
-  components: { ErrorComponent },
+  components: { ErrorComponent, SeeChatComponent },
   setup() {
     const componentKey = ref(0)
     const store = useStore()

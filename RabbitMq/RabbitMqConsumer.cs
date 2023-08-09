@@ -17,24 +17,25 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitRepository;
-
-
 namespace RabbitRepository{
 
 using System;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-public class RabbitMqConsumer : IRabbitMqConsumer
+public class RabbitMqConsumer
 {
-    private  string _queueName = "MyQueue";
-	private  string _hostName = "localhost";
+    private  string _queueName; //= "MyQueue";
+	private  string _hostName; //= "localhost";
     private readonly IConnection _connection;
     private readonly IModel _channel;
+	private EventingBasicConsumer _consumer;//переписать без создания объекта
 
-    public RabbitMqConsumer()
+    public RabbitMqConsumer(string hostName, string queueName)
     {
-        //_queueName = queueName;
+        _queueName = queueName;
+		_hostName = hostName;
+		 _consumer = new EventingBasicConsumer(_channel);//переписать без создания объекта
         var factory = new ConnectionFactory
         {
             HostName = _hostName,
@@ -43,19 +44,18 @@ public class RabbitMqConsumer : IRabbitMqConsumer
         _channel = _connection.CreateModel();
         _channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
     }
-
     public void StartListening()
     {
-        var consumer = new EventingBasicConsumer(_channel);
-        consumer.Received += OnMessageReceived;
-        _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
+     
+        _consumer.Received += OnMessageReceived;
+        _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: _consumer);
     }
 
     public void OnMessageReceived(object model, BasicDeliverEventArgs args)
     {
         var body = args.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);    
-        Console.WriteLine($"Received message: {message}");
+	Console.WriteLine($"Received message: {message}");
     }
 
     public void StopListening()
@@ -64,12 +64,8 @@ public class RabbitMqConsumer : IRabbitMqConsumer
         _channel.Close();
         _connection.Close();
     }
-	public void setSettings(string hostName, string queueName) {
-			_hostName = hostName;
-			_queueName = queueName;
-	}
-}
 
+}
 
 }
 

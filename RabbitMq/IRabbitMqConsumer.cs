@@ -15,6 +15,7 @@ namespace RabbitRepository{
 
 public interface IRabbitMqConsumer
 {
+		
  		 public void StartListening();
 
    		 public void OnMessageReceived(object model, BasicDeliverEventArgs args);
