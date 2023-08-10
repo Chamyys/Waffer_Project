@@ -22,6 +22,5 @@ public interface IRabbitMqConsumer
    
     	 public void StopListening();
 		
-		public void setSettings(string hostName, string queueName);
 }		
 }

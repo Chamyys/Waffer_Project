@@ -2,6 +2,6 @@ using Models;
 public interface IWaferRedisService
 {
     
-    public  Task<WaferRedis?> GetWaferReddis(string id);
+    public  Task<WaferRedis?> SetWaferReddis(WaferRedis id);
     
 }

@@ -16,6 +16,8 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Models;
+using System.Text.Json;
 using RabbitRepository;
 namespace RabbitRepository{
 
@@ -23,18 +25,21 @@ using System;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-public class RabbitMqConsumer
+  
+public class RabbitMqConsumer : IRabbitMqConsumer
 {
     private  string _queueName; //= "MyQueue";
 	private  string _hostName; //= "localhost";
     private readonly IConnection _connection;
     private readonly IModel _channel;
 	private EventingBasicConsumer _consumer;//переписать без создания объекта
-
-    public RabbitMqConsumer(string hostName, string queueName)
+	private IWaferRedisService _waferRedisService;
+	
+    public RabbitMqConsumer(string hostName, string queueName, IWaferRedisService waferRedisService)
     {
         _queueName = queueName;
 		_hostName = hostName;
+		 _waferRedisService = waferRedisService;
 		 _consumer = new EventingBasicConsumer(_channel);//переписать без создания объекта
         var factory = new ConnectionFactory
         {
@@ -55,7 +60,8 @@ public class RabbitMqConsumer
     {
         var body = args.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);    
-	Console.WriteLine($"Received message: {message}");
+    	Console.WriteLine($"Received message: {message}");
+		_waferRedisService.SetWaferReddis(JsonSerializer.Deserialize<WaferRedis>(message)); // номер пластины
     }
 
     public void StopListening()

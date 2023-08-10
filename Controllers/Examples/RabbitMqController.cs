@@ -8,10 +8,12 @@ public class RabbitMqController : Controller
 {
 
      private  IWaferRedisService _waferRedisService;
-     private  RabbitMqConsumer _rabbitMqConsumer;
-       public RabbitMqController(IWaferRedisService waferRedisService,RabbitMqConsumer rabbitMqConsumer)//
+     private  IRabbitMqConsumer _rabbitMqConsumer;
+    //   public RabbitMqController(IWaferRedisService waferRedisService,RabbitMqConsumer rabbitMqConsumer)//
+           public RabbitMqController(IRabbitMqConsumer rabbitMqConsumer)//
+
     {
-        _waferRedisService = waferRedisService;
+        //_waferRedisService = waferRedisService;
         _rabbitMqConsumer = rabbitMqConsumer;
     }
 
@@ -21,7 +23,7 @@ public class RabbitMqController : Controller
       //  chatHub.SendMessage("hello","Again");
         _rabbitMqConsumer.StartListening();  //https://localhost:3000/api/RabbitMq/consume    - старт consumerа
 
-        _waferRedisService.GetWaferReddis("42ea81cb");
+      // _waferRedisService.SetWaferReddis("42ea81cb");
     } 
 
 }

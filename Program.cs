@@ -8,20 +8,16 @@ using System.Text.Json;
 using RabbitRepository;
 using Models;
 using ChatHubSpace;
-using SignalRService;
 using Microsoft.AspNet;
-string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-
-
-
-
-
-  builder.Services.AddSingleton<RabbitMqConsumer>(provider => new RabbitMqConsumer("localhost","MyQueue"));
 
 /* 
 builder.Services.AddSingleton<IMongoRepository>(sp =>
@@ -38,7 +34,10 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
 });
 
 
-builder.Services.AddTransient<IWaferRedisService,WaferRedisService>();
+  builder.Services.AddSingleton<IWaferRedisService,WaferRedisService>();
+  builder.Services.AddTransient<IChatHub,ChatHub>();
+  builder.Services.AddTransient<IRabbitMqConsumer>(provider => new RabbitMqConsumer("localhost","MyQueue",provider.GetService<IWaferRedisService>()));
+
                                                    //builder.Services.AddSingleton<IRabbitMqConsumer,RabbitMqConsumer>();
 
   builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
@@ -196,10 +195,5 @@ app.UseSpa(spa =>
 app.MapFallbackToFile("index.html"); ;// все запросы проксируются тут 
 
 
-      //  WebSocketServer server = new WebSocketServer();
-       // server.Start("http://localhost:9000/");
-       // Console.WriteLine("WebSocket сервер запущен. Нажмите любую клавишу, чтобы остановить сервер.");
-        //Console.ReadLine();
-        //server.Stop();
 
 app.Run();
