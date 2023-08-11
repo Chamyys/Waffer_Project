@@ -1,4 +1,5 @@
 <template>
+  <!--
   <v-card>
     <v-layout>
       <v-navigation-drawer
@@ -52,6 +53,15 @@
       </v-main>
     </v-layout>
   </v-card>
+  -->
+  <v-alert color="green" theme="dark" icon="mdi-pencil" prominent>
+    Добро пожаловать, {{ username }}!
+  </v-alert>
+  <v-tabs fixed-tabs bg-color="green">
+    <v-tab @click="createMT"> Создать Измерение </v-tab>
+    <v-tab @click="createWaffer"> Прием пластины </v-tab>
+  </v-tabs>
+  <router-view></router-view>
 </template>
 
 <script>

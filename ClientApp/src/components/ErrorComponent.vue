@@ -4,7 +4,7 @@
     :key="item"
     v-model="item.snackbar"
     :color="item.color"
-    :timeout="100000"
+    :timeout="10000"
     :style="getSnackbarStyle(index)"
     location="top right"
     width="30em"
@@ -65,7 +65,7 @@ export default {
         top: `${topOffset}px`,
       }
     }
-    setInterval(deleteLastError, 5000)
+    setInterval(deleteLastError, 7000)
 
     return {
       getSnackbarStyle,

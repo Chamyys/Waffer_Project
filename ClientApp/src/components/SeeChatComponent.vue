@@ -1,10 +1,10 @@
 <template>
   <div>
-    <input v-model="message" type="text" placeholder="Message" />
+    <!--   <input v-model="message" type="text" placeholder="Message" />
     <button @click="sendMessage">Send</button>
     <ul>
       <li v-for="message in messages" :key="message.id">{{ message.text }}</li>
-    </ul>
+    </ul>-->
   </div>
 </template>
 

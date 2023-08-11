@@ -38,7 +38,13 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
   builder.Services.AddTransient<IChatHub,ChatHub>();
   builder.Services.AddTransient<IRabbitMqConsumer>(provider => new RabbitMqConsumer("localhost","MyQueue",provider.GetService<IWaferRedisService>()));
 
-                                                   //builder.Services.AddSingleton<IRabbitMqConsumer,RabbitMqConsumer>();
+  //builder.Services.AddHttpClient("SvrApiClient", httpClient =>
+  //{
+   // httpClient.BaseAddress = new Uri("https://api.svr.com/");
+
+    // using Microsoft.Net.Http.Headers;
+    // The GitHub API requires two headers.
+  //}); //заглушка для внешнего api
 
   builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
   builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));

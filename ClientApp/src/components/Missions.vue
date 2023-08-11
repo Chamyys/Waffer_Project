@@ -9,6 +9,7 @@ export default {
     const creeateMeasursMissions = ref([])
     const createMonitorMissions = ref([])
     const missions = ref([])
+    const offsetTop = ref(0)
     const parseData = (data) => {
       let dateString = data
       let dateObj = new Date(dateString)
@@ -53,6 +54,9 @@ export default {
         console.error(error)
       }
     }
+    const onScroll = (e) => {
+      offsetTop.value = e.target.scrollTop
+    }
 
     getMissions()
     getMeasurMissions()
@@ -72,40 +76,50 @@ export default {
       parseData,
       createMonitor,
       createMeasur,
+      onScroll,
+      offsetTop,
     }
   },
 }
 </script>
+
 <template>
-  <div style="height: 5em"></div>
-  <v-data-table>
-    <div style="height: 5em"></div>
-    <h2>Создать новое измерение</h2>
-    <thead>
-      <tr>
-        <th class="text-left"></th>
-        <th class="text-left">Данные технолога</th>
-        <th class="text-left">Номер пластины</th>
-        <th class="text-left">Технологический этап</th>
-        <th class="text-left">Этап</th>
-        <th class="text-left">Номер запуска</th>
-        <th class="text-left">Схема/монитор</th>
-        <th class="text-left">Действие</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
+  <v-container
+    id="scroll-target"
+    style="max-height: 100%"
+    class="overflow-y-auto"
+  >
+    <div style="width: 100%">
+      <h2 style="text-align: center">Создать новое измерение</h2>
+    </div>
+
+    <div class="d-table">
+      <div class="d-tr">
+        <div class="d-td"></div>
+        <div class="d-td">Данные технолога</div>
+        <div class="d-td">Номер пластины</div>
+        <div class="d-td">Технологический этап</div>
+        <div class="d-td">Этап</div>
+        <div class="d-td">Номер запуска</div>
+        <div class="d-td">Схема/монитор</div>
+        <div class="d-td">Действие</div>
+      </div>
+
+      <div
         v-for="(item, index) in creeateMeasursMissions"
         :key="item.creationTime"
+        style="height: 4em"
+        class="d-tr"
       >
-        <td>{{ index + 1 }}</td>
-        <td>{{ item.technologist }}</td>
-        <td>{{ item.id }}</td>
-        <td>{{ item.measurementRecording.name }}</td>
-        <td>{{ item.stage.stageName }}</td>
-        <td>{{ item.parcel.name }}</td>
-        <td>{{ item.dieType.name }}</td>
-        <td class="text-center">
+        <div class="d-td">{{ index + 1 }}</div>
+
+        <div class="d-td">{{ item.technologist }}</div>
+        <div class="d-td">{{ item.id }}</div>
+        <div class="d-td">{{ item.measurementRecording.name }}</div>
+        <div class="d-td">{{ item.stage.stageName }}</div>
+        <div class="d-td">{{ item.parcel.name }}</div>
+        <div class="d-td">{{ item.dieType.name }}</div>
+        <div class="d-td">
           <v-btn
             size="small"
             density="compact"
@@ -114,78 +128,101 @@ export default {
             @click="createMeasur"
             >Измерить</v-btn
           >
-        </td>
-      </tr>
-    </tbody>
-  </v-data-table>
+        </div>
+      </div>
+    </div>
 
-  <div style="height: 5em"></div>
-  <div>
-    <div style="float: left; padding-left: 25%">
-      <v-data-table>
-        <h2>Создать новую пластину</h2>
-        <thead>
-          <tr>
-            <th class="text-left"></th>
-            <th class="text-left">Номер пластины</th>
-            <th class="text-left">Дата выставления задачи</th>
-            <th class="text-left">Действие</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, index) in createWafelMissions"
-            :key="item.creationTime"
-          >
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.number }}</td>
-            <td>{{ parseData(item.creationTime) }}</td>
-            <td class="text-center">
-              <v-btn
-                size="small"
-                density="compact"
-                variant="plain"
-                icon="mdi-plus"
-                @click="createWafel"
-                >Создать</v-btn
-              >
-            </td>
-          </tr>
-        </tbody>
-      </v-data-table>
+    <div style="height: 5em"></div>
+    <div style="width: 100%">
+      <h2 style="text-align: center">Создать новую пластину</h2>
     </div>
-    <div>
-      <v-data-table style="float: right; padding-right: 25%">
-        <h2>Создать новый монитор</h2>
-        <thead>
-          <tr>
-            <th class="text-left"></th>
-            <th class="text-left">Номер монитора</th>
-            <th class="text-left">Дата выставления задачи</th>
-            <th class="text-left">Действие</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, index) in createMonitorMissions"
-            :key="item.creationTime"
+
+    <div class="d-table">
+      <div class="d-tr">
+        <div class="d-td"></div>
+        <div class="d-td">Номер пластины</div>
+        <div class="d-td">Дата выставления задачи</div>
+        <div class="d-td">Действие</div>
+      </div>
+
+      <div
+        v-for="(item, index) in createWafelMissions"
+        :key="item.creationTime"
+        style="height: 4em"
+        class="d-tr"
+      >
+        <div class="d-td">{{ index + 1 }}</div>
+        <div class="d-td">{{ item.number }}</div>
+        <div class="d-td">{{ parseData(item.creationTime) }}</div>
+        <div class="d-td">
+          <v-btn
+            size="small"
+            density="compact"
+            variant="plain"
+            icon="mdi-plus"
+            @click="createWafel"
+            >Создать</v-btn
           >
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.number }}</td>
-            <td>{{ parseData(item.creationTime) }}</td>
-            <td class="text-center">
-              <v-btn
-                size="small"
-                density="compact"
-                variant="plain"
-                icon="mdi-plus"
-                @click="createMonitor"
-                >Создать</v-btn
-              >
-            </td>
-          </tr>
-        </tbody>
-      </v-data-table>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <div style="height: 5em"></div>
+    <div style="width: 100%">
+      <h2 style="text-align: center">Создать новый монитор</h2>
+    </div>
+
+    <div class="d-table">
+      <div class="d-tr">
+        <div class="d-td"></div>
+        <div class="d-td">Номер монитора</div>
+        <div class="d-td">Дата выставления задачи</div>
+        <div class="d-td">Действие</div>
+      </div>
+
+      <div
+        v-for="(item, index) in createMonitorMissions"
+        :key="item.creationTime"
+        style="height: 4em"
+        class="d-tr"
+      >
+        <div class="d-td">{{ index + 1 }}</div>
+        <div class="d-td">{{ item.number }}</div>
+        <div class="d-td">{{ parseData(item.creationTime) }}</div>
+        <div class="d-td">
+          <v-btn
+            size="small"
+            density="compact"
+            variant="plain"
+            icon="mdi-plus"
+            @click="createMonitor"
+            >Создать</v-btn
+          >
+        </div>
+      </div>
+    </div>
+    <div style="height: 5em"></div>
+  </v-container>
 </template>
+<style>
+.d-td {
+  display: table-cell;
+  text-align: center;
+  border: none;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+  padding: 4px;
+}
+.d-tr {
+  display: table-row;
+  padding: 4px;
+}
+.d-td:not(.no-p) {
+  padding: 4px;
+}
+.d-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+</style>
