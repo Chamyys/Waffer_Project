@@ -9,6 +9,7 @@ export default {
     const GenerateNewWafelString = 'Создать новую пластину'
     const GenerateNewMonitorString = 'Создать новый монитор'
     const GenerateNewElementsConfigString = 'Создать новый набор элементов'
+    const configName = ref()
     const waferNumbers = ref([]) //GenerateNewWafelString
     const myCounter = ref(0)
     const monitors = ref([
@@ -24,7 +25,7 @@ export default {
       GenerateNewElementsConfigString,
     ])
     const menu = ref(false)
-    const monitorElementsselected = ref(['Vuetify'])
+    const monitorElementsselected = ref([])
     const monitorElements = ref([
       'Programming1',
       'Programming2',
@@ -113,7 +114,9 @@ export default {
     const delegateData = ref()
     const AllWaffelsInLabArray = ref([])
     const AllConfigObjects = ref([])
+    const waferChoosedFlag = ref(false)
     const currentMissionType = ref()
+    const textareatransition = ref(false)
     const goBack = () => {
       router.push('/Technologist/WelcomeBack')
     }
@@ -154,6 +157,14 @@ export default {
       }
       return measurementRecordingObj
     }
+    const fillMonitorConfig = () => {
+      let config = {
+        id: 'someId',
+        name: createNewElementsConfig.value,
+        elements: monitorElementsselected.value,
+      }
+      return config
+    }
     const fillStage = () => {
       let stage = {
         stageId: getPreviousMeasurementRecording(), // APISVR2.0
@@ -193,6 +204,7 @@ export default {
         stage: fillStage(),
         parcel: fillParcel(),
         dieType: fillDieType(),
+        monitorConfig: fillMonitorConfig(),
       }
       return newMtObject
     }
@@ -261,9 +273,12 @@ export default {
     const createNewElementsConfigAction = () => {
       addNewElementsConfiguration.value = true
     }
-    showCurrentConfig = () => {
-      addNewElementsConfiguration.value = true      //СДЕЛАТЬ ПОИСК ПО КОНФИГУ!!!
-      
+    const showCurrentConfig = () => {
+      addNewElementsConfiguration.value = true
+      monitorElementsselected.value = AllConfigObjects.value.find(
+        (el) => createNewElementsConfig.value === el.name
+      ).elements
+      //СДЕЛАТЬ ПОИСК ПО КОНФИГУ!!!
     }
     const createNewWafer = () => {
       dialog.value = false
@@ -365,13 +380,40 @@ export default {
       } catch (error) {
         console.error(error)
       }
+      monitorElementsConfigCollection.value.push(
+        GenerateNewElementsConfigString
+      )
     }
     const createNewConfigObject = () => {
+      textareatransition.value = true
       return {
         id: crc32(new Date().toString()).toString(16),
-        name: 'someName',
+        name: configName.value,
         elements: monitorElementsselected.value,
       }
+    }
+    const continueWithoutSavingConfig = async () => {
+      
+      try {
+        const response = await axios.post(
+          'https://localhost:3000/api/MT/Post',
+        (  createNewMtObject().monitorConfig.elements = monitorElementsselected.value
+                                         .name = "no_config_name"
+                                         .id = "someMoreId")
+        )
+
+        console.log(response)
+        store.dispatch('throwMessage', {
+          type: 'success',
+          name: 'deliverySuccsess',
+        })
+      } catch (error) {
+        console.error(error)
+      }
+
+
+
+      
     }
     const postNewConfig = async () => {
       try {
@@ -386,6 +428,7 @@ export default {
           type: 'success',
           name: 'configSuccsess',
         })
+        getConfigObjects()
       } catch (error) {
         console.error(error)
       }
@@ -401,15 +444,17 @@ export default {
     })
     watch(createNewElementsConfig, (newVal, oldVal) => {
       if (newVal === GenerateNewElementsConfigString) {
+        textareatransition.value = true
         createNewElementsConfigAction()
-      } else if(newVal!==oldVal) {
+      } else if (newVal !== oldVal) {
+        textareatransition.value = false
         showCurrentConfig()
       } else addNewElementsConfiguration.value = false
     })
     watch(createNewWafel, (newVal, oldVal) => {
+      waferChoosedFlag.value = true
       if (newVal === GenerateNewWafelString) {
         currentMissionType.value = newVal
-
         createNewWaferBtnAction()
       }
     })
@@ -417,7 +462,9 @@ export default {
     getConfigObjects()
     return {
       chunks,
+      textareatransition,
       postNewConfig,
+      continueWithoutSavingConfig,
       lastChunkSize,
       myCounter,
       menu,
@@ -428,7 +475,9 @@ export default {
       monitorElementsselected,
       monitorElements,
       statusDialog,
+      waferChoosedFlag,
       startupNumbers,
+      configName,
       startupNumber,
       currentMissionType,
       waferNumbers,
@@ -539,24 +588,28 @@ export default {
     ></v-autocomplete>
     <v-autocomplete
       v-model="startupNumber"
+      :disabled="!waferChoosedFlag"
       label="Номер запуска"
       :items="startupNumbers"
     ></v-autocomplete>
     <v-autocomplete
       v-model="createNewMonitor"
+      :disabled="!waferChoosedFlag"
       label="Монитор для измерения"
       :items="monitors"
     ></v-autocomplete>
     <v-autocomplete
       v-model="createNewElementsConfig"
       label="Готовые наборы элементов для мониторов"
+      :disabled="!waferChoosedFlag"
       :items="monitorElementsConfigCollection"
     ></v-autocomplete>
-
     <v-form>
       <v-text-field
+    
         v-model="measurementRecording"
         label="Технологический этап"
+        :disabled="!waferChoosedFlag"
         :rules="TechnoStageRules"
       ></v-text-field>
     </v-form>
@@ -581,21 +634,36 @@ export default {
 
     <div style="height: 20em"></div>
 
-    <div style="padding-bottom: 3em">
-      <v-btn
-        color="green"
-        style="float: none; width: 400px; height: 5em"
-        @click="postNewConfig"
-        >Сохранить текущую конфигурацию</v-btn
-      >
-      <v-btn
-        color="red"
-        style="float: none; width: 400px; height: 5em"
-        @click="continueWithoutSavingConfig"
-        >Продолжить без сохранения</v-btn
-      >
-    </div>
+    <v-expand-transition>
+      <div v-show="textareatransition" style="padding-bottom: 3em">
+        <v-btn
+          color="green"
+          style="float: none; width: 400px; height: 5em"
+          @click="postNewConfig"
+          >Сохранить текущую конфигурацию</v-btn
+        >
+        <v-btn
+          color="red"
+          style="float: none; width: 400px; height: 5em"
+          @click="continueWithoutSavingConfig"
+          >Продолжить без сохранения</v-btn
+        >
+      </div>
+    </v-expand-transition>
+
+    <v-expand-x-transition>
+      <v-textarea
+        v-if="textareatransition"
+        v-model="configName"
+        rows="3"
+        bg-color="indigo-lighten-4"
+        color="indigo-darken-2"
+        label="Введите имя нового конфига"
+        style="float: left; padding: 5em; width: 50em"
+      ></v-textarea>
+    </v-expand-x-transition>
   </div>
+
   <v-sheet width="400" class="mx-auto">
     <v-btn type="submit" block class="mt-2" @click="sendToServer">{{
       dynamicServerPushButtonText
@@ -607,5 +675,8 @@ export default {
 <style>
 .column {
   float: left;
+}
+.slide-fade-enter-active {
+  transition: all 12s ease;
 }
 </style>

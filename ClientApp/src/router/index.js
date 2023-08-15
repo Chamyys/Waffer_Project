@@ -91,9 +91,19 @@ const routes = [
     meta: { requiresTechnologist: true },
     children: [
       {
+        path: '/Technologist/WaferTimeLine',
+        name: 'MeasurerWaferTimeLine',
+        component: WaferTimeLine,
+      },
+      {
         path: '/Technologist/WelcomeBack',
         name: 'TechnologistWelcomeback',
         component: Welcomeback,
+      },
+      {
+        path: '/Technologist/Missions',
+        name: 'TechnologistMissions',
+        component: Missions,
       },
       {
         path: '/Technologist/AddNewMT',

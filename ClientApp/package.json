@@ -44,10 +44,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
-    "eslint": "^8.46.0",
+    "eslint": "^8.47.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-vue": "^9.16.1",
+    "eslint-plugin-vue": "^9.17.0",
     "material-design-icons-iconfont": "^6.7.0",
     "prettier": "^2.6.2",
     "run-script-os": "^1.1.6",

@@ -54,12 +54,28 @@
     </v-layout>
   </v-card>
   -->
-  <v-alert color="green" theme="dark" icon="mdi-pencil" prominent>
+  <v-alert color="indigo-darken-1" theme="dark" icon="mdi-pencil" prominent>
     Добро пожаловать, {{ username }}!
   </v-alert>
-  <v-tabs fixed-tabs bg-color="green">
-    <v-tab @click="createMT"> Создать Измерение </v-tab>
-    <v-tab @click="createWaffer"> Прием пластины </v-tab>
+  <v-tabs
+    v-model="selected"
+    slider-color="rgb(30, 7, 135)"
+    active-class="choosed"
+    fixed-tabs
+    bg-color="indigo-lighten-1"
+  >
+    <v-tab :id="0" :class="checkActivityClass(0)" @click="createWaffer">
+      Прием пластины
+    </v-tab>
+    <v-tab :id="1" :class="checkActivityClass(1)" @click="createMT">
+      Создать Измерение
+    </v-tab>
+    <v-tab :id="2" :class="checkActivityClass(2)" @click="seeLivePath"
+      >Просмотреть статус пластины</v-tab
+    >
+    <v-tab :id="3" :class="checkActivityClass(3)" @click="checkMissions">
+      Таблица задач
+    </v-tab>
   </v-tabs>
   <router-view></router-view>
 </template>
@@ -73,6 +89,7 @@ export default {
     const rail = ref(true)
     const drawer = ref(true)
     const router = useRouter()
+    const selected = ref(0)
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
@@ -84,14 +101,35 @@ export default {
     const createWaffer = () => {
       router.push('/Technologist/WelcomeBack')
     }
+    const checkMissions = () => {
+      router.push('/Technologist/Missions')
+    }
+    const seeLivePath = () => {
+      router.push('/Technologist/WaferTimeLine')
+    }
+    const checkActivityClass = (id) => {
+      return id === selected.value ? 'choosed' : ''
+    }
+
     router.push('/Technologist/WelcomeBack')
     return {
       drawer,
+      seeLivePath,
       rail,
       username,
       createMT,
       createWaffer,
+      checkActivityClass,
+      checkMissions,
+      selected,
     }
   },
 }
 </script>
+
+<style>
+.choosed {
+  background-color: rgb(30, 7, 135);
+  color: rgb(30, 7, 135);
+}
+</style>

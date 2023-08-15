@@ -39,16 +39,22 @@
         />
       </div>
       <div style="height: 5em"></div>
-
-      <v-select
-        id="select-id"
-        v-model="currentTechnologistName"
-        label="Ответственный технолог"
-        :items="['А.С. Иванов', 'Б.А. Пушкин', 'В.И.Ленин', 'К.С.Имя']"
-        @change="getCurrentTechnologistName($event)"
-      >
-        {{ item.Text }}
-      </v-select>
+      <div v-if="!isCurrentUserTechnologist()">
+        <v-select
+          id="select-id"
+          v-model="currentTechnologistName"
+          label="Ответственный технолог"
+          :items="['А.С. Иванов', 'Б.А. Пушкин', 'В.И.Ленин', 'К.С.Имя']"
+          @change="getCurrentTechnologistName($event)"
+        >
+          {{ item.Text }}
+        </v-select>
+      </div>
+      <div v-else>
+        <v-form disabled>
+          <v-text-field v-model="username"></v-text-field>
+        </v-form>
+      </div>
     </v-sheet>
 
     <div>
@@ -96,7 +102,7 @@ export default {
     const arr = ref([])
     const hashCode = ref('')
     const router = useRouter()
-
+    let userRole = window.localStorage.getItem('role')
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
@@ -139,7 +145,9 @@ export default {
       let entity = {
         id: hashCode.value,
         stageName: 'WelcomeBack',
-        Technologist: currentTechnologistName.value,
+        Technologist: isCurrentUserTechnologist()
+          ? username
+          : currentTechnologistName.value,
         returnedTime: date.value,
         Measurer: username,
       }
@@ -148,7 +156,10 @@ export default {
     const goNextStage = () => {
       router.push(router.currentRoute.value.matched[0].path + '/LabEntry')
     }
-
+    const isCurrentUserTechnologist = () => {
+      if (userRole === 'Technologist') return true
+      else return false
+    }
     const postInfo = async () => {
       try {
         const response = await axios.post(
@@ -230,6 +241,8 @@ export default {
     getInfo()
 
     return {
+      isCurrentUserTechnologist,
+      userRole,
       goNextStage,
       postWaferInLab,
       renderHashAlert,
