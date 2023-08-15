@@ -24,8 +24,8 @@ export default {
       return `${day}-${month}-${year} ${hours}:${minutes}`
     }
     const fillChipBtnArray = () => {
-      for(let i = 0; i < creeateMeasursMissions.value.length;i++) {
-        addChipsBtnText.value[i] = "Показать больше..."
+      for (let i = 0; i < creeateMeasursMissions.value.length; i++) {
+        addChipsBtnText.value[i] = 'Показать больше...'
       }
     }
     const createWafel = () => {
@@ -37,7 +37,7 @@ export default {
     const createMeasur = () => {
       router.push('/Measurer/CreateMeasur')
     }
-   
+
     const getMissions = async () => {
       try {
         const promise = await axios.get(
@@ -70,10 +70,12 @@ export default {
     const getMore = (index) => {
       if (!showableIndexes.value.includes(index)) {
         showableIndexes.value.push(index)
-        addChipsBtnText.value[index]="Скрыть..."
+        addChipsBtnText.value[index] = 'Скрыть...'
       } else {
-        showableIndexes.value = showableIndexes.value.filter((number) => number !== index);
-        addChipsBtnText.value[index]="Показать больше..."
+        showableIndexes.value = showableIndexes.value.filter(
+          (number) => number !== index
+        )
+        addChipsBtnText.value[index] = 'Показать больше...'
       }
     }
     const isCurrentIndexShowable = (index) => {
@@ -103,7 +105,7 @@ export default {
 
       return chunks
     }
-  
+
     return {
       fillChipBtnArray,
       createWafelMissions,
@@ -121,7 +123,7 @@ export default {
       chunksMaker,
       showableIndexes,
       isCurrentIndexShowable,
-      addChipsBtnText
+      addChipsBtnText,
     }
   },
 }
@@ -169,8 +171,10 @@ export default {
             vertical
           ></v-divider>
           <v-col class="col">
-            <v-card-title class="text-h4 text--primary" style="padding-top: 1em"
-              >{{item.stage.stageName }}</v-card-title
+            <v-card-title
+              class="text-h4 text--primary"
+              style="padding-top: 1em"
+              >{{ item.stage.stageName }}</v-card-title
             >
             <v-card-subtitle class="text-h5 text--primary" style="padding: 1em"
               >Данные об этапе</v-card-subtitle
@@ -184,7 +188,7 @@ export default {
           ></v-divider>
           <v-col class="col">
             <v-card-title class="text-h5 text--primary" style="padding-top: 1em"
-              >Технологический этап - {{item.measurementRecording.name}}
+              >Технологический этап - {{ item.measurementRecording.name }}
             </v-card-title>
             <v-card-subtitle class="text-h5 text--primary" style="padding: 1em"
               >Номер запуска - {{ item.parcel.name }}</v-card-subtitle
@@ -230,13 +234,13 @@ export default {
                   >{{ obj }}</v-chip
                 >
               </v-chip-group>
-              <v-chip-group style="padding-bottom: 1em;">
+              <v-chip-group style="padding-bottom: 1em">
                 <v-chip
                   v-if="item.monitorConfig.elements.length >= 9"
-                  style="color: white; background-color: rgb(48, 79, 254); "
+                  style="color: white; background-color: rgb(48, 79, 254)"
                   @click="getMore(index)"
                 >
-                 {{ addChipsBtnText[index] }}
+                  {{ addChipsBtnText[index] }}
                 </v-chip>
               </v-chip-group>
             </v-row>
@@ -244,8 +248,8 @@ export default {
         </v-row>
         <div style="height: 3em"></div>
       </v-card>
-      </div>
-            <!--
+    </div>
+    <!--
         <v-row style="max-height: min-content; padding-left: 1em;">
                <div
                 v-for="(obj, index) in (item.monitorConfig.elements.slice(3,6))"
@@ -402,9 +406,7 @@ export default {
     </div>
    
       -->
-   
   </v-container>
-  
 </template>
 <style>
 .d-td {

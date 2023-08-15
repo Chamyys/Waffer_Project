@@ -100,7 +100,7 @@ export default {
     const textfieldhashconfirmcode = ref('')
     const generatedHashCode = ref()
     const createNewMonitor = ref('')
-    const createNewElementsConfig = ref([])
+    const createNewElementsConfig = ref()
     const createNewWafel = ref()
     const addNewElementsConfiguration = ref(false)
     const dialogText = ref()
@@ -117,6 +117,7 @@ export default {
     const waferChoosedFlag = ref(false)
     const currentMissionType = ref()
     const textareatransition = ref(false)
+
     const goBack = () => {
       router.push('/Technologist/WelcomeBack')
     }
@@ -274,10 +275,14 @@ export default {
       addNewElementsConfiguration.value = true
     }
     const showCurrentConfig = () => {
-      addNewElementsConfiguration.value = true
-      monitorElementsselected.value = AllConfigObjects.value.find(
-        (el) => createNewElementsConfig.value === el.name
-      ).elements
+      if (createNewElementsConfig.value != null) {
+        addNewElementsConfiguration.value = true
+        monitorElementsselected.value = AllConfigObjects.value.find(
+          (el) => createNewElementsConfig.value === el.name
+        ).elements
+      } else {
+        monitorElementsselected.value = ['']
+      }
       //СДЕЛАТЬ ПОИСК ПО КОНФИГУ!!!
     }
     const createNewWafer = () => {
@@ -392,15 +397,31 @@ export default {
         elements: monitorElementsselected.value,
       }
     }
-    const continueWithoutSavingConfig = async () => {
-      
+    
+    const continueWithoutSavingConfig = async () => { //в разработке----------------------------------------------------------------------------------------------очистка чекбоксов, новый id,
+      let newMtObject = {
+        id: crc32(new Date().toString()).toString(16),
+        status: 'NEW',
+        wafer: fillWafelPole(),
+        technologist: technologistName,
+        measurementRecording: fillMeasurementRecording(),
+        stage: fillStage(),
+        parcel: fillParcel(),
+        dieType: fillDieType(),
+        monitorConfig: fillMonitorConfig(),
+      }
       try {
+       let localConfig = createNewConfigObject()
+       localConfig.name = 'temp'
+       let localObject = createNewMtObject()
+       localObject.monitorConfig = localConfig
+       newMtObject.monitorConfig = localConfig
+       cleanCheckbox()
         const response = await axios.post(
           'https://localhost:3000/api/MT/Post',
-        (  createNewMtObject().monitorConfig.elements = monitorElementsselected.value
-                                         .name = "no_config_name"
-                                         .id = "someMoreId")
+          newMtObject
         )
+
 
         console.log(response)
         store.dispatch('throwMessage', {
@@ -410,10 +431,6 @@ export default {
       } catch (error) {
         console.error(error)
       }
-
-
-
-      
     }
     const postNewConfig = async () => {
       try {
@@ -423,14 +440,28 @@ export default {
         )
 
         console.log(response)
+        AllConfigObjects.value.push(createNewConfigObject())
+        monitorElementsConfigCollection.value.push(createNewConfigObject().name)
         monitorElementsselected.value = []
+        createNewElementsConfig.value = configName.value
+        addNewElementsConfiguration.value = false
         store.dispatch('throwMessage', {
           type: 'success',
           name: 'configSuccsess',
         })
-        getConfigObjects()
       } catch (error) {
         console.error(error)
+      }
+    }
+    const checkboxeschanged = () => {
+      if (
+        monitorElementsselected.value !==
+        AllConfigObjects.value.map(function (item) {
+          return item.elements //Проверка на законченность измерений
+        })
+      ) {
+        textareatransition.value = true
+        createNewElementsConfig.value = GenerateNewElementsConfigString
       }
     }
     // Вызов функции при определенном значении createNew
@@ -463,6 +494,7 @@ export default {
     return {
       chunks,
       textareatransition,
+      checkboxeschanged,
       postNewConfig,
       continueWithoutSavingConfig,
       lastChunkSize,
@@ -606,7 +638,6 @@ export default {
     ></v-autocomplete>
     <v-form>
       <v-text-field
-    
         v-model="measurementRecording"
         label="Технологический этап"
         :disabled="!waferChoosedFlag"
@@ -627,6 +658,7 @@ export default {
             style="float: none; width: 14em; height: 2em"
             :value="item"
             :label="item"
+            @click="checkboxeschanged"
           ></v-checkbox>
         </div>
       </div>
@@ -663,7 +695,6 @@ export default {
       ></v-textarea>
     </v-expand-x-transition>
   </div>
-
   <v-sheet width="400" class="mx-auto">
     <v-btn type="submit" block class="mt-2" @click="sendToServer">{{
       dynamicServerPushButtonText

@@ -50,10 +50,8 @@
           {{ item.Text }}
         </v-select>
       </div>
-      <div v-else>
-        <v-form disabled>
-          <v-text-field v-model="username"></v-text-field>
-        </v-form>
+      <div v-else style="text-align: center">
+        <h4 class="font-weight-thin">Пожалуйста, выберете дату.</h4>
       </div>
     </v-sheet>
 
