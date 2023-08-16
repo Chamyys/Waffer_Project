@@ -10,7 +10,7 @@ namespace Repository
     {
 
         private  IMongoCollection<T> _weathercollection;
-        private IMongoDatabase _database;
+        private   IMongoDatabase _database;
         public MongoRepository(IMongoClient client)
         {
             var database = client.GetDatabase("Mongo");
@@ -32,9 +32,6 @@ public MongoRepository(IMongoClient client, string databaseName, string collecti
         public void setCollectionName(string name){
         _weathercollection = _database.GetCollection<T>(name);
         }
-
-        
-
         public async Task<string> Create(T car)
         {
 
@@ -44,8 +41,7 @@ public MongoRepository(IMongoClient client, string databaseName, string collecti
 
         public  Result Delete(T entity)
         {
-            try
-            { 
+            try{ 
             var filter = Builders<T>.Filter.Eq(c => c.id, entity.id);
             var result =  _weathercollection.DeleteOneAsync(filter);
             return Result.Ok();
@@ -79,15 +75,14 @@ public MongoRepository(IMongoClient client, string databaseName, string collecti
         }
 
 
-      public async Task Update(dynamic entity)
-        {
+      public async Task Update(dynamic entity){
         var filter = Builders<dynamic>.Filter.Eq("id", entity.id);
         var update = Builders<dynamic>.Update
-        .Set("firstName", entity.firstName)
-        .Set("secondName", entity.secondName)
-        .Set("login", entity.login)
-        .Set("password", entity.password)
-        .Set("role", entity.role);
+          .Set("firstName", entity.firstName)
+          .Set("secondName", entity.secondName)
+          .Set("login", entity.login)
+          .Set("password", entity.password)
+          .Set("role", entity.role);
         await _weathercollection.UpdateOneAsync(filter, update);
         }
 

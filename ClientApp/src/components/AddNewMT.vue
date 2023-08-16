@@ -6,6 +6,7 @@ import crc32 from 'crc/crc32'
 import { useStore } from 'vuex'
 export default {
   setup() {
+    const testref = ref()
     const GenerateNewWafelString = 'Создать новую пластину'
     const GenerateNewMonitorString = 'Создать новый монитор'
     const GenerateNewElementsConfigString = 'Создать новый набор элементов'
@@ -189,11 +190,7 @@ export default {
       return dieType
     }
 
-    const checkStatus = () => {
-      //4 этап лк технолога
-      // APISVR2.0
-      //if(someFunc) return "NEW"; else return "ReWork"
-    }
+
 
     const createNewMtObject = () => {
       let newMtObject = {
@@ -241,11 +238,7 @@ export default {
       'firstName'
     )} ${window.localStorage.getItem('lastName')}`
 
-    const createNewMonitorBtnAction = () => {
-      delegateDialog.value = true
-      delegateDialogText.value = 'Задайте данные монитора'
-      createNewMonitor.value = ''
-    }
+
     const getWaferNumbers = async () => {
       //use removeWafersWithInappropriateType() here insted when API ready
       try {
@@ -257,20 +250,14 @@ export default {
         let wafels = dataPromise.data
         AllWaffelsInLabArray.value = dataPromise.data
         waferNumbers.value = wafels.map(function (item) {
-          if (checkIfWaferInLabCycleEnded(item.id)) return item.id //Проверка на законченность измерений
+          return item.id //Проверка на законченность измерений
         })
 
-        waferNumbers.value.push(GenerateNewWafelString)
       } catch (error) {
         console.error(error)
       }
     }
-    const createNewWaferBtnAction = () => {
-      dialog.value = true
-      dialogText.value =
-        'Вы можете делегировать создание пластины измерителям или создать ее сами'
-      createNewWafel.value = ''
-    }
+ 
     const createNewElementsConfigAction = () => {
       addNewElementsConfiguration.value = true
     }
@@ -285,74 +272,14 @@ export default {
       }
       //СДЕЛАТЬ ПОИСК ПО КОНФИГУ!!!
     }
-    const createNewWafer = () => {
-      dialog.value = false
-      router.push('/Technologist/WelcomeBack')
-    }
-    const delegateCreateNewWafer = () => {
-      dialog.value = false
-      delegateDialogText.value = 'Введите номер пластины'
-      delegateDialog.value = true
-    }
-    const delegateConfirm = () => {
-      delegateDialog.value = false
-      postMission()
-    }
-    const translateType = () => {
-      if (currentMissionType.value === GenerateNewWafelString)
-        return 'generateNewWafel'
-      else return 'generateNewMonitor'
-    }
-    const removeWafersWithInappropriateType = () => {
-      //get array of  WaferCycle with InWork and Stored status, name of array is cycle
-      waferNumbers.value = cycle.map(function (item) {
-        if (item.cycleStatus === 'InWork' || item.cycleStatus === 'Stored')
-          return item.waferId
-      })
-    }
-    const checkIfWaferInLabCycleEnded = (waferId) => {
-      let numberOfEndedStages = AllWaffelsInLabArray.value.find(
-        (obj) => obj.id === waferId
-      ).stages.length
-      if (numberOfEndedStages < 3) return true
-      else return false
-    }
+ 
+  
     const cleanCheckbox = () => {
-      createNewMonitor.value = ''
+      monitorElementsselected.value = []
     }
-    const createMission = () => {
-      let curentTime = new Date()
-      curentTime.setHours(new Date().getHours() + 3)
-      curentTime.setMinutes(new Date().getMinutes())
-      curentTime.setSeconds(new Date().getSeconds())
 
-      let mission = {
-        id: crc32(new Date().toString()).toString(16),
-        type: translateType(),
-        number: delegateData.value,
-        creationTime: curentTime,
-      }
-      return mission
-    }
-    const appendChangeStstatusInfo = () => {
-      statusDialog.value = false
-      //send reason of changed status
-    }
-    const postMission = async () => {
-      try {
-        const response = await axios.post(
-          'https://localhost:3000/api/WaferCreateMission/Post',
-          createMission()
-        )
-        console.log(response)
-      } catch (error) {
-        console.error(error)
-      }
-      store.dispatch('throwMessage', {
-        type: 'success',
-        name: 'deliverySuccsess',
-      })
-    }
+   
+  
     const postMT = async () => {
       try {
         const response = await axios.post(
@@ -397,8 +324,12 @@ export default {
         elements: monitorElementsselected.value,
       }
     }
-    
-    const continueWithoutSavingConfig = async () => { //в разработке----------------------------------------------------------------------------------------------очистка чекбоксов, новый id,
+
+    const continueWithoutSavingConfig = async () => {
+      textareatransition.value = !textareatransition.value
+    }
+    //в разработке----------------------------------------------------------------------------------------------очистка чекбоксов, новый id,
+    /*
       let newMtObject = {
         id: crc32(new Date().toString()).toString(16),
         status: 'NEW',
@@ -411,17 +342,16 @@ export default {
         monitorConfig: fillMonitorConfig(),
       }
       try {
-       let localConfig = createNewConfigObject()
-       localConfig.name = 'temp'
-       let localObject = createNewMtObject()
-       localObject.monitorConfig = localConfig
-       newMtObject.monitorConfig = localConfig
-       cleanCheckbox()
+        let localConfig = createNewConfigObject()
+        localConfig.name = 'temp'
+        let localObject = createNewMtObject()
+        localObject.monitorConfig = localConfig
+        newMtObject.monitorConfig = localConfig
+        cleanCheckbox()
         const response = await axios.post(
           'https://localhost:3000/api/MT/Post',
           newMtObject
         )
-
 
         console.log(response)
         store.dispatch('throwMessage', {
@@ -432,6 +362,7 @@ export default {
         console.error(error)
       }
     }
+*/
     const postNewConfig = async () => {
       try {
         const response = await axios.post(
@@ -468,14 +399,15 @@ export default {
     watch(createNewMonitor, (newVal, oldVal) => {
       if (newVal === GenerateNewMonitorString) {
         currentMissionType.value = newVal
-
         createNewMonitorBtnAction()
       }
       currentMissionType.value = newVal
     })
+
     watch(createNewElementsConfig, (newVal, oldVal) => {
       if (newVal === GenerateNewElementsConfigString) {
         textareatransition.value = true
+        cleanCheckbox()
         createNewElementsConfigAction()
       } else if (newVal !== oldVal) {
         textareatransition.value = false
@@ -484,11 +416,9 @@ export default {
     })
     watch(createNewWafel, (newVal, oldVal) => {
       waferChoosedFlag.value = true
-      if (newVal === GenerateNewWafelString) {
-        currentMissionType.value = newVal
-        createNewWaferBtnAction()
-      }
+     
     })
+   
     getWaferNumbers()
     getConfigObjects()
     return {
@@ -520,10 +450,6 @@ export default {
       technologistName,
       monitors,
       dialog,
-      createNewWafer,
-      delegateCreateNewWafer,
-      delegateConfirm,
-      createMission,
       delegateDialog,
       delegateData,
       dialogText,
@@ -534,7 +460,6 @@ export default {
       dynamicServerPushButtonText,
       generatedHashCode,
       goBack,
-      appendChangeStstatusInfo,
       textArea,
       TechnoStageRules: [
         (value) => {
@@ -548,66 +473,7 @@ export default {
 </script>
 
 <template>
-  <div style="float: left"></div>
-  <v-dialog v-model="dialog" width="50em">
-    <v-card>
-      <v-card-text>
-        {{ dialogText }}
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="red" block @click="createNewWafer()">Создать лично</v-btn>
-      </v-card-actions>
-      <v-card-actions>
-        <v-btn color="green" block @click="delegateCreateNewWafer()"
-          >Делегировать</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <v-dialog v-model="statusDialog" persistent width="35em" height="35em">
-    <template #activator="{ props }"> </template>
-    <v-card>
-      <v-card-title class="text-h8">
-        {{ dialogText }}
-      </v-card-title>
-      <v-textarea
-        v-model="textArea"
-        label="Причина проведения повторного измерения"
-      ></v-textarea>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          color="green-darken-1"
-          variant="text"
-          @click="statusDialog = false"
-        >
-          Назад
-        </v-btn>
-        <v-btn
-          color="green-darken-1"
-          variant="text"
-          @click="appendChangeStstatusInfo()"
-        >
-          Готово
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-  <v-dialog v-model="delegateDialog" width="50em">
-    <v-card>
-      <v-card-text> {{ delegateDialogText }} </v-card-text>
-      <v-card-actions>
-        <v-text-field v-model="delegateData"></v-text-field>
-      </v-card-actions>
-      <v-card-actions>
-        <v-btn color="green" block @click="delegateConfirm()"
-          >Подтвердить</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+   
   <div style="height: 3em"></div>
   <v-sheet width="80%" class="mx-auto">
     <v-form disabled>
@@ -665,37 +531,37 @@ export default {
     </div>
 
     <div style="height: 20em"></div>
-
-    <v-expand-transition>
-      <div v-show="textareatransition" style="padding-bottom: 3em">
-        <v-btn
-          color="green"
-          style="float: none; width: 400px; height: 5em"
-          @click="postNewConfig"
-          >Сохранить текущую конфигурацию</v-btn
-        >
-        <v-btn
-          color="red"
-          style="float: none; width: 400px; height: 5em"
-          @click="continueWithoutSavingConfig"
-          >Продолжить без сохранения</v-btn
-        >
-      </div>
-    </v-expand-transition>
-
-    <v-expand-x-transition>
-      <v-textarea
-        v-if="textareatransition"
-        v-model="configName"
-        rows="3"
-        bg-color="indigo-lighten-4"
-        color="indigo-darken-2"
-        label="Введите имя нового конфига"
-        style="float: left; padding: 5em; width: 50em"
-      ></v-textarea>
-    </v-expand-x-transition>
+    <v-sheet width="800" class="mx-auto">
+      <v-expand-transition>
+        <div v-show="textareatransition" style="padding-bottom: 3em">
+          <v-expand-x-transition>
+            <v-textarea
+              v-model="configName"
+              rows="3"
+              bg-color="indigo-lighten-4"
+              color="indigo-darken-2"
+              label="Введите имя нового конфига"
+              maxlength="128"
+              style="float: none; width: 35em"
+            ></v-textarea>
+          </v-expand-x-transition>
+          <v-btn
+            color="green"
+            style="float: none; width: 300px; margin: 6em; height: 5em"
+            @click="postNewConfig"
+            >Сохранить текущую конфигурацию</v-btn
+          >
+          <v-btn
+            color="red"
+            style="float: none; width: 300px; margin: 6em; height: 5em"
+            @click="continueWithoutSavingConfig"
+            >Продолжить без сохранения</v-btn
+          >
+        </div>
+      </v-expand-transition>
+    </v-sheet>
   </div>
-  <v-sheet width="400" class="mx-auto">
+  <v-sheet v-if="!textareatransition" width="400" class="mx-auto">
     <v-btn type="submit" block class="mt-2" @click="sendToServer">{{
       dynamicServerPushButtonText
     }}</v-btn>
