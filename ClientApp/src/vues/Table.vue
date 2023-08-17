@@ -18,10 +18,10 @@ const exportnumber = ref(0)
 export default {
   components: { Counter, CreationData },
   props: {
-    localprop: Number,
+    localprop: Number
   },
 
-  setup(props) {
+  setup (props) {
     //const router = useRouter()
 
     // router.push('/Table')
@@ -48,7 +48,7 @@ export default {
     })
 */
     const route = useRoute()
-    let myPropValue = ref(Number(route.params.btnnumber))
+    const myPropValue = ref(Number(route.params.btnnumber))
     currentrows = myPropValue.value
     exportnumber.value = currentrows
     /*
@@ -60,34 +60,7 @@ export default {
     )
     */
 
-    const axiosTest = async () => {
-      const promise = axios.get(
-        'https://localhost:3000/api/WeatherForecast/get'
-      )
-      console.log(promise)
-
-      const dataPromise = await promise.then((response) => response.data)
-      arr.value.length = 0
-      store.dispatch('createWeatherArray', dataPromise) //заполнение vuex
-
-      for (let i = 0; i < 5; i++) {
-        arr.value.push(dataPromise[i])
-      }
-
-      arr.value.length = currentrows
-      console.log(arr)
-
-      //const totalNotes = store.state.arrayofWeather //получение из vuex
-
-      // console.log(totalNotes[0][0].date) //вызов поля объекта
-
-      //store.dispatch('createWeatherArray', mainArray) //заполнение vuex
-
-      return dataPromise
-    }
-
     const vote = () => {
-      axiosTest()
       arr.value.length = currentrows
       console.log(myPropValue)
     }
@@ -115,7 +88,7 @@ export default {
     const votes = ref([])
     arr.value.push(axiosTest())
     return { arr, vote, onUpdateColor, myPropValue, exportnumber } //labels
-  },
+  }
 }
 </script>
 <template>
@@ -123,20 +96,33 @@ export default {
   <!--  <router-link to="/bugaga">Table</router-link>
 -->
   <p>{{ myPropValue.btnnumber }}</p>
-  <CreationData></CreationData>
+  <CreationData />
 
   <v-data-table v-model:items-per-page="itemsPerPage">
     <thead>
       <tr>
-        <th class="text-left">Номер</th>
-        <th class="text-left">Градусы Цельсия</th>
-        <th class="text-left">Градусы Фаренгейта</th>
-        <th class="text-left">Ощущение</th>
-        <th class="text-left">Дата</th>
+        <th class="text-left">
+          Номер
+        </th>
+        <th class="text-left">
+          Градусы Цельсия
+        </th>
+        <th class="text-left">
+          Градусы Фаренгейта
+        </th>
+        <th class="text-left">
+          Ощущение
+        </th>
+        <th class="text-left">
+          Дата
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in arr" :key="item.date">
+      <tr
+        v-for="(item, index) in arr"
+        :key="item.date"
+      >
         <td>{{ index + 1 }}</td>
         <td>{{ item.temperatureC }}</td>
         <td>{{ item.temperatureF }}</td>
@@ -147,7 +133,7 @@ export default {
   </v-data-table>
 
   <div>
-    <div style="height: 50px; width: 100%"></div>
+    <div style="height: 50px; width: 100%" />
     <div>
       <div>
         <Counter
@@ -160,7 +146,7 @@ export default {
           "
           :defoultnumber="exportnumber"
           @updateColor="onUpdateColor"
-        ></Counter>
+        />
       </div>
 
       <div>
@@ -179,17 +165,18 @@ export default {
       </div>
     </div>
   </div>
-  <div style="height: 50px; width: 100%"></div>
+  <div style="height: 50px; width: 100%" />
   <footer>
     <div style="width: 50%; margin: 0 auto">
-      <router-link :to="'/'">Назад</router-link>
+      <router-link :to="'/'">
+        Назад
+      </router-link>
     </div>
   </footer>
 </template>
 
 <!--
 
-  
 -->
 <style>
 table {

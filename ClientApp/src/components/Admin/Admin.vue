@@ -18,32 +18,35 @@
               variant="text"
               icon="mdi-chevron-left"
               @click.stop="rail = !rail"
-            ></v-btn>
+            />
           </template>
         </v-list-item>
 
-        <v-divider></v-divider>
+        <v-divider />
 
-        <v-list density="compact" nav>
+        <v-list
+          density="compact"
+          nav
+        >
           <v-list-item
             prepend-icon="mdi-magnify"
             title="Поиск пластины"
             value="home"
-          ></v-list-item>
+          />
           <v-list-item
             prepend-icon="mdi-download"
             title="Загрузка измерений"
             value="account"
-          ></v-list-item>
+          />
           <v-list-item
             prepend-icon="mdi-help"
             title="Этот пункт в разработке"
             value="users"
-          ></v-list-item>
+          />
         </v-list>
       </v-navigation-drawer>
       <v-main style="height: 80em">
-        <router-view></router-view>
+        <router-view />
       </v-main>
     </v-layout>
   </v-card>
@@ -55,7 +58,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 export default {
-  setup() {
+  setup () {
     const rail = ref(true)
 
     const drawer = ref(true)
@@ -75,8 +78,8 @@ export default {
       drawer,
       rail,
       username,
-      goBack,
+      goBack
     }
-  },
+  }
 }
 </script>

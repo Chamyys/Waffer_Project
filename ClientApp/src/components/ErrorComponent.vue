@@ -4,27 +4,29 @@
     :key="item"
     v-model="item.snackbar"
     :color="item.color"
-    :timeout="10000"
+    :timeout="100000"
     :style="getSnackbarStyle(index)"
     location="top right"
     width="30em"
   >
     {{ item.errorText }}
     <template #actions>
-      <v-btn variant="text" @click="deleteOnewSnackBar(item.id)">
+      <v-btn
+        variant="text"
+        @click="deleteOnewSnackBar(item.id)"
+      >
         Закрыть
       </v-btn>
     </template>
   </v-snackbar>
-  <div style="height: 2em"></div>
+  <div style="height: 2em" />
 </template>
 <script>
 import { useStore } from 'vuex'
-import crc32 from 'crc/crc32'
 
 import { ref } from 'vue'
 export default {
-  setup() {
+  setup () {
     const errorArray = ref([])
     const text = ref()
     const snackbar = ref(false)
@@ -62,7 +64,7 @@ export default {
       const topOffset = index * 60
       return {
         position: 'absolute',
-        top: `${topOffset}px`,
+        top: `${topOffset}px`
       }
     }
     setInterval(deleteLastError, 7000)
@@ -74,8 +76,8 @@ export default {
       lastIndex,
       myColor,
       errorArray,
-      deleteOnewSnackBar,
+      deleteOnewSnackBar
     }
-  },
+  }
 }
 </script>

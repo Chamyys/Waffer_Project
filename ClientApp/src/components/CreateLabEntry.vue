@@ -3,13 +3,23 @@
     v-if="loading"
     indeterminate
     :size="100"
-  ></v-progress-circular>
+  />
   <div v-if="isStageAvailable">
     <p>Текст</p>
     <div>
-      <v-btn style="float: left" @click="goBack">Предыдущий этап</v-btn>
-      <v-btn style="float: right">Следующий этап</v-btn>
-      <v-sheet width="700" class="mx-auto">
+      <v-btn
+        style="float: left"
+        @click="goBack"
+      >
+        Предыдущий этап
+      </v-btn>
+      <v-btn style="float: right">
+        Следующий этап
+      </v-btn>
+      <v-sheet
+        width="700"
+        class="mx-auto"
+      >
         <v-autocomplete
           label="Autocomplete"
           :items="[
@@ -20,7 +30,7 @@
             'Texas',
             'Wyoming',
           ]"
-        ></v-autocomplete>
+        />
         <v-autocomplete
           label="Autocomplete"
           :items="[
@@ -31,7 +41,7 @@
             'Texas',
             'Wyoming',
           ]"
-        ></v-autocomplete>
+        />
         <v-autocomplete
           label="Autocomplete"
           :items="[
@@ -42,19 +52,21 @@
             'Texas',
             'Wyoming',
           ]"
-        ></v-autocomplete>
-        <v-text-field label="Label"></v-text-field>
-        <v-text-field label="Label"></v-text-field>
-        <v-text-field label="Label"></v-text-field>
-        <v-text-field label="Label"></v-text-field>
-        <v-textarea label="Label"></v-textarea>
+        />
+        <v-text-field label="Label" />
+        <v-text-field label="Label" />
+        <v-text-field label="Label" />
+        <v-text-field label="Label" />
+        <v-textarea label="Label" />
       </v-sheet>
     </div>
   </div>
 
   <div v-else>
     Извините, данный этап пока не доступен
-    <v-btn style="float: left">Предыдущий этап</v-btn>
+    <v-btn style="float: left">
+      Предыдущий этап
+    </v-btn>
   </div>
 </template>
 <script>
@@ -64,7 +76,7 @@ import { ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
-  setup() {
+  setup () {
     const loading = ref(true)
     const isStageAvailable = ref(true)
     const router = useRouter()
@@ -79,7 +91,7 @@ export default {
         console.error(error)
         store.dispatch('throwMessage', {
           type: 'error',
-          name: 'noServerConnection',
+          name: 'noServerConnection'
         })
       }
       loading.value = false
@@ -94,8 +106,8 @@ export default {
     return {
       response,
       goBack,
-      isStageAvailable,
+      isStageAvailable
     }
-  },
+  }
 }
 </script>

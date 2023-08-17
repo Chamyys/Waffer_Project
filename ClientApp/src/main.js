@@ -44,7 +44,7 @@ const vuetify = createVuetify({
   VDataTable,
   VDatePicker,
   style,
-  ssr: true,
+  ssr: true
 })
 const app = createApp(App)
 app.use(store)

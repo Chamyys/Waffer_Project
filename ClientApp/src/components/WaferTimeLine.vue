@@ -3,13 +3,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 export default {
-  setup() {
+  setup () {
     const stagesNames = ref([
       'Пластина зарегистрирована',
       'Пластина убыла на измерения',
       'Пластина измеряется',
       'Измерения окончены',
-      'Пластина готова',
+      'Пластина готова'
     ])
     const loading = ref(false)
     const wafelNumber = ref()
@@ -26,13 +26,13 @@ export default {
       'Введите номер пластины для отслеживания истории ее состояний'
     )
     const parseData = (data) => {
-      let dateString = data
-      let dateObj = new Date(dateString)
-      let day = dateObj.getUTCDate().toString().padStart(2, '0')
-      let month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
-      let year = dateObj.getUTCFullYear().toString()
-      let hours = dateObj.getUTCHours().toString().padStart(2, '0')
-      let minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
+      const dateString = data
+      const dateObj = new Date(dateString)
+      const day = dateObj.getUTCDate().toString().padStart(2, '0')
+      const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
+      const year = dateObj.getUTCFullYear().toString()
+      const hours = dateObj.getUTCHours().toString().padStart(2, '0')
+      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
       return `${day}-${month}-${year} ${hours}:${minutes}`
     }
     const goBack = () => {
@@ -47,8 +47,8 @@ export default {
           'https://localhost:3000/api/WaferInLab/GetById',
           {
             params: {
-              id: wafelNumber.value,
-            },
+              id: wafelNumber.value
+            }
           }
         )
         console.log(promise)
@@ -63,7 +63,7 @@ export default {
             ...stagesNames.value.slice(
               0,
               getNumberOfStages(stages.value.stages)
-            ),
+            )
           ]
           dialog.value = false
           stageOne.value = stages.value.stages[0]
@@ -86,9 +86,9 @@ export default {
       dialogText,
       parseData,
       stagesNames,
-      getStage,
+      getStage
     }
-  },
+  }
 }
 </script>
 <template>
@@ -96,21 +96,29 @@ export default {
     v-if="!loading"
     indeterminate
     :size="100"
-  ></v-progress-circular>
+  />
 
   <v-card v-if="loading">
-    <v-tabs fixed-tabs bg-color="green-darken-1">
+    <v-tabs
+      fixed-tabs
+      bg-color="green-darken-1"
+    >
       <v-tab
         v-for="(name, index) in stagesNames"
         :key="index"
         @click="getStage(index)"
-        >{{ name }}</v-tab
       >
+        {{ name }}
+      </v-tab>
     </v-tabs>
   </v-card>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent width="auto">
-      <template #activator="{ props }"> </template>
+    <v-dialog
+      v-model="dialog"
+      persistent
+      width="auto"
+    >
+      <template #activator="{ props }" />
       <v-card>
         <v-card-title class="text-h8">
           {{ dialogText }}
@@ -119,9 +127,9 @@ export default {
         <v-text-field
           v-model="wafelNumber"
           label="Номер пластины"
-        ></v-text-field>
+        />
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             color="green-darken-1"
             variant="text"
@@ -140,12 +148,12 @@ export default {
       </v-card>
     </v-dialog>
   </v-row>
-  <div style="height: 10em"></div>
+  <div style="height: 10em" />
   <v-row justify="center">
     <v-timeline v-if="loading">
       <v-timeline-item>
         <template #opposite>
-          <div style="width: 28em; height: auto"></div>
+          <div style="width: 28em; height: auto" />
           <!--Костыль убрать по возможности-->
         </template>
         <v-card>
@@ -153,7 +161,9 @@ export default {
             Пластина зарегистрирована
           </v-card-title>
           <v-card-text class="text--primary bg-white">
-            <div class="text-h6">Информация по этапу:</div>
+            <div class="text-h6">
+              Информация по этапу:
+            </div>
             <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>
             <p>Технолог - {{ stageOne.technologist }}</p>
             <p>Измеритель - {{ stageOne.measurer }}</p>
@@ -166,7 +176,9 @@ export default {
             Пластина убыла на измерения
           </v-card-title>
           <v-card-text class="text--primary bg-white">
-            <div class="text-h6">Информация по этапу:</div>
+            <div class="text-h6">
+              Информация по этапу:
+            </div>
             <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>
             <p>Технолог - {{ stageOne.technologist }}</p>
             <p>Измеритель - {{ stageOne.measurer }}</p>
@@ -179,7 +191,9 @@ export default {
             Пластина измеряется
           </v-card-title>
           <v-card-text class="text--primary bg-white">
-            <div class="text-h6">Информация по этапу:</div>
+            <div class="text-h6">
+              Информация по этапу:
+            </div>
             <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>
             <p>Технолог - {{ stageOne.technologist }}</p>
             <p>Измеритель - {{ stageOne.measurer }}</p>
@@ -192,7 +206,9 @@ export default {
             Измерения окончены
           </v-card-title>
           <v-card-text class="text--primary bg-white">
-            <div class="text-h6">Информация по этапу:</div>
+            <div class="text-h6">
+              Информация по этапу:
+            </div>
             <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>
             <p>Технолог - {{ stageOne.technologist }}</p>
             <p>Измеритель - {{ stageOne.measurer }}</p>
@@ -205,7 +221,9 @@ export default {
             Пластина готова
           </v-card-title>
           <v-card-text class="text--primary bg-white">
-            <div class="text-h6">Информация по этапу:</div>
+            <div class="text-h6">
+              Информация по этапу:
+            </div>
             <p>Этап начат - {{ parseData(stageOne.returnedTime) }}</p>
             <p>Технолог - {{ stageOne.technologist }}</p>
             <p>Измеритель - {{ stageOne.measurer }}</p>

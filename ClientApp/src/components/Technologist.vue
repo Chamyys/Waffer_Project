@@ -54,7 +54,12 @@
     </v-layout>
   </v-card>
   -->
-  <v-alert color="indigo-darken-1" theme="dark" icon="mdi-pencil" prominent>
+  <v-alert
+    color="indigo-darken-1"
+    theme="dark"
+    icon="mdi-pencil"
+    prominent
+  >
     Добро пожаловать, {{ username }}!
   </v-alert>
   <v-tabs
@@ -64,20 +69,36 @@
     fixed-tabs
     bg-color="indigo-lighten-1"
   >
-    <v-tab :id="0" :class="checkActivityClass(0)" @click="createWaffer">
+    <v-tab
+      :id="0"
+      :class="checkActivityClass(0)"
+      @click="createWaffer"
+    >
       Прием пластины
     </v-tab>
-    <v-tab :id="1" :class="checkActivityClass(1)" @click="createMT">
+    <v-tab
+      :id="1"
+      :class="checkActivityClass(1)"
+      @click="createMT"
+    >
       Создать Измерение
     </v-tab>
-    <v-tab :id="2" :class="checkActivityClass(2)" @click="seeLivePath"
-      >Просмотреть статус пластины</v-tab
+    <v-tab
+      :id="2"
+      :class="checkActivityClass(2)"
+      @click="seeLivePath"
     >
-    <v-tab :id="3" :class="checkActivityClass(3)" @click="checkMissions">
+      Просмотреть статус пластины
+    </v-tab>
+    <v-tab
+      :id="3"
+      :class="checkActivityClass(3)"
+      @click="checkMissions"
+    >
       Таблица задач
     </v-tab>
   </v-tabs>
-  <router-view></router-view>
+  <router-view />
 </template>
 
 <script>
@@ -85,7 +106,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
-  setup() {
+  setup () {
     const rail = ref(true)
     const drawer = ref(true)
     const router = useRouter()
@@ -121,9 +142,9 @@ export default {
       createWaffer,
       checkActivityClass,
       checkMissions,
-      selected,
+      selected
     }
-  },
+  }
 }
 </script>
 

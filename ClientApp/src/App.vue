@@ -3,7 +3,7 @@
     <div class="wrapper-content">
       <div class="view">
         <div class="container">
-          <router-view></router-view>
+          <router-view />
           <ErrorComponent />
           <SeeChatComponent />
         </div>
@@ -20,7 +20,7 @@ import SeeChatComponent from '@/components/SeeChatComponent.vue'
 
 export default {
   components: { ErrorComponent, SeeChatComponent },
-  setup() {
+  setup () {
     const componentKey = ref(0)
     const store = useStore()
     const changed = ref(false)
@@ -32,9 +32,9 @@ export default {
       changed,
       path,
       handleErrorType,
-      componentKey,
+      componentKey
     }
-  },
+  }
 }
 </script>
 <!---->

@@ -1,27 +1,44 @@
 @@ -0,0 +1,90 @@
 <template>
-  <div style="height: 20em"></div>
+  <div style="height: 20em" />
   <h1>Личный кабинет - {{ role }}</h1>
-  <div style="height: 2em"></div>
-  <v-sheet width="400" class="mx-auto">
-    <v-form fast-fail @submit.prevent>
+  <div style="height: 2em" />
+  <v-sheet
+    width="400"
+    class="mx-auto"
+  >
+    <v-form
+      fast-fail
+      @submit.prevent
+    >
       <v-text-field
         v-model="login"
         label="Логин"
         :rules="firstNameRules"
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="password"
         label="Пароль"
         :rules="lastNameRules"
-      ></v-text-field>
+      />
 
-      <v-btn type="submit" block class="mt-2" @click="checkEnterData"
-        >Войти</v-btn
+      <v-btn
+        type="submit"
+        block
+        class="mt-2"
+        @click="checkEnterData"
       >
+        Войти
+      </v-btn>
 
-      <v-btn block class="mt-10" @click="returnHome">Назад</v-btn>
+      <v-btn
+        block
+        class="mt-10"
+        @click="returnHome"
+      >
+        Назад
+      </v-btn>
     </v-form>
   </v-sheet>
 </template>
@@ -32,7 +49,7 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default {
-  setup() {
+  setup () {
     const store = useStore()
     const login = ref('')
     const password = ref('')
@@ -45,8 +62,8 @@ export default {
       await axios
         .get('https://localhost:3000/api/WorkerData/get', {
           params: {
-            curentRole: role,
-          },
+            curentRole: role
+          }
         })
         .then(function (response) {
           for (let i = 0; i < response.data.length; i++) {
@@ -59,7 +76,7 @@ export default {
     }
 
     const checkEnterData = () => {
-      let currentUser = currentUsersArray.value.find(
+      const currentUser = currentUsersArray.value.find(
         (obj) => obj.login === login.value
       )
       if (
@@ -73,7 +90,7 @@ export default {
       } else {
         store.dispatch('throwMessage', {
           type: 'error',
-          name: 'notCorrectLogin',
+          name: 'notCorrectLogin'
         })
       }
     }
@@ -110,7 +127,7 @@ export default {
       }
     }
 
-    let role = getRole(path)
+    const role = getRole(path)
     getCurrentRoleAccounts()
     return {
       returnHome,
@@ -123,7 +140,7 @@ export default {
           if (value?.length > 3) return true
 
           return 'Имя не может быть короче трех символов.'
-        },
+        }
       ],
       password,
       lastNameRules: [
@@ -131,9 +148,9 @@ export default {
           if (/[^0-9]/.test(value)) return true
 
           return 'Фамилия не должна содержать цифр.'
-        },
-      ],
+        }
+      ]
     }
-  },
+  }
 }
 </script>

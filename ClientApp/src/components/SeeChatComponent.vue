@@ -12,13 +12,13 @@
 import { ref, onMounted } from 'vue'
 import * as signalR from '@microsoft/signalr'
 export default {
-  setup() {
+  setup () {
     const message = ref('')
     const messages = ref([])
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:7001/chat', {
         skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
+        transport: signalR.HttpTransportType.WebSockets
       })
       .build()
 
@@ -47,8 +47,8 @@ export default {
     return {
       message,
       messages,
-      sendMessage,
+      sendMessage
     }
-  },
+  }
 }
 </script>

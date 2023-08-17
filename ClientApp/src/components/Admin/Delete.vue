@@ -1,14 +1,22 @@
 <template>
-  <v-sheet width="300" class="mx-auto">
+  <v-sheet
+    width="300"
+    class="mx-auto"
+  >
     <v-form @submit.prevent>
       <v-text-field
         v-model="Id"
         :rules="rules"
         label="Введите id для удаления"
-      ></v-text-field>
-      <v-btn type="remove" block class="mt-2" @click="remove(id)"
-        >Удалить</v-btn
+      />
+      <v-btn
+        type="remove"
+        block
+        class="mt-2"
+        @click="remove(id)"
       >
+        Удалить
+      </v-btn>
     </v-form>
   </v-sheet>
 </template>
@@ -21,10 +29,10 @@ export default {
   // Определяем пользовательские события
   props: {
     measurersDelete: Array,
-    technologistsDelete: Array,
+    technologistsDelete: Array
   },
   emits: ['remove'],
-  setup(props, { emit }) {
+  setup (props, { emit }) {
     let deletedRole = ''
     let deletedIndex = ''
     let isCurrentUserExists = false
@@ -36,13 +44,13 @@ export default {
     // eslint-disable-next-line vue/no-setup-props-destructure
     console.log(props.measurers)
     const remove = async () => {
-      let workerToDelete = findWorkerById()
+      const workerToDelete = findWorkerById()
       emit('remove', {
         //доделать эмит
         role: deletedRole,
         currentIndex: deletedIndex,
         isUserExists: isCurrentUserExists,
-        message: 'Пользователь успешно удален',
+        message: 'Пользователь успешно удален'
       })
       if (workerToDelete) {
         try {
@@ -91,8 +99,8 @@ export default {
     }
     return {
       Id,
-      remove,
+      remove
     }
-  },
+  }
 }
 </script>

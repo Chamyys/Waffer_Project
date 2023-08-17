@@ -51,9 +51,20 @@ public MongoRepository(IMongoClient client, string databaseName, string collecti
             {
                return Result.Fail("No such element");
             }
-          
         }
-
+         public  Result DeleteById(string id)
+        {
+            try{ 
+            var filter = Builders<T>.Filter.Eq(c => c.id, id);
+            var result =  _weathercollection.DeleteOneAsync(filter);
+            return Result.Ok();
+           // return result.DeletedCount == 1;
+            }
+            catch (Exception e)
+            {
+               return Result.Fail("No such element");
+            }
+        }
         public async Task<T> Get(T entity)
         {
             

@@ -5,59 +5,79 @@
     text="Данные успешно загружены на сервер"
     type="success"
     style="margin-left: 5em; float: left"
-  ></v-alert>
+  />
 
-  <v-sheet v-if="!isIdSubmited" width="300" class="mx-auto">
+  <v-sheet
+    v-if="!isIdSubmited"
+    width="300"
+    class="mx-auto"
+  >
     <v-form @submit.prevent>
       <v-text-field
         v-model="Id"
         :rules="rules"
         label="Введите id для поиска"
-      ></v-text-field>
-      <v-btn type="remove" block class="mt-2" @click="submitId(id)"
-        >Поиск</v-btn
+      />
+      <v-btn
+        type="remove"
+        block
+        class="mt-2"
+        @click="submitId(id)"
       >
+        Поиск
+      </v-btn>
     </v-form>
   </v-sheet>
 
-  <v-sheet v-if="isIdSubmited" width="300" class="mx-auto">
+  <v-sheet
+    v-if="isIdSubmited"
+    width="300"
+    class="mx-auto"
+  >
     <form @submit.prevent="submit">
       <v-text-field
         v-model="name.value.value"
         :counter="10"
         :error-messages="name.errorMessage.value"
         label="Имя"
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="surname.value.value"
         :counter="7"
         :error-messages="surname.errorMessage.value"
         label="Фамилия"
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="login.value.value"
         :error-messages="login.errorMessage.value"
         label="Логин"
-      ></v-text-field>
+      />
 
       <v-text-field
         v-model="password.value.value"
         :error-messages="password.errorMessage.value"
         label="Пароль"
-      ></v-text-field>
+      />
 
       <v-select
         v-model="select.value.value"
         :items="items"
         :error-messages="select.errorMessage.value"
         label="Роль"
-      ></v-select>
+      />
 
-      <v-btn class="me-4" type="Submit"> Изменить </v-btn>
+      <v-btn
+        class="me-4"
+        type="Submit"
+      >
+        Изменить
+      </v-btn>
 
-      <v-btn @click="submitId(Id)"> Отменить </v-btn>
+      <v-btn @click="submitId(Id)">
+        Отменить
+      </v-btn>
     </form>
   </v-sheet>
 </template>
@@ -72,47 +92,49 @@ import router from '@/router/index'
 export default {
   props: {
     measurersDelete: Array,
-    technologistsDelete: Array,
+    technologistsDelete: Array
   },
   emits: ['handleSubmit'],
-  setup(props, { emit }) {
+  setup (props, { emit }) {
     const Id = ref()
     const isIdSubmited = ref(false)
     const { handleSubmit, handleReset } = useForm({
       validationSchema: {
-        name(value) {
+        name (value) {
           DeliverySuccsess.value = false
           if (value?.length >= 2) return true
 
           return 'Имя должно состоять минимум из двух символов'
         },
-        surname(value) {
+        surname (value) {
           if (value?.length >= 2) return true
 
           return 'Фамилия должна состоять минимум из двух символов'
         },
-        login(value) {
+        login (value) {
           if (value?.length > 12) return 'Логин слишком длинный'
           if (value?.length < 5) return 'Логин слишком короткий'
-          if (value?.match(/[^A-Za-z0-9_@-]/))
+          if (value?.match(/[^A-Za-z0-9_@-]/)) {
             return 'В логине возможны только латинские буквы, цифры и знаки: @,-,_ '
+          }
 
           return true
         },
-        password(value) {
+        password (value) {
           if (value?.length > 12) return 'Пароль слишком длинный'
           if (value?.length < 5) return 'Пароль слишком короткий'
-          if (value?.match(/[^A-Za-z0-9_@-]/))
+          if (value?.match(/[^A-Za-z0-9_@-]/)) {
             return 'В пароле возможны только латинские буквы, цифры и знаки: @,-,_ '
+          }
 
           return true
         },
-        select(value) {
+        select (value) {
           if (value) return true
 
           return 'Выберете роль пользователя'
-        },
-      },
+        }
+      }
     })
     const router = useRouter()
     const DeliverySuccsess = ref(false)
@@ -128,19 +150,19 @@ export default {
     const editedUser = ref('')
     const items = ref(['Админ', 'Измеритель', 'Технолог'])
     const upload = (values) => {
-      let worker = {
+      const worker = {
         firstName: values.name,
         secondName: values.surname,
         login: values.login,
         role: values.select,
         password: values.password,
-        id: editedUser.value.id, //не забыть поменять + сделать axios
+        id: editedUser.value.id //не забыть поменять + сделать axios
       }
       return worker
     }
 
     const roleChanged = async (values) => {
-      let workerToDelete = upload(values)
+      const workerToDelete = upload(values)
       try {
         workerToDelete.role = startRole
         await axios.post(
@@ -169,13 +191,13 @@ export default {
         baseRole: startRole,
         worker: upload(values),
         index: indexEdited,
-        isUserExists: isUserExists,
-        message: 'Пользователь успешно изменен',
+        isUserExists,
+        message: 'Пользователь успешно изменен'
       })
     }
     const makeErrorEmit = () => {
       emit('handleSubmit', {
-        isUserExists: isUserExists,
+        isUserExists
       })
     }
     const submit = handleSubmit(async (values) => {
@@ -252,8 +274,8 @@ export default {
       handleSubmit,
       submitId,
       isIdSubmited,
-      Id,
+      Id
     }
-  },
+  }
 }
 </script>

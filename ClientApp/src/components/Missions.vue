@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 export default {
-  setup() {
+  setup () {
     const router = useRouter()
     const createWafelMissions = ref([])
     const creeateMeasursMissions = ref([])
@@ -14,13 +14,13 @@ export default {
     const chunks = ref([])
     const showableIndexes = ref([])
     const parseData = (data) => {
-      let dateString = data
-      let dateObj = new Date(dateString)
-      let day = dateObj.getUTCDate().toString().padStart(2, '0')
-      let month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
-      let year = dateObj.getUTCFullYear().toString()
-      let hours = dateObj.getUTCHours().toString().padStart(2, '0')
-      let minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
+      const dateString = data
+      const dateObj = new Date(dateString)
+      const day = dateObj.getUTCDate().toString().padStart(2, '0')
+      const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
+      const year = dateObj.getUTCFullYear().toString()
+      const hours = dateObj.getUTCHours().toString().padStart(2, '0')
+      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
       return `${day}-${month}-${year} ${hours}:${minutes}`
     }
     const fillChipBtnArray = () => {
@@ -123,9 +123,9 @@ export default {
       chunksMaker,
       showableIndexes,
       isCurrentIndexShowable,
-      addChipsBtnText,
+      addChipsBtnText
     }
-  },
+  }
 }
 </script>
 
@@ -135,74 +135,122 @@ export default {
     style="max-height: 100%"
     class="overflow-y-auto"
   >
-    <div v-for="(item, index) in creeateMeasursMissions" :key="item.index">
-      <v-card class="mx-auto" style="width: 100%">
+    <div
+      v-for="(item, index) in creeateMeasursMissions"
+      :key="item.index"
+    >
+      <v-card
+        class="mx-auto"
+        style="width: 100%"
+      >
         <v-row style="width: auto">
           <v-col class="col">
             <v-card-title
               class="text-h3 text--primary"
               style="padding-top: 1em"
-              >{{ item.id }}</v-card-title
             >
-            <v-card-subtitle class="text-h4 text--primary" style="padding: 1em"
-              >Тип измерения</v-card-subtitle
-            >
-          </v-col>
-          <v-divider
-            :thickness="8"
-            class="border-opacity-25"
-            color="indigo-darken-1"
-            vertical
-          ></v-divider>
-          <v-col class="col">
-            <v-card-title
-              class="text-h4 text--primary"
-              style="padding-top: 1em"
-              >{{ item.technologist }}</v-card-title
-            >
-            <v-card-subtitle class="text-h5 text--primary" style="padding: 1em"
-              >Данные технолога</v-card-subtitle
-            >
-          </v-col>
-          <v-divider
-            :thickness="8"
-            class="border-opacity-25"
-            color="indigo-darken-1"
-            vertical
-          ></v-divider>
-          <v-col class="col">
-            <v-card-title
-              class="text-h4 text--primary"
-              style="padding-top: 1em"
-              >{{ item.stage.stageName }}</v-card-title
-            >
-            <v-card-subtitle class="text-h5 text--primary" style="padding: 1em"
-              >Данные об этапе</v-card-subtitle
-            >
-          </v-col>
-          <v-divider
-            :thickness="8"
-            class="border-opacity-25"
-            color="indigo-darken-1"
-            vertical
-          ></v-divider>
-          <v-col class="col">
-            <v-card-title class="text-h5 text--primary" style="padding-top: 1em"
-              >Технологический этап - {{ item.measurementRecording.name }}
+              {{ item.id }}
             </v-card-title>
-            <v-card-subtitle class="text-h5 text--primary" style="padding: 1em"
-              >Номер запуска - {{ item.parcel.name }}</v-card-subtitle
+            <v-card-subtitle
+              class="text-h4 text--primary"
+              style="padding: 1em"
             >
+              Тип измерения
+            </v-card-subtitle>
           </v-col>
           <v-divider
             :thickness="8"
             class="border-opacity-25"
             color="indigo-darken-1"
             vertical
-          ></v-divider>
+          />
+          <v-col class="col">
+            <v-card-title
+              class="text-h4 text--primary"
+              style="padding-top: 1em"
+            >
+              {{ item.technologist }}
+            </v-card-title>
+            <v-card-subtitle
+              class="text-h5 text--primary"
+              style="padding: 1em"
+            >
+              Данные технолога
+            </v-card-subtitle>
+          </v-col>
+          <v-divider
+            :thickness="8"
+            class="border-opacity-25"
+            color="indigo-darken-1"
+            vertical
+          />
+          <v-col class="col">
+            <v-card-title
+              class="text-h4 text--primary"
+              style="padding-top: 1em"
+            >
+              {{ item.stage.stageName }}
+            </v-card-title>
+            <v-card-subtitle
+              class="text-h5 text--primary"
+              style="padding: 1em"
+            >
+              Данные об этапе
+            </v-card-subtitle>
+          </v-col>
+          <v-divider
+            :thickness="8"
+            class="border-opacity-25"
+            color="indigo-darken-1"
+            vertical
+          />
+          <v-col class="col">
+            <v-card-title
+              class="text-h5 text--primary"
+              style="padding-top: 1em"
+            >
+              Технологический этап - {{ item.measurementRecording.name }}
+            </v-card-title>
+            <v-card-subtitle
+              class="text-h5 text--primary"
+              style="padding: 1em"
+            >
+              Номер запуска - {{ item.parcel.name }}
+            </v-card-subtitle>
+          </v-col>
+          <v-divider
+            :thickness="8"
+            class="border-opacity-25"
+            color="indigo-darken-1"
+            vertical
+          />
+          <v-col class="col">
+            <v-card-subtitle
+              class="text-h5 text--primary"
+              style="padding: 1em"
+            >
+              <p>Комментарий технолога:</p>
+            </v-card-subtitle>
+            <v-row>
+              <div style="padding: 1em">
+                <p class="text-h10 text--primary">
+                  {{ item.comment }}
+                </p>
+              </div>
+            </v-row>
+          </v-col>
+          <v-divider
+            :thickness="8"
+            class="border-opacity-25"
+            color="indigo-darken-1"
+            vertical
+          />
           <v-col class="col">
             <v-card-text>
-              <p class="text-h6 text--primary" style="text-align: center">
+              <p
+                class="text-h6 text--primary"
+                style="text-align: center"
+              >
                 Элементы монитора:
               </p>
             </v-card-text>
@@ -231,12 +279,13 @@ export default {
                   )"
                   :key="key"
                   style="color: white; background-color: rgb(30, 7, 210)"
-                  >{{ obj }}</v-chip
                 >
+                  {{ obj }}
+                </v-chip>
               </v-chip-group>
               <v-chip-group style="padding-bottom: 1em">
                 <v-chip
-                  v-if="item.monitorConfig.elements.length >= 9"
+                  v-if="item.monitorConfig.elements.length > 10"
                   style="color: white; background-color: rgb(48, 79, 254)"
                   @click="getMore(index)"
                 >
@@ -246,166 +295,9 @@ export default {
             </v-row>
           </v-col>
         </v-row>
-        <div style="height: 3em"></div>
+        <div style="height: 3em" />
       </v-card>
     </div>
-    <!--
-        <v-row style="max-height: min-content; padding-left: 1em;">
-               <div
-                v-for="(obj, index) in (item.monitorConfig.elements.slice(3,6))"
-                :key="index"
-                class="column"
-              >
-              <v-chip  class="ma-2"   style="color: white; background-color: rgb(30, 7, 135); padding-top: 0px; padding-bottom: 0px;"> 
-                {{ obj }}
-              </v-chip>
-            </div>
-        </v-row>
-        <v-row style="max-height: max-content; padding-left: 1em;">
-               <div
-                v-for="(obj, index) in (item.monitorConfig.elements.slice(6,9))"
-                :key="index"
-                class="column"
-              >
-              <v-chip  class="ma-2"   style="color: white; background-color: rgb(30, 7, 135); padding-top: 0px; padding-bottom: 0px;"> 
-                {{ obj }}
-              </v-chip>
-            </div>
-            <div style="padding-bottom: 1em;">
-            <v-chip v-if="item.monitorConfig.elements.length>=9" @click="getMore()"  class="ma-2"   style="color: white; background-color: rgb(48, 79, 254); padding-top: 0px;"> 
-                 Увидеть больше... 
-              </v-chip>
-              <v-chip-group  v-if="showAllChipsFlag" style="padding-bottom: 1em; padding-left: 0.5em;">
-            <v-chip>Chip 1</v-chip>
-            <v-chip>Chip 2</v-chip> 
-            <v-chip>Chip 3</v-chip>
-            <v-chip>Chip 3</v-chip>
-            <v-chip>Chip 3</v-chip>
-            <v-chip>Chip 3</v-chip>
-            <v-chip>Chip 3</v-chip>
-            <v-chip>Chip 3</v-chip>
-          </v-chip-group>
-            </div>
-        </v-row>
-  
-
-       
-      <div style="height: 2em"></div>
-    </div>
-
-    <div style="width: 100%">
-      <h2 style="text-align: center">Создать новое измерение</h2>
-    </div>
-
-    <div class="d-table">
-      <div class="d-tr">
-        <div class="d-td"></div>
-        <div class="d-td">Данные технолога</div>
-        <div class="d-td">Номер пластины</div>
-        <div class="d-td">Технологический этап</div>
-        <div class="d-td">Этап</div>
-        <div class="d-td">Номер запуска</div>
-        <div class="d-td">Схема/монитор</div>
-        <div class="d-td">Действие</div>
-      </div>
-
-      <div
-        v-for="(item, index) in creeateMeasursMissions"
-        :key="item.creationTime"
-        style="height: 4em"
-        class="d-tr"
-      >
-        <div class="d-td">{{ index + 1 }}</div>
-        <div class="d-td">{{ item.technologist }}</div>
-        <div class="d-td">{{ item.id }}</div>
-        <div class="d-td">{{ item.measurementRecording.name }}</div>
-        <div class="d-td">{{ item.stage.stageName }}</div>
-        <div class="d-td">{{ item.parcel.name }}</div>
-        <div class="d-td">{{ item.dieType.name }}</div>
-        <div class="d-td">
-          <v-btn
-            size="small"
-            density="compact"
-            variant="plain"
-            icon="mdi-plus"
-            @click="createMeasur"
-            >Измерить</v-btn
-          >
-        </div>
-      </div>
-    </div>
-
-    <div style="height: 5em"></div>
-    <div style="width: 100%">
-      <h2 style="text-align: center">Создать новую пластину</h2>
-    </div>
-
-    <div class="d-table">
-      <div class="d-tr">
-        <div class="d-td"></div>
-        <div class="d-td">Номер пластины</div>
-        <div class="d-td">Дата выставления задачи</div>
-        <div class="d-td">Действие</div>
-      </div>
-
-      <div
-        v-for="(item, index) in createWafelMissions"
-        :key="item.creationTime"
-        style="height: 4em"
-        class="d-tr"
-      >
-        <div class="d-td">{{ index + 1 }}</div>
-        <div class="d-td">{{ item.number }}</div>
-        <div class="d-td">{{ parseData(item.creationTime) }}</div>
-        <div class="d-td">
-          <v-btn
-            size="small"
-            density="compact"
-            variant="plain"
-            icon="mdi-plus"
-            @click="createWafel"
-            >Создать</v-btn
-          >
-        </div>
-      </div>
-    </div>
-
-    <div style="height: 5em"></div>
-    <div style="width: 100%">
-      <h2 style="text-align: center">Создать новый монитор</h2>
-    </div>
-
-    <div class="d-table">
-      <div class="d-tr">
-        <div class="d-td"></div>
-        <div class="d-td">Номер монитора</div>
-        <div class="d-td">Дата выставления задачи</div>
-        <div class="d-td">Действие</div>
-      </div>
-
-      <div
-        v-for="(item, index) in createMonitorMissions"
-        :key="item.creationTime"
-        style="height: 4em"
-        class="d-tr"
-      >
-        <div class="d-td">{{ index + 1 }}</div>
-        <div class="d-td">{{ item.number }}</div>
-        <div class="d-td">{{ parseData(item.creationTime) }}</div>
-        <div class="d-td">
-          <v-btn
-            size="small"
-            density="compact"
-            variant="plain"
-            icon="mdi-plus"
-            @click="createMonitor"
-            >Создать</v-btn
-          >
-        </div>
-      </div>
-    </div>
-   
-      -->
   </v-container>
 </template>
 <style>

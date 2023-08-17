@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>
-      <h1 style="float: none">Прием пластины</h1>
+      <h1 style="float: none">
+        Прием пластины
+      </h1>
 
       <div style="float: left">
         <v-alert
@@ -19,13 +21,16 @@
           label="Введите код поддтверждения"
           :rules="rules"
           hide-details="auto"
-        ></v-text-field>
+        />
       </div>
     </div>
-    <div style="height: 5em"></div>
+    <div style="height: 5em" />
     <!-- <div class="right">-->
 
-    <v-sheet width="400" class="mx-auto">
+    <v-sheet
+      width="400"
+      class="mx-auto"
+    >
       <div>
         <Datepicker
           v-model="date"
@@ -38,7 +43,7 @@
           input-format="dd.MM.yyyy"
         />
       </div>
-      <div style="height: 5em"></div>
+      <div style="height: 5em" />
       <div v-if="!isCurrentUserTechnologist()">
         <v-select
           id="select-id"
@@ -50,28 +55,53 @@
           {{ item.Text }}
         </v-select>
       </div>
-      <div v-else style="text-align: center">
-        <h4 class="font-weight-thin">Пожалуйста, выберете дату.</h4>
+      <div
+        v-else
+        style="text-align: center"
+      >
+        <h4 class="font-weight-thin">
+          Пожалуйста, выберете дату.
+        </h4>
       </div>
     </v-sheet>
 
     <div>
       <div>
-        <div></div>
+        <div />
 
-        <div></div>
+        <div />
       </div>
     </div>
-    <div style="height: 5em"></div>
+    <div style="height: 5em" />
 
-    <v-sheet width="400" class="mx-auto">
-      <v-btn type="submit" block class="mt-2" @click="createHashCode">{{
-        dynamicServerPushButtonText
-      }}</v-btn>
+    <v-sheet
+      width="400"
+      class="mx-auto"
+    >
+      <v-btn
+        type="submit"
+        block
+        class="mt-2"
+        @click="createHashCode"
+      >
+        {{ dynamicServerPushButtonText }}
+      </v-btn>
 
-      <v-btn type="submit" block class="mt-10" @click="goBack">Выход</v-btn>
+      <v-btn
+        type="submit"
+        block
+        class="mt-10"
+        @click="goBack"
+      >
+        Выход
+      </v-btn>
     </v-sheet>
-    <v-btn style="float: right" @click="goNextStage">Следующий этап</v-btn>
+    <v-btn
+      style="float: right"
+      @click="goNextStage"
+    >
+      Следующий этап
+    </v-btn>
   </div>
 </template>
 <script>
@@ -83,8 +113,8 @@ import { useRouter } from 'vue-router'
 import crc32 from 'crc/crc32'
 export default {
   components: { Datepicker },
-  setup() {
-    let currentTechnologistName = ref('')
+  setup () {
+    const currentTechnologistName = ref('')
 
     const getCurrentTechnologistName = (name) => {
       currentTechnologistName.value = name
@@ -100,23 +130,23 @@ export default {
     const arr = ref([])
     const hashCode = ref('')
     const router = useRouter()
-    let userRole = window.localStorage.getItem('role')
+    const userRole = window.localStorage.getItem('role')
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
       window.localStorage.getItem('lastName')
     ).toString()
 
-    let currentrows = 5
+    const currentrows = 5
     const isAllFieldsComplitedCheck = (entity) => {
       if (
         !entity.id ||
         !entity.Technologist ||
         entity.Measurer.length < 2 ||
         hashCode.value != textfieldhashconfirmcode.value
-      )
+      ) {
         return false
-      else return true
+      } else return true
     }
     const createHashCode = () => {
       if (!isHashGot) {
@@ -130,7 +160,7 @@ export default {
         } else {
           store.dispatch('throwMessage', {
             type: 'error',
-            name: 'FormNotComplited',
+            name: 'FormNotComplited'
           })
         }
       }
@@ -140,14 +170,14 @@ export default {
       date.value.setHours(Time.getHours() + 3)
       date.value.setMinutes(Time.getMinutes())
       date.value.setSeconds(Time.getSeconds())
-      let entity = {
+      const entity = {
         id: hashCode.value,
         stageName: 'WelcomeBack',
         Technologist: isCurrentUserTechnologist()
           ? username
           : currentTechnologistName.value,
         returnedTime: date.value,
-        Measurer: username,
+        Measurer: username
       }
       return entity
     }
@@ -173,12 +203,12 @@ export default {
       restartPageLife()
     }
     const createWaferInLAb = () => {
-      let waferInLab = {
+      const waferInLab = {
         id: hashCode.value,
         stages: [],
         LabEntryStage: 'stingscsa', // APISVR2.0
         MStartStage: 'sss', // APISVR2.0
-        UploadingStage: 'sad', // APISVR2.0
+        UploadingStage: 'sad' // APISVR2.0
       }
       waferInLab.stages.push(createWELCOMEBACK())
       return waferInLab
@@ -199,7 +229,7 @@ export default {
     const restartPageLife = () => {
       store.dispatch('throwMessage', {
         type: 'success',
-        name: 'deliverySuccsess',
+        name: 'deliverySuccsess'
       })
 
       dynamicServerPushButtonText.value = 'Получить код'
@@ -266,10 +296,10 @@ export default {
           'Длины кодов подтверждения не совпадают',
         (value) =>
           (value && textfieldhashconfirmcode.value == hashCode.value) ||
-          'Код подтверждения не совпадает',
-      ],
+          'Код подтверждения не совпадает'
+      ]
     }
-  },
+  }
 }
 </script>
 

@@ -1,6 +1,6 @@
 namespace Models;
 
-public class  WAFFERINLAB<T> : Entity  
+public class  WAFFERINLAB<T> : Entity
 {
   
     public string LabEntryStage { get; set; } = null!;

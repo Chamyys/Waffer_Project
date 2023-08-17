@@ -31,4 +31,9 @@ public void Post([FromBody]MonitorConfig config)
       _mongoRepository.setCollectionName("MonitorConfig");
       return _mongoRepository.GetAll().Result;
   }
+   [HttpPost]
+  public void Delete(MonitorConfig config){
+        _mongoRepository.setCollectionName("MonitorConfig");
+        _mongoRepository.Delete(config);
+  }
 }

@@ -19,10 +19,55 @@ const store = createStore({
             component: 'app.vue',
             method: 'returnDef',
             errorCode: '500',
+            errorText: 'Пожалуйста, выберете измеряемые элементы',
+            name: 'monitorElementsEmpty',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Конфиг с такими измерениями уже существует!',
+            name: 'configAlreadyExists',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Такое имя уже занято',
+            name: 'nameIsBuissy',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Пожалуйста, дайте имя вашему конфигу',
+            name: 'configNameEmpty',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Список конфигов пуст!',
+            name: 'NoConfigsToDelete',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
             errorText: 'Что-то пошло не так',
             name: 'error',
             color: 'error',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: '',
@@ -32,7 +77,7 @@ const store = createStore({
               'Ошибка при подключению к серверу, пожалуйста попробуйте позже',
             name: 'noServerConnection',
             color: 'error',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: '',
@@ -41,7 +86,7 @@ const store = createStore({
             errorText: 'Неверный логин и/или пароль',
             name: 'notCorrectLogin',
             color: 'error',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: '',
@@ -50,7 +95,7 @@ const store = createStore({
             errorText: 'Пожалуйста, закончите заполнение формы',
             name: 'FormNotComplited',
             color: 'error',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: 'app.vue',
@@ -59,9 +104,9 @@ const store = createStore({
             errorText: 'Такого пользователя не существует',
             name: 'userDoesNotExist',
             color: 'error',
-            snackbar: true,
-          },
-        ],
+            snackbar: true
+          }
+        ]
       },
       {
         messageType: 'success',
@@ -70,10 +115,19 @@ const store = createStore({
             component: 'app.vue',
             method: 'returnDef',
             errorCode: '200',
+            errorText: 'Новый конфиг успешно удален!',
+            name: 'configSuccsessRemoved',
+            color: 'success',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '200',
             errorText: 'Новый конфиг успешно сохранен!',
             name: 'configSuccsess',
             color: 'success',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: 'app.vue',
@@ -82,7 +136,7 @@ const store = createStore({
             errorText: 'Все прошло успешно',
             name: 'success',
             color: 'success',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: 'app.vue',
@@ -91,7 +145,7 @@ const store = createStore({
             errorText: 'Данные успешно загружены на сервер',
             name: 'deliverySuccsess',
             color: 'success',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: 'app.vue',
@@ -100,7 +154,7 @@ const store = createStore({
             errorText: 'Пользователь успешно добавлен',
             name: 'userAddedSuccessesfully',
             color: 'success',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: 'app.vue',
@@ -109,7 +163,7 @@ const store = createStore({
             errorText: 'Пользователь успешно изменен',
             name: 'userEditedSuccessesfully',
             color: 'success',
-            snackbar: true,
+            snackbar: true
           },
           {
             component: 'app.vue',
@@ -118,31 +172,31 @@ const store = createStore({
             errorText: 'Пользователь успешно удален',
             name: 'userDeletedSuccessesfully',
             color: 'success',
-            snackbar: true,
-          },
-        ],
-      },
-    ],
+            snackbar: true
+          }
+        ]
+      }
+    ]
   },
   getters: {
-    getError(state) {
+    getError (state) {
       return state.myError
     },
-    getweatherarray(state) {
+    getweatherarray (state) {
       return state.arrayofWeather
     },
-    getErrorsArray(state) {
+    getErrorsArray (state) {
       return state.myErrorsArray
     },
-    getFirstName(state) {
+    getFirstName (state) {
       return state.firstname
     },
-    getSecondName(state) {
+    getSecondName (state) {
       return state.secondname
     },
-    getMyMessageCollection(state, type) {
+    getMyMessageCollection (state, type) {
       return state.type
-    },
+    }
   },
 
   mutations: {
@@ -157,34 +211,34 @@ const store = createStore({
         state.myErrorsArray.push(currentError)
       }
     },*/
-    FORGET_CURRENT_ERROR(state) {
+    FORGET_CURRENT_ERROR (state) {
       state.lastErrorId = null
     },
-    SAVE_WEATHER_ARRAY(state, title) {
+    SAVE_WEATHER_ARRAY (state, title) {
       state.arrayofWeather.push(title)
     },
-    CLEAN_WEATHER_ARRAY(state) {
+    CLEAN_WEATHER_ARRAY (state) {
       state.arrayofWeather.length = 0
     },
-    THROW_NEW_MESSAGE(state, { type, name }) {
+    THROW_NEW_MESSAGE (state, { type, name }) {
       if (state.myErrorsArray.length < state.maxErrorsArraySize) {
-        let id = crc32(new Date().toString()).toString(16) + Math.random(10)
-        let errorConfig = state.messages
+        const id = crc32(new Date().toString()).toString(16) + Math.random(10)
+        const errorConfig = state.messages
           .find((obj) => obj.messageType === type)
           .messageList.find((obj) => obj.name === name)
-        let currentError = { ...errorConfig, id }
+        const currentError = { ...errorConfig, id }
         state.lastErrorId = currentError.id
         state.myError = currentError
         state.myErrorsArray.push(currentError)
       }
     },
 
-    DELETE_ERROR_IN_ARRAY_BY_ID(state, id) {
+    DELETE_ERROR_IN_ARRAY_BY_ID (state, id) {
       state.myErrorsArray = state.myErrorsArray.filter(
         (value) => value.id !== id
       )
     },
-    DELETE_LAST_ERROR_IN_ARRAY(state) {
+    DELETE_LAST_ERROR_IN_ARRAY (state) {
       if (state.myErrorsArray.length > 0) {
         state.myErrorsArray = state.myErrorsArray.slice(
           0,
@@ -192,37 +246,37 @@ const store = createStore({
         )
       }
     },
-    CREATE_LOCAL_USER(state, { firstname, secondname }) {
+    CREATE_LOCAL_USER (state, { firstname, secondname }) {
       state.firstname = firstname
       state.secondname = secondname
-    },
+    }
   },
   actions: {
     /* throwError({ commit }, myError) {
       commit('THROW_NEW_ERROR', myError)
     },*/
-    throwMessage({ commit }, { type, name }) {
+    throwMessage ({ commit }, { type, name }) {
       commit('THROW_NEW_MESSAGE', { type, name })
     },
-    deleteErrorInArrayById({ commit }, id) {
+    deleteErrorInArrayById ({ commit }, id) {
       commit('DELETE_ERROR_IN_ARRAY_BY_ID', id)
     },
-    deleteLastErrorInArray({ commit }) {
+    deleteLastErrorInArray ({ commit }) {
       commit('DELETE_LAST_ERROR_IN_ARRAY')
     },
-    forgetError({ commit }) {
+    forgetError ({ commit }) {
       commit('FORGET_CURRENT_ERROR')
     },
-    createUser({ commit }, { firstname, secondname }) {
+    createUser ({ commit }, { firstname, secondname }) {
       commit('CREATE_LOCAL_USER', { firstname, secondname })
     },
-    createWeatherArray({ commit }, title) {
+    createWeatherArray ({ commit }, title) {
       commit('SAVE_WEATHER_ARRAY', title)
     },
-    cleanWeatherArray({ commit }) {
+    cleanWeatherArray ({ commit }) {
       commit('CLEAN_WEATHER_ARRAY')
-    },
-  },
+    }
+  }
 })
 
 export default store

@@ -13,27 +13,27 @@
 <script>
 export default {
   props: {
-    defoultnumber: Number,
+    defoultnumber: Number
   },
 
-  data() {
+  data () {
     // console.log(this.defoultnumber)
     //alert(this.defoultnumber.value.currentrows)
     return {
-      selectedColor: this.defoultnumber,
+      selectedColor: this.defoultnumber
     }
   },
   watch: {
     selectedColor: function (newValue) {
       this.updateColor(newValue)
-    },
+    }
   },
   methods: {
-    updateColor(color) {
+    updateColor (color) {
       this.$emit('updateColor', {
-        selectedColor: color,
+        selectedColor: color
       })
-    },
-  },
+    }
+  }
 }
 </script>

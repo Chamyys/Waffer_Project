@@ -51,7 +51,7 @@ const routes = [
 */
   {
     path: '/',
-    component: EnterVue,
+    component: EnterVue
   },
   {
     path: '/Measurer',
@@ -61,29 +61,29 @@ const routes = [
       {
         path: '/Measurer/WelcomeBack',
         name: 'MeasurerWelcomeback',
-        component: Welcomeback,
+        component: Welcomeback
       },
       {
         path: '/Measurer/LabEntry',
         name: 'MeasurerCreateLabEntry',
-        component: CreateLabEntry,
+        component: CreateLabEntry
       },
       {
         path: '/Measurer/Missions',
         name: 'MeasurerMissions',
-        component: Missions,
+        component: Missions
       },
       {
         path: '/Measurer/CreateMonitor',
         name: 'MeasurerCreateMonitor',
-        component: CreateMonitor,
+        component: CreateMonitor
       },
       {
         path: '/Measurer/WaferTimeLine',
         name: 'MeasurerWaferTimeLine',
-        component: WaferTimeLine,
-      },
-    ],
+        component: WaferTimeLine
+      }
+    ]
   },
   {
     path: '/Technologist',
@@ -93,29 +93,29 @@ const routes = [
       {
         path: '/Technologist/WaferTimeLine',
         name: 'MeasurerWaferTimeLine',
-        component: WaferTimeLine,
+        component: WaferTimeLine
       },
       {
         path: '/Technologist/WelcomeBack',
         name: 'TechnologistWelcomeback',
-        component: Welcomeback,
+        component: Welcomeback
       },
       {
         path: '/Technologist/Missions',
         name: 'TechnologistMissions',
-        component: Missions,
+        component: Missions
       },
       {
         path: '/Technologist/AddNewMT',
         name: 'AddNewMT',
-        component: AddNewMT,
+        component: AddNewMT
       },
       {
         path: '/Technologist/WaferTimeLine',
         name: 'TechnologistWaferTimeLine',
-        component: WaferTimeLine,
-      },
-    ],
+        component: WaferTimeLine
+      }
+    ]
   },
   {
     path: '/Admin',
@@ -130,37 +130,37 @@ const routes = [
           {
             path: '/Admin/AdminChooseConfig/Delete',
             name: 'Delete',
-            component: Delete,
+            component: Delete
           },
           {
             path: '/Admin/AdminChooseConfig/Edit',
             name: 'Edit',
-            component: Edit,
+            component: Edit
           },
           {
             path: '/Admin/AdminChooseConfig/AddUser',
             name: 'AddUser',
-            component: AddUser,
-          },
-        ],
-      },
-    ],
+            component: AddUser
+          }
+        ]
+      }
+    ]
   },
 
   {
     path: '/Home',
-    component: Home,
+    component: Home
   },
 
   {
     path: '/Login/:role',
     name: 'Login',
-    component: Login,
+    component: Login
   },
   {
     path: '/:catchAll(.*)',
-    component: NotFound,
-  },
+    component: NotFound
+  }
   /*
   {
     path: '/',
@@ -180,7 +180,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior,
+  scrollBehavior
 })
 /*
 const postMission = async () => {

@@ -18,41 +18,44 @@
               variant="text"
               icon="mdi-chevron-left"
               @click.stop="rail = !rail"
-            ></v-btn>
+            />
           </template>
         </v-list-item>
 
-        <v-divider></v-divider>
+        <v-divider />
 
-        <v-list density="compact" nav>
+        <v-list
+          density="compact"
+          nav
+        >
           <v-list-item
             prepend-icon="mdi-magnify"
             title="Прием пластины"
             value="home"
             @click="createWafel"
-          ></v-list-item>
+          />
           <v-list-item
             prepend-icon="mdi-download"
             title="Создание монитора"
             value="account"
             @click="createMonitor"
-          ></v-list-item>
+          />
           <v-list-item
             prepend-icon="mdi-help"
             title="Текущие задачи"
             value="users"
             @click="missions"
-          ></v-list-item>
+          />
           <v-list-item
             prepend-icon="mdi-download"
             title="Поиск пластины"
             value="account"
             @click="searchWafer"
-          ></v-list-item>
+          />
         </v-list>
       </v-navigation-drawer>
       <v-main style="height: 80em">
-        <router-view></router-view>
+        <router-view />
       </v-main>
     </v-layout>
   </v-card>
@@ -63,7 +66,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
-  setup() {
+  setup () {
     const rail = ref(true)
     const drawer = ref(true)
     const router = useRouter()
@@ -95,8 +98,8 @@ export default {
       missions,
       createWafel,
       createMonitor,
-      searchWafer,
+      searchWafer
     }
-  },
+  }
 }
 </script>
