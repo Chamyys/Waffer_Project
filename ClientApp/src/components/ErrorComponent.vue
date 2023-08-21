@@ -8,6 +8,7 @@
     :style="getSnackbarStyle(index)"
     location="top right"
     width="30em"
+    height="5em"
   >
     {{ item.errorText }}
     <template #actions>
@@ -19,7 +20,6 @@
       </v-btn>
     </template>
   </v-snackbar>
-  <div style="height: 2em" />
 </template>
 <script>
 import { useStore } from 'vuex'
@@ -50,6 +50,7 @@ export default {
       errorArray.value = store.getters.getErrorsArray
       lastIndex.value++
     }
+    /*
     const deleteLastError = () => {
       if (errorArray.value.length > 0) {
         store.dispatch('deleteLastErrorInArray')
@@ -59,12 +60,19 @@ export default {
         )
         lastIndex.value--
       }
+    }*/
+
+    const deleteLastError = () => {
+      if (errorArray.value.length > 0) {
+        errorArray.value.shift()
+        lastIndex.value--
+      }
     }
     const getSnackbarStyle = (index) => {
-      const topOffset = index * 60
+      const topOffset = index * 6
       return {
         position: 'absolute',
-        top: `${topOffset}px`
+        top: `${topOffset}em`
       }
     }
     setInterval(deleteLastError, 7000)

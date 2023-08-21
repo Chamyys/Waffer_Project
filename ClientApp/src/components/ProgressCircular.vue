@@ -1,55 +1,40 @@
 <template>
-  <v-progress-circular
-    :size="150"
-    :width="10"
-    :rotate="0"
-    :value="progress"
-    :color="getColor()"
-  >
-    <span class="progress-text">{{ seconds }}</span>
-  </v-progress-circular>
+  <div class="text-center">
+    <v-progress-circular
+      :rotate="360"
+      :size="90"
+      :width="13"
+      :model-value="value"
+      color="indigo"
+    >
+      {{ value / 20 }}
+    </v-progress-circular>
+  </div>
 </template>
-
 <script>
-import { ref, onMounted } from 'vue'
-
 export default {
-  name: 'ProgressCircular',
-  setup () {
-    const progress = ref(0)
-    const seconds = ref(0)
-
-    const getColor = () => {
-      return progress.value === 100 ? 'green' : 'blue'
-    }
-
-    const startTimer = () => {
-      let count = 0
-      const interval = setInterval(() => {
-        count += 1000
-        progress.value = (count / 5000) * 100
-        seconds.value = Math.floor(count / 1000)
-        if (count === 5000) {
-          clearInterval(interval)
-        }
-      }, 1000)
-    }
-
-    onMounted(() => {
-      startTimer()
-    })
-
+  data () {
     return {
-      progress,
-      seconds,
-      getColor
+      interval: {},
+      value: 100
     }
+  },
+  beforeUnmount () {
+    clearInterval(this.interval)
+  },
+  mounted () {
+    this.interval = setInterval(() => {
+      if (this.value === 0) {
+        return (this.value = 100)
+      }
+      this.value -= 20
+    }, 1000)
   }
 }
 </script>
 
 <style scoped>
-.progress-text {
-  font-size: 24px;
+.v-progress-circular {
+  margin: 1rem;
 }
 </style>

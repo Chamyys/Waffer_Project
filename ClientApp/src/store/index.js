@@ -37,6 +37,15 @@ const store = createStore({
             component: 'app.vue',
             method: 'returnDef',
             errorCode: '500',
+            errorText: 'Не выбран конфиг для удаления',
+            name: 'NoConfigToDeleteChosen',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
             errorText: 'Такое имя уже занято',
             name: 'nameIsBuissy',
             color: 'error',
@@ -108,6 +117,23 @@ const store = createStore({
           }
         ]
       },
+
+      {
+        messageType: 'warning',
+        messageList: [
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText:
+              'Внимание! Выбранный конфиг не подходит для текущего монитора, измеряемые величины будут изменены!',
+            name: 'configDoesntMatch',
+            color: 'warning',
+            snackbar: true
+          }
+        ]
+      },
+
       {
         messageType: 'success',
         messageList: [

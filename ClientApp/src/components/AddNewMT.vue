@@ -1,88 +1,169 @@
 <script>
 import { ref, watch } from 'vue'
+import { useThrottleFn } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import crc32 from 'crc/crc32'
 import { useStore } from 'vuex'
 import ProgressCircular from './ProgressCircular.vue'
+
 export default {
   components: {
     ProgressCircular
   },
   setup () {
+    const isDeleteButtonDisabled = ref(false)
     const configName = ref()
+    const rules = ref([])
     const createNewElementsConfigFlag = ref(false)
-    const waferNumbers = ref([]) //GenerateNewWafelString
+    const waferNumbers = ref([])
     const myCounter = ref(0)
-    const monitors = ref(['Первый монитор', 'Второй монитор'])
+    const firstMonitorObject = { name: 'Первый монитор', id: 'firstMonitorId' }
+    const secondMonitorObject = {
+      name: 'Второй монитор',
+      id: 'secondMonitorId'
+    }
+    const valid = ref(false)
+    const monitors = ref([firstMonitorObject, secondMonitorObject]) //выгрузка данных с api
     const monitorElementsConfigCollection = ref([])
     const menu = ref(false)
-    const monitorElementsselected = ref([])
+    const monitorElementsselected = ref([{ id: '', name: '' }])
+    let lastId = ''
+    const firstMonitorElements = ref([
+      //выгрузка данных с api
+      { name: 'TS1', id: '1lc' },
+      { name: 'TS2', id: '2d' },
+      { name: 'TS3', id: '3a' },
+      { name: 'TS4', id: 'sxc4' },
+      { name: 'TS5', id: '5da' },
+      { name: 'TS6', id: '6' },
+      { name: 'TS7', id: '7' },
+      { name: 'TS8', id: '8' },
+      { name: 'TS9', id: '9' },
+      { name: 'TS10', id: '10' },
+      { name: 'TS11', id: '11' },
+      { name: 'TS12', id: '12' },
+      { name: 'TS13', id: '13' },
+      { name: 'TS14', id: '14' },
+      { name: 'TS15', id: '15' },
+      { name: 'TS16', id: '16' },
+      { name: 'TS17', id: '17' },
+      { name: 'TS18', id: '18' },
+      { name: 'TS19', id: '19' },
+      { name: 'TS20', id: '20' },
+      { name: 'TS21', id: '21' },
+      { name: 'TS22', id: '22' },
+      { name: 'TS23', id: '23' },
+      { name: 'TS24', id: '24' },
+      { name: 'TS25', id: '25' },
+      { name: 'TS26', id: '26' },
+      { name: 'TS27', id: '27' },
+      { name: 'TS28', id: '28' },
+      { name: 'TS29', id: '29' },
+      { name: 'TS30', id: '30' },
+      { name: 'TS31', id: '31' },
+      { name: 'TS32', id: '32' },
+      { name: 'TS33', id: '33' },
+      { name: 'TS34', id: '34' },
+      { name: 'TS35', id: '35' },
+      { name: 'TS36', id: '36' },
+      { name: 'TS37', id: '37' },
+      { name: 'TS38', id: '38' },
+      { name: 'TS39', id: '39' },
+      { name: 'TS40', id: '40' }
+    ])
+    const secondMonitorElements = ref([
+      //выгрузка данных с api
+      { name: 'TS41', id: '41' },
+      { name: 'TS42', id: '42' },
+      { name: 'TS43', id: '43' },
+      { name: 'TS44', id: '44' },
+      { name: 'TS45', id: '45' },
+      { name: 'TS46', id: '46' },
+      { name: 'TS47', id: '47' },
+      { name: 'TS48', id: '48' },
+      { name: 'TS49', id: '49' },
+      { name: 'TS50', id: '50' },
+      { name: 'TS51', id: '51' },
+      { name: 'TS52', id: '52' },
+      { name: 'TS53', id: '53' },
+      { name: 'TS54', id: '54' },
+      { name: 'TS55', id: '55' },
+      { name: 'TS56', id: '56' },
+      { name: 'TS57', id: '57' },
+      { name: 'TS58', id: '58' },
+      { name: 'TS59', id: '59' },
+      { name: 'TS60', id: '60' },
+      { name: 'TS61', id: '61' },
+      { name: 'TS62', id: '62' },
+      { name: 'TS63', id: '63' },
+      { name: 'TS64', id: '64' }
+    ])
     const monitorElements = ref([
-      'TS1',
-      'TS2',
-      'TS3',
-      'TS4',
-      'TS5',
-      'TS6',
-      'TS7',
-      'TS8',
-      'TS9',
-      'TS10',
-      'TS11',
-      'TS12',
-      'TS13',
-      'TS14',
-      'TS15',
-      'TS16',
-      'TS17',
-      'TS18',
-      'TS19',
-      'TS20',
-      'TS21',
-      'TS22',
-      'TS23',
-      'TS24',
-      'TS25',
-      'TS26',
-      'TS27',
-      'TS28',
-      'TS29',
-      'TS30',
-      'TS31',
-      'TS32',
-      'TS33',
-      'TS34',
-      'TS35',
-      'TS36',
-      'TS37',
-      'TS38',
-      'TS39',
-      'TS40',
-      'TS41',
-      'TS42',
-      'TS43',
-      'TS44',
-      'TS45',
-      'TS46',
-      'TS47',
-      'TS48',
-      'TS49',
-      'TS50',
-      'TS51',
-      'TS52',
-      'TS53',
-      'TS54',
-      'TS55',
-      'TS56',
-      'TS57',
-      'TS58',
-      'TS59',
-      'TS60',
-      'TS61',
-      'TS62',
-      'TS63',
-      'TS64'
+      { name: 'TS1', id: '1lc' },
+      { name: 'TS2', id: '2d' },
+      { name: 'TS3', id: '3a' },
+      { name: 'TS4', id: 'sxc4' },
+      { name: 'TS5', id: '5da' },
+      { name: 'TS6', id: '6' },
+      { name: 'TS7', id: '7' },
+      { name: 'TS8', id: '8' },
+      { name: 'TS9', id: '9' },
+      { name: 'TS10', id: '10' },
+      { name: 'TS11', id: '11' },
+      { name: 'TS12', id: '12' },
+      { name: 'TS13', id: '13' },
+      { name: 'TS14', id: '14' },
+      { name: 'TS15', id: '15' },
+      { name: 'TS16', id: '16' },
+      { name: 'TS17', id: '17' },
+      { name: 'TS18', id: '18' },
+      { name: 'TS19', id: '19' },
+      { name: 'TS20', id: '20' },
+      { name: 'TS21', id: '21' },
+      { name: 'TS22', id: '22' },
+      { name: 'TS23', id: '23' },
+      { name: 'TS24', id: '24' },
+      { name: 'TS25', id: '25' },
+      { name: 'TS26', id: '26' },
+      { name: 'TS27', id: '27' },
+      { name: 'TS28', id: '28' },
+      { name: 'TS29', id: '29' },
+      { name: 'TS30', id: '30' },
+      { name: 'TS31', id: '31' },
+      { name: 'TS32', id: '32' },
+      { name: 'TS33', id: '33' },
+      { name: 'TS34', id: '34' },
+      { name: 'TS35', id: '35' },
+      { name: 'TS36', id: '36' },
+      { name: 'TS37', id: '37' },
+      { name: 'TS38', id: '38' },
+      { name: 'TS39', id: '39' },
+      { name: 'TS40', id: '40' },
+      { name: 'TS41', id: '41' },
+      { name: 'TS42', id: '42' },
+      { name: 'TS43', id: '43' },
+      { name: 'TS44', id: '44' },
+      { name: 'TS45', id: '45' },
+      { name: 'TS46', id: '46' },
+      { name: 'TS47', id: '47' },
+      { name: 'TS48', id: '48' },
+      { name: 'TS49', id: '49' },
+      { name: 'TS50', id: '50' },
+      { name: 'TS51', id: '51' },
+      { name: 'TS52', id: '52' },
+      { name: 'TS53', id: '53' },
+      { name: 'TS54', id: '54' },
+      { name: 'TS55', id: '55' },
+      { name: 'TS56', id: '56' },
+      { name: 'TS57', id: '57' },
+      { name: 'TS58', id: '58' },
+      { name: 'TS59', id: '59' },
+      { name: 'TS60', id: '60' },
+      { name: 'TS61', id: '61' },
+      { name: 'TS62', id: '62' },
+      { name: 'TS63', id: '63' },
+      { name: 'TS64', id: '64' }
     ])
     const comment = ref()
     const timeoutId = ref(null)
@@ -96,7 +177,7 @@ export default {
     const textfieldhashconfirmcode = ref('')
     const generatedHashCode = ref()
     const createNewMonitor = ref('')
-    const createNewElementsConfig = ref()
+    const createNewElementsConfig = ref({ id: '', name: '' })
     const createNewWafel = ref()
     const addNewElementsConfiguration = ref(false)
     const selectedMonitor = ref()
@@ -104,11 +185,14 @@ export default {
     const startupNumber = ref()
     const router = useRouter()
     const AllWaffelsInLabArray = ref([])
+    const CurrentConfigObjects = ref([])
     const AllConfigObjects = ref([])
     const waferChoosedFlag = ref(false)
+    const monitorChoosedFlag = ref(false)
     const currentMissionType = ref()
     const textareatransition = ref(false)
     const isNewConfigInProgress = ref(false)
+    const securityBlock = ref(false)
 
     const goBack = () => {
       router.push('/Technologist/WelcomeBack')
@@ -118,8 +202,12 @@ export default {
         !createNewMonitor.value ||
         !createNewWafel.value ||
         !measurementRecording.value ||
+        !startupNumber.value ||
+        !monitorElementsselected.value ||
         !createNewElementsConfig.value ||
-        !monitorElementsselected.value
+        !valid.value ||
+        createNewElementsConfig.value.id === '' ||
+        createNewElementsConfig.value.name === ''
       ) {
         return false
       } else return true
@@ -180,7 +268,7 @@ export default {
     const fillDieType = () => {
       const dieType = {
         dieTypeId: 12, // APISVR2.0
-        name: createNewMonitor.value
+        name: createNewMonitor.value.name
       }
       return dieType
     }
@@ -198,7 +286,7 @@ export default {
         stage: fillStage(),
         parcel: fillParcel(),
         dieType: fillDieType(),
-        monitorConfig: fillMonitorConfig(),
+        monitorConfig: createNewConfigObject(), //createNewElementsConfig.value,
         comment: comment.value
       }
       return newMtObject
@@ -216,7 +304,7 @@ export default {
       }
     }
     const chunksMaker = () => {
-      const chunkSize = 8
+      const chunkSize = 9
       const chunks = []
 
       for (let i = 0; i < monitorElements.value.length; i += chunkSize) {
@@ -225,10 +313,11 @@ export default {
 
       return chunks
     }
-
-    const chunks = chunksMaker()
-    const lastChunkSize = chunks.at(-1).length
-    const columnWidth = (100 / chunks[0].length).toString().concat('%')
+    const chunks = ref([chunksMaker()])
+    const lastChunkSize = ref(chunks.value.at(-1).length)
+    const columnWidth = ref(
+      (100 / chunks.value[0].length).toString().concat('%')
+    )
 
     const technologistName = `${window.localStorage.getItem(
       'firstName'
@@ -258,10 +347,10 @@ export default {
     }
 
     const showCurrentConfig = () => {
-      if (createNewElementsConfig.value !== null) {
+      if (createNewElementsConfig.value.id !== '') {
         addNewElementsConfiguration.value = true
-        monitorElementsselected.value = AllConfigObjects.value.find(
-          (el) => createNewElementsConfig.value === el.name
+        monitorElementsselected.value = CurrentConfigObjects.value.find(
+          (el) => createNewElementsConfig.value.id === el.id
         ).elements
       } else {
         monitorElementsselected.value = ['']
@@ -278,7 +367,6 @@ export default {
           'https://localhost:3000/api/MT/Post',
           createNewMtObject()
         )
-
         console.log(response)
         store.dispatch('throwMessage', {
           type: 'success',
@@ -293,44 +381,37 @@ export default {
         const response = await axios.get(
           'https://localhost:3000/api/MonitorConfig/Get'
         )
-
         console.log(response)
         AllConfigObjects.value = response.data
-        monitorElementsConfigCollection.value = AllConfigObjects.value.map(
-          function (item) {
-            return item.name //Проверка на законченность измерений
-          }
-        )
       } catch (error) {
         console.error(error)
       }
     }
     const createNewConfigObject = () => {
-      textareatransition.value = true
+      //textareatransition.value = true
       isNewConfigInProgress.value = false
+      lastId = crc32(new Date().toString()).toString(16)
       return {
-        id: crc32(new Date().toString()).toString(16),
+        id: lastId,
+        matchableMonitors: [createNewMonitor.value.id],
         name: configName.value,
         elements: monitorElementsselected.value
       }
     }
-
-    const continueWithoutSavingConfig = async () => {
-      textareatransition.value = !textareatransition.value
-    }
     const postNewConfig = async () => {
+      createNewElementsConfig.value = createNewConfigObject()
+      CurrentConfigObjects.value.push(createNewElementsConfig.value)
+      // createNewElementsConfig.value = createNewConfigObject()
       try {
         const response = await axios.post(
           'https://localhost:3000/api/MonitorConfig/Post',
           createNewConfigObject()
         )
-
         console.log(response)
-        AllConfigObjects.value.push(createNewConfigObject())
-        monitorElementsConfigCollection.value.push(createNewConfigObject().name)
-        monitorElementsselected.value = []
-        createNewElementsConfig.value = configName.value
+        createNewElementsConfig.value.elements = monitorElementsselected.value
+        createNewElementsConfig.value.id = lastId
         addNewElementsConfiguration.value = false
+
         configName.value = ''
         store.dispatch('throwMessage', {
           type: 'success',
@@ -339,8 +420,8 @@ export default {
       } catch (error) {
         console.error(error)
       }
+      stopCreatingNewConfig()
     }
-
     const isCheckboxesNotEmpty = () => {
       if (monitorElementsselected.value.length > 0) return true
       else {
@@ -351,9 +432,14 @@ export default {
         return false
       }
     }
-
     const nameIsBuissy = () => {
-      if (!monitorElementsConfigCollection.value.includes(configName.value)) {
+      if (
+        !CurrentConfigObjects.value
+          .map(function (item) {
+            return item.name
+          })
+          .includes(configName.value)
+      ) {
         return true
       } else {
         store.dispatch('throwMessage', {
@@ -364,24 +450,35 @@ export default {
       }
     }
 
+    function areArraysEqual (configs, elements) {
+      for (let i = 0; i < configs.length; i++) {
+        if (
+          JSON.stringify(configs[i].elements.sort()) ===
+          JSON.stringify(elements.sort())
+        ) {
+          return true
+        }
+      }
+
+      return false
+    }
+
     const isConfigElementsAlreadyExists = () => {
       if (
-        !AllConfigObjects.value.find(
-          (element) =>
-            element.elements.sort().toString() ===
-            monitorElementsselected.value.sort().toString()
+        areArraysEqual(
+          CurrentConfigObjects.value,
+          monitorElementsselected.value
         )
       ) {
-        return true
-      } else {
         store.dispatch('throwMessage', {
           type: 'error',
           name: 'configAlreadyExists'
         })
+        return true
+      } else {
         return false
       }
     }
-
     const isConfigNotEmpty = () => {
       if (configName.value) return true
       else {
@@ -394,20 +491,53 @@ export default {
     }
     const checkIsConfigOk = () => {
       if (
-        isCheckboxesNotEmpty() &&
         isConfigNotEmpty() &&
         nameIsBuissy() &&
-        isConfigElementsAlreadyExists()
+        isCheckboxesNotEmpty() &&
+        !isConfigElementsAlreadyExists()
       ) {
         postNewConfig()
+        securityBlock.value = false
+      }
+      //
+    }
+    const isAnyObjectExists = () => {
+      if (CurrentConfigObjects.value.length > 0) return true
+      else {
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'NoConfigsToDelete'
+        })
+        return false
       }
     }
-    const deleteConfig = () => {
+    const isAnyConfigChoosedToDelete = () => {
       if (
-        monitorElementsConfigCollection.value.length > 0 
+        !createNewElementsConfig.value ||
+        createNewElementsConfig.value.id === '' ||
+        createNewElementsConfig.value.name === ''
       ) {
-        snackbar.value = true
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'NoConfigToDeleteChosen'
+        })
+        return false
+      } else return true
+    }
 
+    /*
+     {
+      isButtonDisabled.value = true;
+      setTimeout(() => {
+        isButtonDisabled.value = false;
+      }, 5000);
+    }, 300);
+
+    isDeleteButtonDisabled
+*/
+    const deleteConfigWithThrottle = () => {
+      if (isAnyObjectExists() && isAnyConfigChoosedToDelete()) {
+        snackbar.value = true
         timeoutId.value = setTimeout(async () => {
           try {
             const response = await axios.post(
@@ -424,14 +554,54 @@ export default {
           } catch (error) {
             console.error(error)
           }
-
           cancelSend()
-        }, 5000)
-      } else {
+        }, 5500)
+      }
+    }
+
+    const deleteConfig = useThrottleFn(() => {
+      deleteConfigWithThrottle()
+    }, 5500)
+
+    window.addEventListener('resize', deleteConfig)
+
+    const chooseAutoMatchConfig = () => {
+      try {
+        const temp = CurrentConfigObjects.value.find((config) => {
+          return config.elements
+            .map((i) => i.id)
+            .every((e) => monitorElements.value.map((i) => i.id).includes(e))
+        })
+        configName.value = temp.name
+        createNewElementsConfig.value = temp //выбрать первый подходящий конфиг
+        securityBlock.value = false
+      } catch {
+        cleanCheckbox()
+        createNewElementsConfig.value = { id: '', name: '' }
+        createNewElementsConfig.value.elements = []
         store.dispatch('throwMessage', {
           type: 'error',
           name: 'NoConfigsToDelete'
         })
+      }
+    }
+    const isConfigMatchMonitor = (myConfig) => {
+      //createNewElementsConfig
+      if (
+        myConfig.value.elements
+          .map((i) => i.id)
+          .every((e) => monitorElements.value.map((i) => i.id).includes(e))
+      ) {
+        //стар
+      } else {
+        store.dispatch('throwMessage', {
+          type: 'warning',
+          name: 'configDoesntMatch'
+        })
+        securityBlock.value = true
+        setTimeout(() => {
+          chooseAutoMatchConfig()
+        }, 1500)
       }
     }
 
@@ -442,40 +612,69 @@ export default {
     }
 
     const removeConfigFromArray = (objectToRemove) => {
-      AllConfigObjects.value = AllConfigObjects.value.filter(
+      CurrentConfigObjects.value = CurrentConfigObjects.value.filter(
         (e) => e !== objectToRemove
       )
-      monitorElementsConfigCollection.value =
-        monitorElementsConfigCollection.value.filter(
-          (e) => e !== objectToRemove.name
-        )
-      createNewElementsConfig.value = monitorElementsConfigCollection.value[0]
+      createNewElementsConfig.value = CurrentConfigObjects.value[0]
     }
     const findConfigForRemoving = () => {
-      //monitorElementsConfigCollection // имена
-      //AllConfigObjects//объекты
-      //createNewElementsConfig//текущее имя
-      return AllConfigObjects.value.find(
-        (element) => element.name === createNewElementsConfig.value
+      return CurrentConfigObjects.value.find(
+        (element) => element.id === createNewElementsConfig.value.id
       )
     }
 
     const stopCreatingNewConfig = () => {
-      textareatransition.value = !textareatransition.value
+      textareatransition.value = false
       isNewConfigInProgress.value = false
-      showCurrentConfig()
+      showCurrentConfig() //Отображение свежесозданного
     }
 
-    watch(createNewElementsConfig, (newVal, oldVal) => {
-      if (newVal !== oldVal && textareatransition) {
-        textareatransition.value = false
-        showCurrentConfig()
+    watch(
+      //сделать проверку конфига на пустоту перед отправкой
+      () => createNewElementsConfig.value,
+      (newVal, oldVal) => {
+        if (
+          newVal &&
+          newVal !== oldVal &&
+          textareatransition &&
+          newVal.name !== '' &&
+          newVal.id !== ''
+        ) {
+          textareatransition.value = false
+          showCurrentConfig()
+          isConfigMatchMonitor(createNewElementsConfig)
+        }
       }
-    })
+    )
     watch(createNewWafel, (newVal, oldVal) => {
       waferChoosedFlag.value = true
     })
-
+    watch(
+      () => createNewMonitor.value,
+      (newVal, oldVal) => {
+        if (newVal && newVal !== oldVal) {
+          if (newVal.id === secondMonitorObject.id) {
+            monitorElements.value = secondMonitorElements.value
+          } else {
+            monitorElements.value = firstMonitorElements.value
+          }
+          CurrentConfigObjects.value = AllConfigObjects.value.filter(function (
+            el
+          ) {
+            return el.matchableMonitors.includes(newVal.id)
+          })
+          chunks.value = chunksMaker()
+          lastChunkSize.value = chunks.value.at(-1).length
+          columnWidth.value = (100 / chunks.value[0].length)
+            .toString()
+            .concat('%')
+          configName.value = ''
+          createNewElementsConfig.value = { id: '', name: '' }
+          cleanCheckbox()
+          monitorChoosedFlag.value = true
+        }
+      }
+    )
     getWaferNumbers()
     getConfigObjects()
     return {
@@ -484,7 +683,6 @@ export default {
       textareatransition,
       stopCreatingNewConfig,
       postNewConfig,
-      continueWithoutSavingConfig,
       lastChunkSize,
       myCounter,
       menu,
@@ -497,6 +695,7 @@ export default {
       monitorElements,
       statusDialog,
       waferChoosedFlag,
+      monitorChoosedFlag,
       startupNumbers,
       configName,
       createNewElementsConfigFlag,
@@ -508,6 +707,7 @@ export default {
       snackbar,
       makeNewConfig,
       cancelSend,
+      AllConfigObjects: CurrentConfigObjects,
       createNewMonitor,
       createNewWafel,
       selectedMonitor,
@@ -518,10 +718,14 @@ export default {
       sendToServer,
       textfieldhashconfirmcode,
       dynamicServerPushButtonText,
+      securityBlock,
       generatedHashCode,
       goBack,
       comment,
+      rules,
       textArea,
+      valid,
+      isDeleteButtonDisabled,
       isNewConfigInProgress,
       TechnoStageRules: [
         (value) => {
@@ -552,6 +756,7 @@ export default {
         :disabled="isNewConfigInProgress"
         label="Номер пластины"
         :items="waferNumbers"
+        no-data-text="Пластин с таким номером нет в базе"
       />
     </v-row>
     <v-row>
@@ -560,6 +765,7 @@ export default {
         :disabled="!waferChoosedFlag || isNewConfigInProgress"
         label="Номер запуска"
         :items="startupNumbers"
+        no-data-text="В базе нет запуска с таким номером"
       />
     </v-row>
     <v-row>
@@ -567,22 +773,28 @@ export default {
         v-model="createNewMonitor"
         :disabled="!waferChoosedFlag || isNewConfigInProgress"
         label="Монитор для измерения"
+        no-data-text="К сожалению, такого монитора нет в базе"
+        item-value="id"
+        item-title="name"
         :items="monitors"
+        return-object
       />
     </v-row>
     <v-row v-if="!textareatransition">
       <div style="width: 70%">
         <v-autocomplete
           v-model="createNewElementsConfig"
-          label="Готовые наборы элементов для мониторов"
-          :disabled="!waferChoosedFlag"
-          :items="monitorElementsConfigCollection"
-          no-data-text="К сожалению готовых конфигов сейчас нет, но вы можете создать их"
+          :disabled="!monitorChoosedFlag"
+          :items="AllConfigObjects"
+          item-value="id"
+          item-title="name"
+          no-data-text="К сожалению, готовых конфигов сейчас нет, но вы можете создать их"
+          return-object
         />
       </div>
       <div style="width: 15%">
         <v-btn
-          :disabled="!waferChoosedFlag"
+          :disabled="!monitorChoosedFlag"
           elevation="2"
           size="x-large"
           style="font-size: medium"
@@ -593,7 +805,7 @@ export default {
       </div>
       <div style="width: 15%">
         <v-btn
-          :disabled="!waferChoosedFlag"
+          :disabled="!monitorChoosedFlag"
           elevation="2"
           size="x-large"
           style="font-size: medium"
@@ -614,9 +826,8 @@ export default {
         size="x-large"
         style="font-size: medium"
         @click="stopCreatingNewConfig"
-      >
-        Вернуться к готовым
-      </v-btn>
+        text="Вернуться к готовым"
+      />
       <v-btn
         :disabled="!waferChoosedFlag"
         elevation="2"
@@ -627,13 +838,14 @@ export default {
         Сохранить
       </v-btn>
     </v-row>
-    <v-form>
+    <v-form v-model="valid">
       <v-row>
         <v-text-field
           v-model="measurementRecording"
           label="Технологический этап"
           :disabled="!waferChoosedFlag || isNewConfigInProgress"
           :rules="TechnoStageRules"
+          no-data-text="К сожалению, такого технологического этапа нет в базе"
         />
       </v-row>
     </v-form>
@@ -658,7 +870,7 @@ export default {
             :disabled="!textareatransition"
             style="float: none; width: 14em; height: 2em"
             :value="item"
-            :label="item"
+            :label="item.name"
           />
         </div>
       </div>
@@ -678,7 +890,7 @@ export default {
       v-model="comment"
     />
     <v-btn
-      :disabled="!waferChoosedFlag || isNewConfigInProgress"
+      :disabled="!waferChoosedFlag || isNewConfigInProgress || securityBlock"
       type="submit"
       block
       class="mt-2"
@@ -734,10 +946,10 @@ export default {
   color: rgb(30, 7, 135) !important;
 }
 </style>
-<!-- сценарий, если монитор новый, а конфиг старый
-     элементы монитора - есть 
+<!-- сценарий, если монитор новый, а конфиг старый +
+     элементы монитора +
      Debounce - удаление (блокировать)
-     No-data-available-переделать
-     у каждого чекбокса есть свой id
-     тех этап не должен реагировать на удаление 
+     No-data-available-переделать+
+     у каждого чекбокса есть свой id +
+     тех этап не должен реагировать на удаление
 -->

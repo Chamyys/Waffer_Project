@@ -268,7 +268,7 @@ export default {
                     padding-top: 0px;
                   "
                 >
-                  {{ obj }}
+                  {{ obj.name }}
                 </v-chip>
               </v-chip-group>
               <v-chip-group v-if="isCurrentIndexShowable(index)">

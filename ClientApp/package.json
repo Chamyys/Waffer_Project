@@ -19,6 +19,7 @@
     "@mdi/js": "^7.2.96",
     "@mdi/react": "^1.6.1",
     "@microsoft/signalr": "^7.0.10",
+    "@vueuse/core": "^10.3.0",
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
