@@ -13,7 +13,7 @@ import { reactive } from 'vue';
 
 export default {
   props: {
-    choosedConfigElements: Object,
+    choosedConfigElements: Object
   },
 
   setup (props) {
@@ -46,7 +46,7 @@ export default {
       { name: 'Второй_51', id: '239eq7aasa5d' },
       { name: 'Второй_61', id: '3c99ssqwaa12d' }
     ]);
-    
+
     let currentElementIndex = 0;
     const checkboxes = ref([]);
     const store = useStore();
@@ -60,7 +60,7 @@ export default {
         graphs: checkboxes.value
       });
     };
-  
+
     const loadTempGraphConfig = () => {
       store.dispatch('getGraphsByElementId', currentElement.value.id);
       checkboxes.value = store.getters.getMyGraph;
@@ -123,7 +123,6 @@ export default {
       currentElement
     };
   }
-  
 };
 </script>
 

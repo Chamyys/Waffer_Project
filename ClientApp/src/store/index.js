@@ -276,7 +276,7 @@ const store = createStore({
     CLEAN_WEATHER_ARRAY (state) {
       state.arrayofWeather.length = 0;
     },
-    CLEAN_ELEMENT_GRAPH_ARRAY(state) {
+    CLEAN_ELEMENT_GRAPH_ARRAY (state) {
       state.elementGraphsArray.length = 0;
     },
     /*SAVE_ONE_ELEMENT (state, { id, name }) {
@@ -375,7 +375,7 @@ const store = createStore({
     cleanWeatherArray ({ commit }) {
       commit('CLEAN_WEATHER_ARRAY');
     },
-    cleanElementGraphsArray({ commit }) {
+    cleanElementGraphsArray ({ commit }) {
       commit('CLEAN_ELEMENT_GRAPH_ARRAY');
     }
   }

@@ -877,9 +877,9 @@ export default {
         </div>
       </div>
     </div>
-
     <div style="height: 15em" />
     <div
+
       style="width: 90%; padding-left: 10%"
       v-if="
         !textareatransition &&
@@ -893,7 +893,6 @@ export default {
       <GraphicsComponent :choosed-config-elements="monitorElementsselected" />
     </div>
   </div>
-
   <v-sheet
     v-if="!textareatransition"
     width="400"
