@@ -9,46 +9,46 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-import * as signalR from '@microsoft/signalr'
+import { ref, onMounted } from 'vue';
+import * as signalR from '@microsoft/signalr';
 export default {
   setup () {
-    const message = ref('')
-    const messages = ref([])
+    const message = ref('');
+    const messages = ref([]);
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:7001/chat', {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
       })
-      .build()
+      .build();
 
     connection.on('Receive', (message) => {
-      messages.value.push({ id: Date.now(), text: message })
-    })
+      messages.value.push({ id: Date.now(), text: message });
+    });
 
     onMounted(async () => {
       try {
-        await connection.start()
+        await connection.start();
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
-    })
+    });
 
     // Отправка сообщения
     const sendMessage = () => {
       if (message.value) {
-        connection.invoke('Send', message.value)
-        message.value = ''
+        connection.invoke('Send', message.value);
+        message.value = '';
       }
-    }
+    };
 
-    //connection.start()
+    // connection.start()
 
     return {
       message,
       messages,
       sendMessage
-    }
+    };
   }
-}
+};
 </script>

@@ -1,19 +1,19 @@
 @@ -0,0 +1,125 @@
 <script>
-import axios from 'axios'
-import Counter from './Counter.vue'
-import CreationData from './CreationData.vue'
-import App from '@/App.vue'
-import { ref, onBeforeMount, toRefs, watch, reactive, computed } from 'vue'
-import { useStore } from 'vuex'
-import store from '@/store/index'
-import { useRoute } from 'vue-router'
+import axios from 'axios';
+import Counter from './Counter.vue';
+import CreationData from './CreationData.vue';
+import App from '@/App.vue';
+import { ref, onBeforeMount, toRefs, watch, reactive, computed } from 'vue';
+import { useStore } from 'vuex';
+import store from '@/store/index';
+import { useRoute } from 'vue-router';
 
-const arr = ref([])
-const counter = ref(0)
-const mainArray = []
+const arr = ref([]);
+const counter = ref(0);
+const mainArray = [];
 
-const exportnumber = ref(0)
+const exportnumber = ref(0);
 
 export default {
   components: { Counter, CreationData },
@@ -22,15 +22,15 @@ export default {
   },
 
   setup (props) {
-    //const router = useRouter()
+    // const router = useRouter()
 
     // router.push('/Table')
     // Now you can access params like:
 
     // let  myPropValue = ref(props.localprop)
-    const store = useStore()
+    const store = useStore();
 
-    let currentrows = 5
+    let currentrows = 5;
 
     /* Передача количества строк при помощи пропсов!!!!
     let myPropValue = ref(props.localprop)
@@ -47,10 +47,10 @@ export default {
       // другие переменные состояния
     })
 */
-    const route = useRoute()
-    const myPropValue = ref(Number(route.params.btnnumber))
-    currentrows = myPropValue.value
-    exportnumber.value = currentrows
+    const route = useRoute();
+    const myPropValue = ref(Number(route.params.btnnumber));
+    currentrows = myPropValue.value;
+    exportnumber.value = currentrows;
     /*
     watch(
       () => props.localprop,
@@ -61,35 +61,35 @@ export default {
     */
 
     const vote = () => {
-      arr.value.length = currentrows
-      console.log(myPropValue)
-    }
+      arr.value.length = currentrows;
+      console.log(myPropValue);
+    };
     const createrows = (rowsToCreate) => {
-      //for (let i = 0; i < rowsToCreate; i++) {
+      // for (let i = 0; i < rowsToCreate; i++) {
       // arr.value.push(mainArray[5 - rowsToCreate + i])
-      //}
-      arr.value.length = 0
+      // }
+      arr.value.length = 0;
       for (let i = 0; i < currentrows; i++) {
         //  arr.value.push(store.state.arrayofWeather[0][i])
-        arr.value.push(store.getters.getweatherarray[0][i])
+        arr.value.push(store.getters.getweatherarray[0][i]);
       }
-    }
+    };
 
     const onUpdateColor = (data) => {
-      currentrows = data.selectedColor
+      currentrows = data.selectedColor;
       if (data.selectedColor >= currentrows) {
-        createrows(data.selectedColor - currentrows)
+        createrows(data.selectedColor - currentrows);
       } else {
         // console.log('child component said login', data)
-        arr.value.length = data.selectedColor
+        arr.value.length = data.selectedColor;
       }
-    }
+    };
 
-    const votes = ref([])
-    arr.value.push(axiosTest())
-    return { arr, vote, onUpdateColor, myPropValue, exportnumber } //labels
+    const votes = ref([]);
+    arr.value.push(axiosTest());
+    return { arr, vote, onUpdateColor, myPropValue, exportnumber }; // labels
   }
-}
+};
 </script>
 <template>
   <!-- <router-link to="/">Home</router-link> |-->

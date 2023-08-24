@@ -13,5 +13,7 @@ public class  MT : Entity
         public DieType dieType {get ; set;} = null!;
 
         public MonitorConfig monitorConfig{get;set;} = null!;
+
+        public IList<GraphArray> graphArray{get;set;} = null!;
         public string comment {get ; set;} = null!;
 }

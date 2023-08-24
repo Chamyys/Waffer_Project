@@ -1,46 +1,46 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
-import Home from '../components/HelloWorld.vue'
-import Table from '../vues/Table.vue'
-import NotFound from '../vues/NotFound.vue'
-import HelloUser from '../vues/HelloUser.vue'
-import EnterVue from '../components/EnterVue.vue'
-import Login from '../components/Login.vue'
-import Measurer from '../components/Measurer.vue'
-import Technologist from '../components/Technologist.vue'
-import Welcomeback from '@/components/CreateWelcomeBack.vue'
-import Admin from '../components/Admin/Admin.vue'
-import AdminChooseConfig from '@/components/Admin/AdminChooseConfig.vue'
-import AddUser from '@/components/Admin/AddUser.vue'
-import Delete from '@/components/Admin/Delete.vue'
-import Edit from '@/components/Admin/EditUser.vue'
-import AddNewMT from '@/components/AddNewMT.vue'
-import Missions from '@/components/Missions.vue'
-import CreateMonitor from '@/components/CreateMonitor.vue'
-import WaferTimeLine from '@/components/WaferTimeLine.vue'
-import CreateLabEntry from '@/components/CreateLabEntry.vue'
-import axios from 'axios'
+import Home from '../components/HelloWorld.vue';
+import Table from '../vues/Table.vue';
+import NotFound from '../vues/NotFound.vue';
+import HelloUser from '../vues/HelloUser.vue';
+import EnterVue from '../components/EnterVue.vue';
+import Login from '../components/Login.vue';
+import Measurer from '../components/Measurer.vue';
+import Technologist from '../components/Technologist.vue';
+import Welcomeback from '@/components/CreateWelcomeBack.vue';
+import Admin from '../components/Admin/Admin.vue';
+import AdminChooseConfig from '@/components/Admin/AdminChooseConfig.vue';
+import AddUser from '@/components/Admin/AddUser.vue';
+import Delete from '@/components/Admin/Delete.vue';
+import Edit from '@/components/Admin/EditUser.vue';
+import AddNewMT from '@/components/AddNewMT.vue';
+import Missions from '@/components/Missions.vue';
+import CreateMonitor from '@/components/CreateMonitor.vue';
+import WaferTimeLine from '@/components/WaferTimeLine.vue';
+import CreateLabEntry from '@/components/CreateLabEntry.vue';
+import axios from 'axios';
 
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
-    return savedPosition
+    return savedPosition;
   } else {
-    const position = {}
+    const position = {};
     if (to.hash) {
-      position.selector = to.hash
+      position.selector = to.hash;
 
       if (to.hash === '#anchor2') {
-        position.offset = { y: 100 }
+        position.offset = { y: 100 };
       }
 
       if (to.matched.some((m) => m.meta.scrollToTop)) {
-        position.x = 0
-        position.y = 0
+        position.x = 0;
+        position.y = 0;
       }
     }
-    return position
+    return position;
   }
-}
+};
 
 const routes = [
   /*
@@ -175,13 +175,13 @@ const routes = [
     component: NotFound,
   },
   */
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior
-})
+});
 /*
 const postMission = async () => {
   try {
@@ -197,25 +197,25 @@ const postMission = async () => {
 }
 */
 router.beforeEach((to, from, next) => {
-  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin)
+  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
   const requiresMeasurer = to.matched.some(
     (record) => record.meta.requiresMeasurer
-  )
+  );
   const requiresTechnologist = to.matched.some(
     (record) => record.meta.requiresTechnologist
-  )
+  );
 
-  const userRole = localStorage.getItem('role') // Получение роли пользователя из localstorage - переделать на запрос к серверу
+  const userRole = localStorage.getItem('role'); // Получение роли пользователя из localstorage - переделать на запрос к серверу
 
   if (requiresAdmin && userRole !== 'Admin') {
-    next('/')
+    next('/');
   } else if (requiresMeasurer && userRole !== 'Measurer') {
-    next('/')
+    next('/');
   } else if (requiresTechnologist && userRole !== 'Technologist') {
-    next('/')
+    next('/');
   } else {
-    next()
+    next();
   }
-})
+});
 
-export default router
+export default router;

@@ -33,7 +33,7 @@ export default {
     return {
       date: new Date().toLocaleString('ru'),
       text: 'Компонент Создан: '
-    }
+    };
   }
-}
+};
 </script>

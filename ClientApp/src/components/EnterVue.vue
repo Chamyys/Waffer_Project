@@ -36,19 +36,19 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
-import { ref } from 'vue'
-import axios from 'axios'
+import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+import axios from 'axios';
 export default {
   setup () {
-    const router = useRouter()
-    const name = ref('')
+    const router = useRouter();
+    const name = ref('');
 
     const chooserole = (data) => {
-      const a = data.target.id
-      if (a == '') alert('Ошибка')
-      router.push({ name: 'Login', params: { role: data.target.id } })
-    }
+      const a = data.target.id;
+      if (a == '') alert('Ошибка');
+      router.push({ name: 'Login', params: { role: data.target.id } });
+    };
     return {
       items: [
         { text: 'Измеритель', icon: 'mdi-scale', id: 'Measurer' },
@@ -57,7 +57,7 @@ export default {
       ],
       name,
       chooserole
-    }
+    };
   }
-}
+};
 </script>

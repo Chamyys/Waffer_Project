@@ -22,34 +22,34 @@
   </v-snackbar>
 </template>
 <script>
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
 
-import { ref } from 'vue'
+import { ref } from 'vue';
 export default {
   setup () {
-    const errorArray = ref([])
-    const text = ref()
-    const snackbar = ref(false)
-    const myColor = ref('error')
-    const store = useStore()
-    const lastIndex = ref(0)
+    const errorArray = ref([]);
+    const text = ref();
+    const snackbar = ref(false);
+    const myColor = ref('error');
+    const store = useStore();
+    const lastIndex = ref(0);
     store.watch(
       (state) => state.lastErrorId,
       (newValue, oldValue) => {
         if (newValue !== oldValue) {
-          handleError()
+          handleError();
         }
       }
-    )
+    );
     const deleteOnewSnackBar = (id) => {
-      store.dispatch('deleteErrorInArrayById', id)
-      errorArray.value = errorArray.value.filter((value) => value.id !== id)
-      lastIndex.value--
-    }
+      store.dispatch('deleteErrorInArrayById', id);
+      errorArray.value = errorArray.value.filter((value) => value.id !== id);
+      lastIndex.value--;
+    };
     const handleError = () => {
-      errorArray.value = store.getters.getErrorsArray
-      lastIndex.value++
-    }
+      errorArray.value = store.getters.getErrorsArray;
+      lastIndex.value++;
+    };
     /*
     const deleteLastError = () => {
       if (errorArray.value.length > 0) {
@@ -64,18 +64,18 @@ export default {
 
     const deleteLastError = () => {
       if (errorArray.value.length > 0) {
-        errorArray.value.shift()
-        lastIndex.value--
+        errorArray.value.shift();
+        lastIndex.value--;
       }
-    }
+    };
     const getSnackbarStyle = (index) => {
-      const topOffset = index * 6
+      const topOffset = index * 6;
       return {
         position: 'absolute',
         top: `${topOffset}em`
-      }
-    }
-    setInterval(deleteLastError, 7000)
+      };
+    };
+    setInterval(deleteLastError, 7000);
 
     return {
       getSnackbarStyle,
@@ -85,7 +85,7 @@ export default {
       myColor,
       errorArray,
       deleteOnewSnackBar
-    }
+    };
   }
-}
+};
 </script>

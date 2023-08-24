@@ -17,20 +17,20 @@ export default {
     return {
       interval: {},
       value: 100
-    }
+    };
   },
   beforeUnmount () {
-    clearInterval(this.interval)
+    clearInterval(this.interval);
   },
   mounted () {
     this.interval = setInterval(() => {
       if (this.value === 0) {
-        return (this.value = 100)
+        return (this.value = 100);
       }
-      this.value -= 20
-    }, 1000)
+      this.value -= 20;
+    }, 1000);
   }
-}
+};
 </script>
 
 <style scoped>

@@ -62,34 +62,34 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   setup () {
-    const rail = ref(true)
-    const drawer = ref(true)
-    const router = useRouter()
+    const rail = ref(true);
+    const drawer = ref(true);
+    const router = useRouter();
     const createWafel = () => {
-      router.push('/Measurer/WelcomeBack')
-    }
+      router.push('/Measurer/WelcomeBack');
+    };
     const createMonitor = () => {
-      router.push('/Measurer/CreateMonitor')
-    }
+      router.push('/Measurer/CreateMonitor');
+    };
 
     const missions = () => {
-      router.push('/Measurer/Missions')
-    }
+      router.push('/Measurer/Missions');
+    };
     const searchWafer = () => {
-      router.push('/Measurer/WaferTimeLine')
-    }
+      router.push('/Measurer/WaferTimeLine');
+    };
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
       window.localStorage.getItem('lastName')
-    ).toString()
+    ).toString();
 
-    router.push('/Measurer/WelcomeBack')
+    router.push('/Measurer/WelcomeBack');
 
     return {
       drawer,
@@ -99,7 +99,7 @@ export default {
       createWafel,
       createMonitor,
       searchWafer
-    }
+    };
   }
-}
+};
 </script>

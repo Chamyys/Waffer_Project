@@ -51,13 +51,12 @@
     </v-btn>
   </v-sheet>
 </template>
-
 <script>
-import crc32 from 'crc/crc32'
-import axios from 'axios'
-import { ref } from 'vue'
-import { useField, useForm } from 'vee-validate'
-import router from '@/router/index'
+import crc32 from 'crc/crc32';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useField, useForm } from 'vee-validate';
+import router from '@/router/index';
 export default {
   props: {
     measurersDelete: Array,
@@ -68,55 +67,55 @@ export default {
     const { handleSubmit, handleReset } = useForm({
       validationSchema: {
         name (value) {
-          DeliverySuccsess.value = false
-          if (value?.length >= 2) return true
+          DeliverySuccsess.value = false;
+          if (value?.length >= 2) return true;
 
-          return 'Имя должно состоять минимум из двух символов'
+          return 'Имя должно состоять минимум из двух символов';
         },
         surname (value) {
-          if (value?.length >= 2) return true
+          if (value?.length >= 2) return true;
 
-          return 'Фамилия должна состоять минимум из двух символов'
+          return 'Фамилия должна состоять минимум из двух символов';
         },
         login (value) {
-          if (value?.length > 12) return 'Логин слишком длинный'
-          if (value?.length < 5) return 'Логин слишком короткий'
+          if (value?.length > 12) return 'Логин слишком длинный';
+          if (value?.length < 5) return 'Логин слишком короткий';
           if (value?.match(/[^A-Za-z0-9_@-]/)) {
-            return 'В логине возможны только латинские буквы, цифры и знаки: @,-,_ '
+            return 'В логине возможны только латинские буквы, цифры и знаки: @,-,_ ';
           }
           if (logins.includes(value)) {
-            return 'Пользователь с таким логином уже существует'
+            return 'Пользователь с таким логином уже существует';
           }
-          return true
+          return true;
         },
         password (value) {
-          if (value?.length > 12) return 'Пароль слишком длинный'
-          if (value?.length < 5) return 'Пароль слишком короткий'
+          if (value?.length > 12) return 'Пароль слишком длинный';
+          if (value?.length < 5) return 'Пароль слишком короткий';
           if (value?.match(/[^A-Za-z0-9_@-]/)) {
-            return 'В пароле возможны только латинские буквы, цифры и знаки: @,-,_ '
+            return 'В пароле возможны только латинские буквы, цифры и знаки: @,-,_ ';
           }
-          return true
+          return true;
         },
         select (value) {
-          if (value) return true
+          if (value) return true;
 
-          return 'Выберете роль пользователя'
+          return 'Выберете роль пользователя';
         }
       }
-    })
-    const DeliverySuccsess = ref(false)
-    const name = ref(useField('name'))
-    const surname = ref(useField('surname'))
-    const login = ref(useField('login'))
-    const password = ref(useField('password'))
-    const select = ref(useField('select'))
+    });
+    const DeliverySuccsess = ref(false);
+    const name = ref(useField('name'));
+    const surname = ref(useField('surname'));
+    const login = ref(useField('login'));
+    const password = ref(useField('password'));
+    const select = ref(useField('select'));
     // eslint-disable-next-line vue/no-setup-props-destructure
-    const workers = props.measurersDelete.concat(props.technologistsDelete)
+    const workers = props.measurersDelete.concat(props.technologistsDelete);
     const logins = workers.map((obj) => {
-      return obj.login
-    })
+      return obj.login;
+    });
 
-    const items = ref(['Администратор', 'Измеритель', 'Технолог'])
+    const items = ref(['Администратор', 'Измеритель', 'Технолог']);
     const upload = (values) => {
       const worker = {
         firstName: values.name,
@@ -125,31 +124,31 @@ export default {
         role: values.select,
         password: values.password,
         id: crc32(new Date().toString()).toString(16)
-      }
-      return worker
-    }
+      };
+      return worker;
+    };
 
     const returnHome = () => {
-      router.push('/Admin/AdminChooseConfig')
-    }
+      router.push('/Admin/AdminChooseConfig');
+    };
     const submit = handleSubmit(async (values) => {
       try {
         const response = await axios.post(
           'https://localhost:3000/api/WorkerData/Post',
           upload(values)
-        )
-        DeliverySuccsess.value = true
+        );
+        DeliverySuccsess.value = true;
         emit('add', {
           role: select.value,
           newUser: upload(values),
           message: 'Пользователь успешно создан'
-        })
-        console.log(response)
-        returnHome()
+        });
+        console.log(response);
+        returnHome();
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    })
+    });
     return {
       handleSubmit,
       handleReset,
@@ -161,7 +160,7 @@ export default {
       items,
       returnHome,
       submit
-    }
+    };
   }
-}
+};
 </script>

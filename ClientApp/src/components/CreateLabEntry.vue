@@ -70,44 +70,44 @@
   </div>
 </template>
 <script>
-import { useRouter, useRoute } from 'vue-router'
-import axios from 'axios'
-import { ref } from 'vue'
-import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   setup () {
-    const loading = ref(true)
-    const isStageAvailable = ref(true)
-    const router = useRouter()
-    const response = ref()
-    const store = useStore()
+    const loading = ref(true);
+    const isStageAvailable = ref(true);
+    const router = useRouter();
+    const response = ref();
+    const store = useStore();
     const getData = async () => {
       try {
         response.value = await axios.get(
           'https://localhost:3000/api/RabbitMq/GetMessage'
-        )
+        );
       } catch (error) {
-        console.error(error)
+        console.error(error);
         store.dispatch('throwMessage', {
           type: 'error',
           name: 'noServerConnection'
-        })
+        });
       }
-      loading.value = false
-    }
+      loading.value = false;
+    };
     const goBack = () => {
-      router.back()
-    }
+      router.back();
+    };
     // getData()
-    //setInterval(getData, 2000)
-    //throwError()
+    // setInterval(getData, 2000)
+    // throwError()
 
     return {
       response,
       goBack,
       isStageAvailable
-    }
+    };
   }
-}
+};
 </script>

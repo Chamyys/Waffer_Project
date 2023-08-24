@@ -35,6 +35,8 @@
         <Datepicker
           v-model="date"
           style="
+            --vdp-hover-bg-color: blue;
+            --vdp-selected-bg-color: blue;
             text-align: center;
             border-style: solid;
             border-color: black;
@@ -105,71 +107,71 @@
   </div>
 </template>
 <script>
-import Datepicker from 'vue3-datepicker'
-import { ref } from 'vue'
-import axios from 'axios'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import crc32 from 'crc/crc32'
+import Datepicker from 'vue3-datepicker';
+import { ref } from 'vue';
+import axios from 'axios';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import crc32 from 'crc/crc32';
 export default {
   components: { Datepicker },
   setup () {
-    const currentTechnologistName = ref('')
+    const currentTechnologistName = ref('');
 
     const getCurrentTechnologistName = (name) => {
-      currentTechnologistName.value = name
-    }
-    const dynamicServerPushButtonText = ref('Получить код')
-    const renderHashAlert = ref(false)
-    const date = ref(new Date())
-    const rail = ref(true)
-    const textfieldhashconfirmcode = ref('')
-    let isHashGot = false
-    const drawer = ref(true)
-    const store = useStore()
-    const arr = ref([])
-    const hashCode = ref('')
-    const router = useRouter()
-    const userRole = window.localStorage.getItem('role')
+      currentTechnologistName.value = name;
+    };
+    const dynamicServerPushButtonText = ref('Получить код');
+    const renderHashAlert = ref(false);
+    const date = ref(new Date());
+    const rail = ref(true);
+    const textfieldhashconfirmcode = ref('');
+    let isHashGot = false;
+    const drawer = ref(true);
+    const store = useStore();
+    const arr = ref([]);
+    const hashCode = ref('');
+    const router = useRouter();
+    const userRole = window.localStorage.getItem('role');
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
       window.localStorage.getItem('lastName')
-    ).toString()
+    ).toString();
 
-    const currentrows = 5
+    const currentrows = 5;
     const isAllFieldsComplitedCheck = (entity) => {
       if (
         !entity.id ||
         !entity.Technologist ||
         entity.Measurer.length < 2 ||
-        hashCode.value != textfieldhashconfirmcode.value
+        hashCode.value !== textfieldhashconfirmcode.value
       ) {
-        return false
-      } else return true
-    }
+        return false;
+      } else return true;
+    };
     const createHashCode = () => {
       if (!isHashGot) {
-        isHashGot = true
-        hashCode.value = crc32(new Date().toString()).toString(16)
-        renderHashAlert.value = true
-        dynamicServerPushButtonText.value = 'Отправить данные на сервер'
+        isHashGot = true;
+        hashCode.value = crc32(new Date().toString()).toString(16);
+        renderHashAlert.value = true;
+        dynamicServerPushButtonText.value = 'Отправить данные на сервер';
       } else {
         if (isAllFieldsComplitedCheck(createWELCOMEBACK())) {
-          postInfo()
+          postInfo();
         } else {
           store.dispatch('throwMessage', {
             type: 'error',
             name: 'FormNotComplited'
-          })
+          });
         }
       }
-    }
+    };
     const createWELCOMEBACK = () => {
-      const Time = new Date()
-      date.value.setHours(Time.getHours() + 3)
-      date.value.setMinutes(Time.getMinutes())
-      date.value.setSeconds(Time.getSeconds())
+      const Time = new Date();
+      date.value.setHours(Time.getHours() + 3);
+      date.value.setMinutes(Time.getMinutes());
+      date.value.setSeconds(Time.getSeconds());
       const entity = {
         id: hashCode.value,
         stageName: 'WelcomeBack',
@@ -178,30 +180,30 @@ export default {
           : currentTechnologistName.value,
         returnedTime: date.value,
         Measurer: username
-      }
-      return entity
-    }
+      };
+      return entity;
+    };
     const goNextStage = () => {
-      router.push(router.currentRoute.value.matched[0].path + '/LabEntry')
-    }
+      router.push(router.currentRoute.value.matched[0].path + '/LabEntry');
+    };
     const isCurrentUserTechnologist = () => {
-      if (userRole === 'Technologist') return true
-      else return false
-    }
+      if (userRole === 'Technologist') return true;
+      else return false;
+    };
     const postInfo = async () => {
       try {
         const response = await axios.post(
           'https://localhost:3000/api/WeatherForecast/Post',
           createWELCOMEBACK()
-        )
-        renderHashAlert.value = false
-        console.log(response)
-        postWaferInLab()
+        );
+        renderHashAlert.value = false;
+        console.log(response);
+        postWaferInLab();
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-      restartPageLife()
-    }
+      restartPageLife();
+    };
     const createWaferInLAb = () => {
       const waferInLab = {
         id: hashCode.value,
@@ -209,64 +211,64 @@ export default {
         LabEntryStage: 'stingscsa', // APISVR2.0
         MStartStage: 'sss', // APISVR2.0
         UploadingStage: 'sad' // APISVR2.0
-      }
-      waferInLab.stages.push(createWELCOMEBACK())
-      return waferInLab
-    }
+      };
+      waferInLab.stages.push(createWELCOMEBACK());
+      return waferInLab;
+    };
     const postWaferInLab = async () => {
       try {
         const response = await axios.post(
           'https://localhost:3000/api/WaferInLab/Post',
           createWaferInLAb()
-        )
+        );
 
-        console.log(response)
+        console.log(response);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
     const restartPageLife = () => {
       store.dispatch('throwMessage', {
         type: 'success',
         name: 'deliverySuccsess'
-      })
+      });
 
-      dynamicServerPushButtonText.value = 'Получить код'
-      isHashGot = false
-      textfieldhashconfirmcode.value = ''
-    }
+      dynamicServerPushButtonText.value = 'Получить код';
+      isHashGot = false;
+      textfieldhashconfirmcode.value = '';
+    };
 
     const goBack = () => {
-      router.push('/')
-    }
+      router.push('/');
+    };
 
     const getInfo = async () => {
       const promise = axios.get(
         'https://localhost:3000/api/WeatherForecast/get'
-      )
-      console.log(promise)
+      );
+      console.log(promise);
 
-      const dataPromise = await promise.then((response) => response.data)
+      const dataPromise = await promise.then((response) => response.data);
 
-      arr.value.length = 0
-      //store.dispatch('cleanWeatherArray')
-      //store.dispatch('createWeatherArray', dataPromise) //заполнение vuex
+      arr.value.length = 0;
+      // store.dispatch('cleanWeatherArray')
+      // store.dispatch('createWeatherArray', dataPromise) //заполнение vuex
 
-      arr.value = [...dataPromise.slice(0, currentrows)]
+      arr.value = [...dataPromise.slice(0, currentrows)];
 
-      console.log(arr)
+      console.log(arr);
 
-      //const totalNotes = store.state.arrayofWeather //получение из vuex
+      // const totalNotes = store.state.arrayofWeather //получение из vuex
 
       // console.log(totalNotes[0][0].date) //вызов поля объекта
 
-      //store.dispatch('createWeatherArray', mainArray) //заполнение vuex
+      // store.dispatch('createWeatherArray', mainArray) //заполнение vuex
 
-      ref.value = dataPromise
-    }
+      ref.value = dataPromise;
+    };
 
-    getInfo()
+    getInfo();
 
     return {
       isCurrentUserTechnologist,
@@ -292,15 +294,15 @@ export default {
       rules: [
         (value) => !!value || 'Поле не может быть пустым.',
         (value) =>
-          (value && value.length == hashCode.value.length) ||
+          (value && value.length === hashCode.value.length) ||
           'Длины кодов подтверждения не совпадают',
         (value) =>
-          (value && textfieldhashconfirmcode.value == hashCode.value) ||
+          (value && textfieldhashconfirmcode.value === hashCode.value) ||
           'Код подтверждения не совпадает'
       ]
-    }
+    };
   }
-}
+};
 </script>
 
 <style>

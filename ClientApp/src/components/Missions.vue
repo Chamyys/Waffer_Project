@@ -1,110 +1,110 @@
 <script>
-import { ref } from 'vue'
-import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 export default {
   setup () {
-    const router = useRouter()
-    const createWafelMissions = ref([])
-    const creeateMeasursMissions = ref([])
-    const createMonitorMissions = ref([])
-    const addChipsBtnText = ref([])
-    const missions = ref([])
-    const offsetTop = ref(0)
-    const chunks = ref([])
-    const showableIndexes = ref([])
+    const router = useRouter();
+    const createWafelMissions = ref([]);
+    const creeateMeasursMissions = ref([]);
+    const createMonitorMissions = ref([]);
+    const addChipsBtnText = ref([]);
+    const missions = ref([]);
+    const offsetTop = ref(0);
+    const chunks = ref([]);
+    const showableIndexes = ref([]);
     const parseData = (data) => {
-      const dateString = data
-      const dateObj = new Date(dateString)
-      const day = dateObj.getUTCDate().toString().padStart(2, '0')
-      const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
-      const year = dateObj.getUTCFullYear().toString()
-      const hours = dateObj.getUTCHours().toString().padStart(2, '0')
-      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
-      return `${day}-${month}-${year} ${hours}:${minutes}`
-    }
+      const dateString = data;
+      const dateObj = new Date(dateString);
+      const day = dateObj.getUTCDate().toString().padStart(2, '0');
+      const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0');
+      const year = dateObj.getUTCFullYear().toString();
+      const hours = dateObj.getUTCHours().toString().padStart(2, '0');
+      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
+    };
     const fillChipBtnArray = () => {
       for (let i = 0; i < creeateMeasursMissions.value.length; i++) {
-        addChipsBtnText.value[i] = 'Показать больше...'
+        addChipsBtnText.value[i] = 'Показать больше...';
       }
-    }
+    };
     const createWafel = () => {
-      router.push('/Measurer/WelcomeBack')
-    }
+      router.push('/Measurer/WelcomeBack');
+    };
     const createMonitor = () => {
-      router.push('/Measurer/CreateMonitor')
-    }
+      router.push('/Measurer/CreateMonitor');
+    };
     const createMeasur = () => {
-      router.push('/Measurer/CreateMeasur')
-    }
+      router.push('/Measurer/CreateMeasur');
+    };
 
     const getMissions = async () => {
       try {
         const promise = await axios.get(
           'https://localhost:3000/api/WaferCreateMission/Get'
-        )
+        );
 
-        console.log(promise)
-        const dataPromise = await promise
-        missions.value = [...dataPromise.data]
-        createArreys()
+        console.log(promise);
+        const dataPromise = await promise;
+        missions.value = [...dataPromise.data];
+        createArreys();
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
     const getMeasurMissions = async () => {
       try {
-        const promise = await axios.get('https://localhost:3000/api/MT/Get')
+        const promise = await axios.get('https://localhost:3000/api/MT/Get');
 
-        console.log(promise)
-        const dataPromise = await promise
-        creeateMeasursMissions.value = [...dataPromise.data]
-        fillChipBtnArray()
+        console.log(promise);
+        const dataPromise = await promise;
+        creeateMeasursMissions.value = [...dataPromise.data];
+        fillChipBtnArray();
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
     const onScroll = (e) => {
-      offsetTop.value = e.target.scrollTop
-    }
+      offsetTop.value = e.target.scrollTop;
+    };
     const getMore = (index) => {
       if (!showableIndexes.value.includes(index)) {
-        showableIndexes.value.push(index)
-        addChipsBtnText.value[index] = 'Скрыть...'
+        showableIndexes.value.push(index);
+        addChipsBtnText.value[index] = 'Скрыть...';
       } else {
         showableIndexes.value = showableIndexes.value.filter(
           (number) => number !== index
-        )
-        addChipsBtnText.value[index] = 'Показать больше...'
+        );
+        addChipsBtnText.value[index] = 'Показать больше...';
       }
-    }
+    };
     const isCurrentIndexShowable = (index) => {
-      return showableIndexes.value.includes(index)
-    }
-    getMissions()
-    getMeasurMissions()
+      return showableIndexes.value.includes(index);
+    };
+    getMissions();
+    getMeasurMissions();
     const createArreys = () => {
       createWafelMissions.value = missions.value.filter(
         (obj) => obj.type === 'generateNewWafel'
-      )
+      );
       createMonitorMissions.value = missions.value.filter(
         (obj) => obj.type === 'generateNewMonitor'
-      )
-    }
+      );
+    };
 
     const afterItemRendered = (item) => {
-      chunks.value = chunksMaker(item)
-    }
+      chunks.value = chunksMaker(item);
+    };
     const chunksMaker = (item) => {
-      const chunkSize = 3
-      const chunks = []
+      const chunkSize = 3;
+      const chunks = [];
 
       for (let i = 0; i < item.monitorConfig.elements.length; i += chunkSize) {
-        chunks.push(item.monitorConfig.elements.slice(i, i + chunkSize))
+        chunks.push(item.monitorConfig.elements.slice(i, i + chunkSize));
       }
 
-      return chunks
-    }
+      return chunks;
+    };
 
     return {
       fillChipBtnArray,
@@ -124,9 +124,9 @@ export default {
       showableIndexes,
       isCurrentIndexShowable,
       addChipsBtnText
-    }
+    };
   }
-}
+};
 </script>
 
 <template>
@@ -155,7 +155,7 @@ export default {
               class="text-h4 text--primary"
               style="padding: 1em"
             >
-              Тип измерения
+              Номер пластины
             </v-card-subtitle>
           </v-col>
           <v-divider

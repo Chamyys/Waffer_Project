@@ -1,7 +1,7 @@
 <script>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 export default {
   setup () {
     const stagesNames = ref([
@@ -10,37 +10,37 @@ export default {
       'Пластина измеряется',
       'Измерения окончены',
       'Пластина готова'
-    ])
-    const loading = ref(false)
-    const wafelNumber = ref()
-    const router = useRouter()
-    const dialog = ref(true)
-    const stages = ref([''])
-    const click2 = ref(false)
-    const stageOne = ref([])
-    const choosedIndex = ref(0)
+    ]);
+    const loading = ref(false);
+    const wafelNumber = ref();
+    const router = useRouter();
+    const dialog = ref(true);
+    const stages = ref(['']);
+    const click2 = ref(false);
+    const stageOne = ref([]);
+    const choosedIndex = ref(0);
     const getNumberOfStages = (stages) => {
-      return stages.length
-    }
+      return stages.length;
+    };
     const dialogText = ref(
       'Введите номер пластины для отслеживания истории ее состояний'
-    )
+    );
     const parseData = (data) => {
-      const dateString = data
-      const dateObj = new Date(dateString)
-      const day = dateObj.getUTCDate().toString().padStart(2, '0')
-      const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0')
-      const year = dateObj.getUTCFullYear().toString()
-      const hours = dateObj.getUTCHours().toString().padStart(2, '0')
-      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0')
-      return `${day}-${month}-${year} ${hours}:${minutes}`
-    }
+      const dateString = data;
+      const dateObj = new Date(dateString);
+      const day = dateObj.getUTCDate().toString().padStart(2, '0');
+      const month = (dateObj.getUTCMonth() + 1).toString().padStart(2, '0');
+      const year = dateObj.getUTCFullYear().toString();
+      const hours = dateObj.getUTCHours().toString().padStart(2, '0');
+      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
+    };
     const goBack = () => {
-      router.push(router.options.history.state.back)
-    }
+      router.push(router.options.history.state.back);
+    };
     const getStage = (key) => {
-      choosedIndex.value = key
-    }
+      choosedIndex.value = key;
+    };
     const getCurentWaferInfo = async () => {
       try {
         const promise = await axios.get(
@@ -50,29 +50,29 @@ export default {
               id: wafelNumber.value
             }
           }
-        )
-        console.log(promise)
-        const dataPromise = await promise
-        stages.value = dataPromise.data
+        );
+        console.log(promise);
+        const dataPromise = await promise;
+        stages.value = dataPromise.data;
 
         if (dataPromise.status === 204) {
           dialogText.value =
-            'Такой пластины не существует, пожалуйста проверьте номер'
+            'Такой пластины не существует, пожалуйста проверьте номер';
         } else {
           stagesNames.value = [
             ...stagesNames.value.slice(
               0,
               getNumberOfStages(stages.value.stages)
             )
-          ]
-          dialog.value = false
-          stageOne.value = stages.value.stages[0]
-          loading.value = true
+          ];
+          dialog.value = false;
+          stageOne.value = stages.value.stages[0];
+          loading.value = true;
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
     return {
       choosedIndex,
       dialog,
@@ -87,9 +87,9 @@ export default {
       parseData,
       stagesNames,
       getStage
-    }
+    };
   }
-}
+};
 </script>
 <template>
   <v-progress-circular

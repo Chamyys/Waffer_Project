@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
-import crc32 from 'crc/crc32'
+import { createStore } from 'vuex';
+import crc32 from 'crc/crc32';
 
 const store = createStore({
   state: {
@@ -9,6 +9,9 @@ const store = createStore({
     lastErrorId: '',
     title: 'Vuex Store',
     arrayofWeather: [],
+    //graphArray: [],
+    elementGraphsArray: [],
+    myTempGraphArray: [],
     firstname: '',
     secondname: '',
     messages: [
@@ -21,6 +24,24 @@ const store = createStore({
             errorCode: '500',
             errorText: 'Пожалуйста, выберете измеряемые элементы',
             name: 'monitorElementsEmpty',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Ошибка загрузки с сервера',
+            name: 'serverLoadingError',
+            color: 'error',
+            snackbar: true
+          },
+          {
+            component: 'app.vue',
+            method: 'returnDef',
+            errorCode: '500',
+            errorText: 'Ошибка загрузки на сервер',
+            name: 'serverPostError',
             color: 'error',
             snackbar: true
           },
@@ -206,22 +227,31 @@ const store = createStore({
   },
   getters: {
     getError (state) {
-      return state.myError
+      return state.myError;
     },
     getweatherarray (state) {
-      return state.arrayofWeather
+      return state.arrayofWeather;
+    },
+    getGraphArray (state) {
+      return state.graphArray;
     },
     getErrorsArray (state) {
-      return state.myErrorsArray
+      return state.myErrorsArray;
     },
     getFirstName (state) {
-      return state.firstname
+      return state.firstname;
+    },
+    getElementGraphsArray (state) {
+      return state.elementGraphsArray;
     },
     getSecondName (state) {
-      return state.secondname
+      return state.secondname;
     },
     getMyMessageCollection (state, type) {
-      return state.type
+      return state.type;
+    },
+    getMyGraph (state) {
+      return state.myTempGraphArray;
     }
   },
 
@@ -238,43 +268,80 @@ const store = createStore({
       }
     },*/
     FORGET_CURRENT_ERROR (state) {
-      state.lastErrorId = null
+      state.lastErrorId = null;
     },
     SAVE_WEATHER_ARRAY (state, title) {
-      state.arrayofWeather.push(title)
+      state.arrayofWeather.push(title);
     },
     CLEAN_WEATHER_ARRAY (state) {
-      state.arrayofWeather.length = 0
+      state.arrayofWeather.length = 0;
     },
+    CLEAN_ELEMENT_GRAPH_ARRAY(state) {
+      state.elementGraphsArray.length = 0;
+    },
+    /*SAVE_ONE_ELEMENT (state, { id, name }) {
+      if (!state.graphArray.find((el) => el.id === id)) {
+        state.graphArray.push({ id, name });
+      } else {
+        state.graphArray.forEach(function (el, i) {
+          if (el.id === id) state.graphArray.splice(i, 1);
+        });
+      }
+    },*/
+    /*
+    CLEAN_GRAPH_ARRAY (state) {
+      state.graphArray.length = 0;
+    },*/
     THROW_NEW_MESSAGE (state, { type, name }) {
       if (state.myErrorsArray.length < state.maxErrorsArraySize) {
-        const id = crc32(new Date().toString()).toString(16) + Math.random(10)
+        const id = crc32(new Date().toString()).toString(16) + Math.random(10);
         const errorConfig = state.messages
           .find((obj) => obj.messageType === type)
-          .messageList.find((obj) => obj.name === name)
-        const currentError = { ...errorConfig, id }
-        state.lastErrorId = currentError.id
-        state.myError = currentError
-        state.myErrorsArray.push(currentError)
+          .messageList.find((obj) => obj.name === name);
+        const currentError = { ...errorConfig, id };
+        state.lastErrorId = currentError.id;
+        state.myError = currentError;
+        state.myErrorsArray.push(currentError);
       }
     },
-
+    SAVE_GRAPHS_FOR_ELEMENT (state, { element, graphs }) {
+      if (
+        !state.elementGraphsArray.find((el) => el.element.id === element.id)
+      ) {
+        state.elementGraphsArray.push({ element, graphs });
+      } else {
+        state.elementGraphsArray.forEach(function (el, i) {
+          if (el.element.id === element.id) {
+            state.elementGraphsArray.splice(i, 1);
+          }
+        });
+        state.elementGraphsArray.push({ element, graphs });
+      }
+    },
     DELETE_ERROR_IN_ARRAY_BY_ID (state, id) {
       state.myErrorsArray = state.myErrorsArray.filter(
         (value) => value.id !== id
-      )
+      );
+    },
+    GET_GRAPHS_BY_ELEMENT (state, id) {
+      const myElement = state.elementGraphsArray.find(
+        (el) => el.element.id === id
+      );
+      if (myElement) {
+        state.myTempGraphArray = myElement.graphs;
+      }
     },
     DELETE_LAST_ERROR_IN_ARRAY (state) {
       if (state.myErrorsArray.length > 0) {
         state.myErrorsArray = state.myErrorsArray.slice(
           0,
           state.myErrorsArray.length - 1
-        )
+        );
       }
     },
     CREATE_LOCAL_USER (state, { firstname, secondname }) {
-      state.firstname = firstname
-      state.secondname = secondname
+      state.firstname = firstname;
+      state.secondname = secondname;
     }
   },
   actions: {
@@ -282,27 +349,36 @@ const store = createStore({
       commit('THROW_NEW_ERROR', myError)
     },*/
     throwMessage ({ commit }, { type, name }) {
-      commit('THROW_NEW_MESSAGE', { type, name })
+      commit('THROW_NEW_MESSAGE', { type, name });
     },
     deleteErrorInArrayById ({ commit }, id) {
-      commit('DELETE_ERROR_IN_ARRAY_BY_ID', id)
+      commit('DELETE_ERROR_IN_ARRAY_BY_ID', id);
     },
     deleteLastErrorInArray ({ commit }) {
-      commit('DELETE_LAST_ERROR_IN_ARRAY')
+      commit('DELETE_LAST_ERROR_IN_ARRAY');
     },
     forgetError ({ commit }) {
-      commit('FORGET_CURRENT_ERROR')
+      commit('FORGET_CURRENT_ERROR');
     },
     createUser ({ commit }, { firstname, secondname }) {
-      commit('CREATE_LOCAL_USER', { firstname, secondname })
+      commit('CREATE_LOCAL_USER', { firstname, secondname });
     },
     createWeatherArray ({ commit }, title) {
-      commit('SAVE_WEATHER_ARRAY', title)
+      commit('SAVE_WEATHER_ARRAY', title);
+    },
+    getGraphsByElementId ({ commit }, id) {
+      commit('GET_GRAPHS_BY_ELEMENT', id);
+    },
+    saveGraph ({ commit }, { element, graphs }) {
+      commit('SAVE_GRAPHS_FOR_ELEMENT', { element, graphs });
     },
     cleanWeatherArray ({ commit }) {
-      commit('CLEAN_WEATHER_ARRAY')
+      commit('CLEAN_WEATHER_ARRAY');
+    },
+    cleanElementGraphsArray({ commit }) {
+      commit('CLEAN_ELEMENT_GRAPH_ARRAY');
     }
   }
-})
+});
 
-export default store
+export default store;

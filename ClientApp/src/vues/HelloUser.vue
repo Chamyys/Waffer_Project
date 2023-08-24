@@ -1,9 +1,9 @@
 @@ -0,0 +1,60 @@
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
-import { ref } from 'vue'
-import router from '@/router'
+import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+import router from '@/router';
 
 // Используем метод push для перехода на новый маршрут
 
@@ -22,21 +22,21 @@ export default {
   },*/
 
   setup () {
-    const router = useRouter()
-    const name = ref('')
+    const router = useRouter();
+    const name = ref('');
 
     const change = (data) => {
-      const a = data.target.innerText
+      const a = data.target.innerText;
       // Переходим на маршрут "/results" с параметром "numberOfPushedBtn"
-      router.push({ name: 'NotFound', params: { btnnumber: a } })
-    }
+      router.push({ name: 'NotFound', params: { btnnumber: a } });
+    };
 
     return {
       name,
       change
-    }
+    };
   }
-}
+};
 </script>
 
 <template>

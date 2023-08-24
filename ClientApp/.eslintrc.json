@@ -14,6 +14,7 @@
   },
   "plugins": ["vue"],
   "rules": {
+    "no-console": "warn",
     "vue/multi-word-component-names": "warn",
     "vue/no-unused-vars": "warn",
     "vue/no-deprecated-v-bind-sync": "warn",
@@ -44,14 +45,7 @@
     "arrow-spacing": ["warn", { "before": true, "after": true }],
     "block-spacing": ["warn", "always"],
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
-    "camelcase": [
-      "warn",
-      {
-        "allow": ["^UNSAFE_"],
-        "properties": "never",
-        "ignoreGlobals": true
-      }
-    ],
+
     "comma-dangle": [
       "warn",
       {
@@ -132,6 +126,7 @@
     "no-array-constructor": "warn",
     "no-async-promise-executor": "warn",
     "no-caller": "warn",
+    "camelcase": ["error", { "properties": "never" }],
     "no-case-declarations": "warn",
     "no-class-assign": "warn",
     "no-compare-neg-zero": "warn",
@@ -272,7 +267,8 @@
       { "avoidEscape": true, "allowTemplateLiterals": false }
     ],
     "rest-spread-spacing": ["warn", "never"],
-    "semi": ["warn", "never"],
+    "semi": ["warn", "always"],
+    "semi-style": ["warn", "last"],
     "semi-spacing": ["warn", { "before": false, "after": true }],
     "space-before-blocks": ["warn", "always"],
     "space-before-function-paren": ["warn", "always"],

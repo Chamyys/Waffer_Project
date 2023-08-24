@@ -44,20 +44,20 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
-import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { ref, computed } from 'vue';
+import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 export default {
   setup () {
-    const store = useStore()
-    const login = ref('')
-    const password = ref('')
-    const route = useRoute() //router
-    let succsessUserIndex = ''
-    const router = useRouter()
-    const path = computed(() => route.path)
-    const currentUsersArray = ref([])
+    const store = useStore();
+    const login = ref('');
+    const password = ref('');
+    const route = useRoute(); // router
+    let succsessUserIndex = '';
+    const router = useRouter();
+    const path = computed(() => route.path);
+    const currentUsersArray = ref([]);
     const getCurrentRoleAccounts = async () => {
       await axios
         .get('https://localhost:3000/api/WorkerData/get', {
@@ -67,68 +67,68 @@ export default {
         })
         .then(function (response) {
           for (let i = 0; i < response.data.length; i++) {
-            currentUsersArray.value.push(response.data[i])
+            currentUsersArray.value.push(response.data[i]);
           }
         })
         .catch(function (error) {
-          console.error(error)
-        })
-    }
+          console.error(error);
+        });
+    };
 
     const checkEnterData = () => {
       const currentUser = currentUsersArray.value.find(
         (obj) => obj.login === login.value
-      )
+      );
       if (
         currentUser !== undefined &&
         currentUser.password === password.value
       ) {
         succsessUserIndex = currentUsersArray.value.indexOf(
           currentUsersArray.value.find((obj) => obj.login === login.value)
-        )
-        enterInAccount()
+        );
+        enterInAccount();
       } else {
         store.dispatch('throwMessage', {
           type: 'error',
           name: 'notCorrectLogin'
-        })
+        });
       }
-    }
+    };
     const enterInAccount = () => {
       window.localStorage.setItem(
         'firstName',
         currentUsersArray.value[succsessUserIndex].firstName
-      )
+      );
       window.localStorage.setItem(
         'lastName',
         currentUsersArray.value[succsessUserIndex].secondName
-      )
-      window.localStorage.setItem('role', path.value.split('/')[2])
-      router.push('/' + path.value.split('/')[2])
-    }
+      );
+      window.localStorage.setItem('role', path.value.split('/')[2]);
+      router.push('/' + path.value.split('/')[2]);
+    };
 
     const returnHome = () => {
-      router.push('/')
-    }
+      router.push('/');
+    };
 
     const getRole = (path) => {
       switch (path.value) {
         case '/Login/Measurer':
-          return 'Измеритель'
+          return 'Измеритель';
 
         case '/Login/Admin':
-          return 'Администратор'
+          return 'Администратор';
 
         case '/Login/Technologist':
-          return 'Технолог'
+          return 'Технолог';
 
         default:
-          alert('Ошибка')
+          alert('Ошибка');
       }
-    }
+    };
 
-    const role = getRole(path)
-    getCurrentRoleAccounts()
+    const role = getRole(path);
+    getCurrentRoleAccounts();
     return {
       returnHome,
       checkEnterData,
@@ -137,20 +137,20 @@ export default {
       login,
       firstNameRules: [
         (value) => {
-          if (value?.length > 3) return true
+          if (value?.length > 3) return true;
 
-          return 'Имя не может быть короче трех символов.'
+          return 'Имя не может быть короче трех символов.';
         }
       ],
       password,
       lastNameRules: [
         (value) => {
-          if (/[^0-9]/.test(value)) return true
+          if (/[^0-9]/.test(value)) return true;
 
-          return 'Фамилия не должна содержать цифр.'
+          return 'Фамилия не должна содержать цифр.';
         }
       ]
-    }
+    };
   }
-}
+};
 </script>

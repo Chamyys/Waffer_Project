@@ -102,37 +102,37 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   setup () {
-    const rail = ref(true)
-    const drawer = ref(true)
-    const router = useRouter()
-    const selected = ref(0)
+    const rail = ref(true);
+    const drawer = ref(true);
+    const router = useRouter();
+    const selected = ref(0);
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
       window.localStorage.getItem('lastName')
-    ).toString()
+    ).toString();
     const createMT = () => {
-      router.push('/Technologist/AddNewMT')
-    }
+      router.push('/Technologist/AddNewMT');
+    };
     const createWaffer = () => {
-      router.push('/Technologist/WelcomeBack')
-    }
+      router.push('/Technologist/WelcomeBack');
+    };
     const checkMissions = () => {
-      router.push('/Technologist/Missions')
-    }
+      router.push('/Technologist/Missions');
+    };
     const seeLivePath = () => {
-      router.push('/Technologist/WaferTimeLine')
-    }
+      router.push('/Technologist/WaferTimeLine');
+    };
     const checkActivityClass = (id) => {
-      return id === selected.value ? 'choosed' : ''
-    }
+      return id === selected.value ? 'choosed' : '';
+    };
 
-    router.push('/Technologist/WelcomeBack')
+    router.push('/Technologist/WelcomeBack');
     return {
       drawer,
       seeLivePath,
@@ -143,9 +143,9 @@ export default {
       checkActivityClass,
       checkMissions,
       selected
-    }
+    };
   }
-}
+};
 </script>
 
 <style>

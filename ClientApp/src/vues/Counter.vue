@@ -18,22 +18,22 @@ export default {
 
   data () {
     // console.log(this.defoultnumber)
-    //alert(this.defoultnumber.value.currentrows)
+    // alert(this.defoultnumber.value.currentrows)
     return {
       selectedColor: this.defoultnumber
-    }
+    };
   },
   watch: {
     selectedColor: function (newValue) {
-      this.updateColor(newValue)
+      this.updateColor(newValue);
     }
   },
   methods: {
     updateColor (color) {
       this.$emit('updateColor', {
         selectedColor: color
-      })
+      });
     }
   }
-}
+};
 </script>

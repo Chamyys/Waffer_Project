@@ -83,12 +83,12 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
-import crc32 from 'crc/crc32'
-import axios from 'axios'
-import { ref } from 'vue'
-import { useField, useForm } from 'vee-validate'
-import router from '@/router/index'
+import { useRouter } from 'vue-router';
+import crc32 from 'crc/crc32';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useField, useForm } from 'vee-validate';
+import router from '@/router/index';
 export default {
   props: {
     measurersDelete: Array,
@@ -96,59 +96,59 @@ export default {
   },
   emits: ['handleSubmit'],
   setup (props, { emit }) {
-    const Id = ref()
-    const isIdSubmited = ref(false)
+    const Id = ref();
+    const isIdSubmited = ref(false);
     const { handleSubmit, handleReset } = useForm({
       validationSchema: {
         name (value) {
-          DeliverySuccsess.value = false
-          if (value?.length >= 2) return true
+          DeliverySuccsess.value = false;
+          if (value?.length >= 2) return true;
 
-          return 'Имя должно состоять минимум из двух символов'
+          return 'Имя должно состоять минимум из двух символов';
         },
         surname (value) {
-          if (value?.length >= 2) return true
+          if (value?.length >= 2) return true;
 
-          return 'Фамилия должна состоять минимум из двух символов'
+          return 'Фамилия должна состоять минимум из двух символов';
         },
         login (value) {
-          if (value?.length > 12) return 'Логин слишком длинный'
-          if (value?.length < 5) return 'Логин слишком короткий'
+          if (value?.length > 12) return 'Логин слишком длинный';
+          if (value?.length < 5) return 'Логин слишком короткий';
           if (value?.match(/[^A-Za-z0-9_@-]/)) {
-            return 'В логине возможны только латинские буквы, цифры и знаки: @,-,_ '
+            return 'В логине возможны только латинские буквы, цифры и знаки: @,-,_ ';
           }
 
-          return true
+          return true;
         },
         password (value) {
-          if (value?.length > 12) return 'Пароль слишком длинный'
-          if (value?.length < 5) return 'Пароль слишком короткий'
+          if (value?.length > 12) return 'Пароль слишком длинный';
+          if (value?.length < 5) return 'Пароль слишком короткий';
           if (value?.match(/[^A-Za-z0-9_@-]/)) {
-            return 'В пароле возможны только латинские буквы, цифры и знаки: @,-,_ '
+            return 'В пароле возможны только латинские буквы, цифры и знаки: @,-,_ ';
           }
 
-          return true
+          return true;
         },
         select (value) {
-          if (value) return true
+          if (value) return true;
 
-          return 'Выберете роль пользователя'
+          return 'Выберете роль пользователя';
         }
       }
-    })
-    const router = useRouter()
-    const DeliverySuccsess = ref(false)
-    let deletedRole
-    let startRole = ''
-    let indexEdited = ''
-    let isUserExists = true
-    const name = useField('name')
-    const surname = useField('surname')
-    const login = useField('login')
-    const password = useField('password')
-    const select = useField('select')
-    const editedUser = ref('')
-    const items = ref(['Админ', 'Измеритель', 'Технолог'])
+    });
+    const router = useRouter();
+    const DeliverySuccsess = ref(false);
+    let deletedRole;
+    let startRole = '';
+    let indexEdited = '';
+    let isUserExists = true;
+    const name = useField('name');
+    const surname = useField('surname');
+    const login = useField('login');
+    const password = useField('password');
+    const select = useField('select');
+    const editedUser = ref('');
+    const items = ref(['Админ', 'Измеритель', 'Технолог']);
     const upload = (values) => {
       const worker = {
         firstName: values.name,
@@ -156,110 +156,110 @@ export default {
         login: values.login,
         role: values.select,
         password: values.password,
-        id: editedUser.value.id //не забыть поменять + сделать axios
-      }
-      return worker
-    }
+        id: editedUser.value.id // не забыть поменять + сделать axios
+      };
+      return worker;
+    };
 
     const roleChanged = async (values) => {
-      const workerToDelete = upload(values)
+      const workerToDelete = upload(values);
       try {
-        workerToDelete.role = startRole
+        workerToDelete.role = startRole;
         await axios.post(
           'https://localhost:3000/api/WorkerData/Delete',
           workerToDelete
-        )
-        workerToDelete.role = values.select
+        );
+        workerToDelete.role = values.select;
         await axios.post(
           'https://localhost:3000/api/WorkerData/Post',
           workerToDelete
-        )
+        );
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
     const returnHome = () => {
-      router.push('/Admin/AdminChooseConfig')
-    }
+      router.push('/Admin/AdminChooseConfig');
+    };
     const closeComponent = () => {
-      router.push('/Admin/AdminChooseConfig')
-    }
+      router.push('/Admin/AdminChooseConfig');
+    };
     const makeFullEmits = (values) => {
       emit('handleSubmit', {
-        //доделать эмит
+        // доделать эмит
         role: values.select,
         baseRole: startRole,
         worker: upload(values),
         index: indexEdited,
         isUserExists,
         message: 'Пользователь успешно изменен'
-      })
-    }
+      });
+    };
     const makeErrorEmit = () => {
       emit('handleSubmit', {
         isUserExists
-      })
-    }
+      });
+    };
     const submit = handleSubmit(async (values) => {
-      makeFullEmits(values)
+      makeFullEmits(values);
       if (isUserExists) {
         if (startRole === values.role) {
           try {
             const response = await axios.post(
               'https://localhost:3000/api/WorkerData/Update',
               upload(values)
-            )
-            DeliverySuccsess.value = true
-            console.log(response)
+            );
+            DeliverySuccsess.value = true;
+            console.log(response);
           } catch (error) {
-            console.error(error)
+            console.error(error);
           }
         } else {
-          roleChanged(values)
+          roleChanged(values);
         }
 
-        closeComponent()
+        closeComponent();
       }
-    })
+    });
 
     const submitId = () => {
       if (findWorkerById(Id.value)) {
-        isIdSubmited.value = true
-        editedUser.value = findWorkerById(Id.value)
-        name.value.value = editedUser.value.firstName
-        surname.value.value = editedUser.value.secondName
-        login.value.value = editedUser.value.login
-        password.value.value = editedUser.value.password
-        select.value.value = editedUser.value.role
-        startRole = editedUser.value.role
-        indexEdited = findIndex(editedUser.value)
+        isIdSubmited.value = true;
+        editedUser.value = findWorkerById(Id.value);
+        name.value.value = editedUser.value.firstName;
+        surname.value.value = editedUser.value.secondName;
+        login.value.value = editedUser.value.login;
+        password.value.value = editedUser.value.password;
+        select.value.value = editedUser.value.role;
+        startRole = editedUser.value.role;
+        indexEdited = findIndex(editedUser.value);
       } else {
-        makeErrorEmit()
+        makeErrorEmit();
       }
-    }
+    };
 
     const findIndex = (workerToDelete) => {
-      let currentRoleArray
+      let currentRoleArray;
       if (deletedRole === 'Измеритель') {
-        currentRoleArray = props.measurersDelete
+        currentRoleArray = props.measurersDelete;
       } else {
-        currentRoleArray = props.technologistsDelete
+        currentRoleArray = props.technologistsDelete;
       }
-      return currentRoleArray.indexOf(workerToDelete)
-    }
+      return currentRoleArray.indexOf(workerToDelete);
+    };
 
     const findWorkerById = (Id) => {
-      const workers = props.measurersDelete.concat(props.technologistsDelete)
-      const workerToDelete = workers.filter((worker) => worker.id === Id)[0]
+      const workers = props.measurersDelete.concat(props.technologistsDelete);
+      const workerToDelete = workers.filter((worker) => worker.id === Id)[0];
       if (workerToDelete) {
-        deletedRole = workerToDelete.role
-        isUserExists = true
-        return workerToDelete
+        deletedRole = workerToDelete.role;
+        isUserExists = true;
+        return workerToDelete;
       } else {
-        isUserExists = false
-        return false
+        isUserExists = false;
+        return false;
       }
-    }
+    };
 
     return {
       submit,
@@ -275,7 +275,7 @@ export default {
       submitId,
       isIdSubmited,
       Id
-    }
+    };
   }
-}
+};
 </script>

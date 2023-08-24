@@ -53,33 +53,33 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   setup () {
-    const rail = ref(true)
+    const rail = ref(true);
 
-    const drawer = ref(true)
+    const drawer = ref(true);
 
-    const router = useRouter()
+    const router = useRouter();
 
     const username = (
       window.localStorage.getItem('firstName') +
       ' ' +
       window.localStorage.getItem('lastName')
-    ).toString()
+    ).toString();
     const goBack = () => {
-      router.push('/')
-    }
-    router.push('/Admin/AdminChooseConfig')
+      router.push('/');
+    };
+    router.push('/Admin/AdminChooseConfig');
     return {
       drawer,
       rail,
       username,
       goBack
-    }
+    };
   }
-}
+};
 </script>

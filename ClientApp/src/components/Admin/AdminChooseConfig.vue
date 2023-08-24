@@ -155,28 +155,28 @@
   </v-container>
 </template>
 <script>
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import { ref } from 'vue'
-import axios from 'axios'
+import { ref } from 'vue';
+import axios from 'axios';
 export default {
   setup () {
-    const store = useStore()
-    const actionText = ref('')
-    const router = useRouter()
-    const offsetTop = ref(0)
-    const switchmodel = ref(true)
-    const technologists = ref([])
-    const measurers = ref([])
-    const ActionSuccessesfullyFlag = ref(false)
-    const isUserExists = ref(true)
+    const store = useStore();
+    const actionText = ref('');
+    const router = useRouter();
+    const offsetTop = ref(0);
+    const switchmodel = ref(true);
+    const technologists = ref([]);
+    const measurers = ref([]);
+    const ActionSuccessesfullyFlag = ref(false);
+    const isUserExists = ref(true);
     const deleteUser = () => {
-      router.push('/Admin/AdminChooseConfig/Delete')
-    }
+      router.push('/Admin/AdminChooseConfig/Delete');
+    };
     const editUser = () => {
-      router.push('/Admin/AdminChooseConfig/Edit')
-    }
+      router.push('/Admin/AdminChooseConfig/Edit');
+    };
     const getInfoTechnologists = async () => {
       const promise = await axios
         .get('https://localhost:3000/api/WorkerData/get', {
@@ -188,17 +188,17 @@ export default {
           // technologists.value.push(response.data[0])
 
           for (let i = 0; i < response.data.length; i++) {
-            technologists.value.push(response.data[i])
+            technologists.value.push(response.data[i]);
           }
           // return response.data;
         })
         .catch(function (error) {
-          console.error(error)
-        })
-    }
+          console.error(error);
+        });
+    };
     const goBack = () => {
-      router.push('/')
-    }
+      router.push('/');
+    };
     const getInfoMeasurers = async () => {
       const promise = await axios
         .get('https://localhost:3000/api/WorkerData/get', {
@@ -208,73 +208,73 @@ export default {
         })
         .then(function (response) {
           for (let i = 0; i < response.data.length; i++) {
-            measurers.value.push(response.data[i])
+            measurers.value.push(response.data[i]);
           }
           // return response.data;
         })
         .catch(function (error) {
-          console.error(error)
-        })
-    }
+          console.error(error);
+        });
+    };
     const addUser = () => {
-      router.push('/Admin/AdminChooseConfig/AddUser')
-    }
+      router.push('/Admin/AdminChooseConfig/AddUser');
+    };
 
     const userWasRemoved = (data) => {
       if (data.isUserExists) {
         store.dispatch('throwMessage', {
           type: 'success',
           name: 'userDeletedSuccessesfully'
-        })
-        isUserExists.value = true
-        chooseNewEditCollection(data.role).splice(data.currentIndex, 1)
+        });
+        isUserExists.value = true;
+        chooseNewEditCollection(data.role).splice(data.currentIndex, 1);
       } else {
         store.dispatch('throwMessage', {
           type: 'error',
           name: 'userDoesNotExist'
-        })
+        });
       }
-    }
+    };
     const chooseNewEditCollection = (role) => {
-      if (role === 'Технолог') return technologists.value
-      else return measurers.value
-    }
+      if (role === 'Технолог') return technologists.value;
+      else return measurers.value;
+    };
     const userWasEdited = (data) => {
       if (data.isUserExists) {
         store.dispatch('throwMessage', {
           type: 'success',
           name: 'userEditedSuccessesfully'
-        })
+        });
         if (data.role === data.baseRole) {
-          //если роль не менялась
-          chooseNewEditCollection(data.role)[data.index] = data.worker
+          // если роль не менялась
+          chooseNewEditCollection(data.role)[data.index] = data.worker;
         } else {
-          //если роль поменялась
-          chooseNewEditCollection(data.baseRole).splice(data.index, 1)
-          chooseNewEditCollection(data.role).push(data.worker)
+          // если роль поменялась
+          chooseNewEditCollection(data.baseRole).splice(data.index, 1);
+          chooseNewEditCollection(data.role).push(data.worker);
         }
-        isUserExists.value = true
+        isUserExists.value = true;
       } else {
         store.dispatch('throwMessage', {
           type: 'error',
           name: 'userDoesNotExist'
-        })
+        });
       }
-    }
+    };
     const userWasAdded = (data) => {
-      chooseNewEditCollection(data.role.value.value).push(data.newUser)
-      isUserExists.value = true
+      chooseNewEditCollection(data.role.value.value).push(data.newUser);
+      isUserExists.value = true;
       store.dispatch('throwMessage', {
         type: 'success',
         name: 'userAddedSuccessesfully'
-      })
-    }
+      });
+    };
     const onScroll = (e) => {
-      offsetTop.value = e.target.scrollTop
-    }
+      offsetTop.value = e.target.scrollTop;
+    };
 
-    getInfoTechnologists()
-    getInfoMeasurers()
+    getInfoTechnologists();
+    getInfoMeasurers();
 
     return {
       userWasAdded,
@@ -292,9 +292,9 @@ export default {
       offsetTop,
       ActionSuccessesfullyFlag,
       actionText
-    }
+    };
   }
-}
+};
 </script>
 <style>
 v-switch {
