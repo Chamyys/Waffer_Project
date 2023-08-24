@@ -4,4 +4,4 @@
 module.exports = [
   // Alert notification color style classes e.g:
   // 'bg-green-100',
-]
+];

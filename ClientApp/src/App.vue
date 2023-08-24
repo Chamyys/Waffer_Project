@@ -3,46 +3,39 @@
     <div class="wrapper-content">
       <div class="view">
         <div class="container">
-          <router-view></router-view>
+          <router-view />
+          <ErrorComponent />
+          <SeeChatComponent />
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
-import { ref, onBeforeMount, onUpdated, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useStore } from 'vuex';
+import ErrorComponent from '@/components/ErrorComponent.vue';
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import SeeChatComponent from '@/components/SeeChatComponent.vue';
+
 export default {
-  //components: { MyTable, Hello },
+  components: { ErrorComponent, SeeChatComponent },
+  setup () {
+    const componentKey = ref(0);
+    const store = useStore();
+    const changed = ref(false);
+    const route = useRoute();
+    const path = computed(() => route.path);
+    const handleErrorType = () => {};
 
-  setup() {
-    let nmberofpushedbtn = ref('12')
-    const changed = ref(false)
-    //let currentComponent = ref();
-    const route = useRoute() //router
-    const path = computed(() => route.path)
-
-    const onChange = (btnnumber) => {
-      changed.value = !changed.value
-
-      // alert(btnnumber.btnnumber)
-      nmberofpushedbtn.value = btnnumber //выбранное количество строчек
-      console.log(nmberofpushedbtn)
-    }
-    function getResult() {
-      let a = changed.value
-      return a
-    }
     return {
-      onChange,
-      getResult,
       changed,
-      nmberofpushedbtn,
       path,
-    }
-  },
-}
+      handleErrorType,
+      componentKey
+    };
+  }
+};
 </script>
-
+<!---->
 <!--<component :is="currentComponent" :key="tab" @change="onChange" />-->

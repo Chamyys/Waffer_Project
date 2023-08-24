@@ -38,6 +38,8 @@ public void Update([FromBody] MTController entity)
       _mongoRepository.Update(entity);
 }
   [HttpGet]
+
+  
   public  IList<MT>  Get()
   {
       _mongoRepository.setCollectionName("MT");

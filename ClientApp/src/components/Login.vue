@@ -1,92 +1,156 @@
 @@ -0,0 +1,90 @@
 <template>
-  <div style="height: 20em"></div>
-  <h1>Личный кабинет {{ role }}</h1>
-  <div style="height: 2em"></div>
-  <v-sheet width="400" class="mx-auto">
-    <v-form fast-fail @submit.prevent>
+  <div style="height: 20em" />
+  <h1>Личный кабинет - {{ role }}</h1>
+  <div style="height: 2em" />
+  <v-sheet
+    width="400"
+    class="mx-auto"
+  >
+    <v-form
+      fast-fail
+      @submit.prevent
+    >
       <v-text-field
-        v-model="firstName"
-        label="Имя"
+        v-model="login"
+        label="Логин"
         :rules="firstNameRules"
-      ></v-text-field>
+      />
 
       <v-text-field
-        v-model="lastName"
-        label="Фамилия"
+        v-model="password"
+        label="Пароль"
         :rules="lastNameRules"
-      ></v-text-field>
+      />
 
-      <v-btn type="submit" block class="mt-2" @click="enterInAccount"
-        >Войти</v-btn
+      <v-btn
+        type="submit"
+        block
+        class="mt-2"
+        @click="checkEnterData"
       >
+        Войти
+      </v-btn>
 
-      <v-btn block class="mt-10" @click="returnHome">Назад</v-btn>
+      <v-btn
+        block
+        class="mt-10"
+        @click="returnHome"
+      >
+        Назад
+      </v-btn>
     </v-form>
   </v-sheet>
 </template>
 
 <script>
-import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { ref, computed } from 'vue';
+import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 export default {
-  setup() {
-    const store = useStore()
-    const firstName = ref('')
-    const lastName = ref('')
-    const route = useRoute() //router
-    const router = useRouter()
-    const path = computed(() => route.path)
+  setup () {
+    const store = useStore();
+    const login = ref('');
+    const password = ref('');
+    const route = useRoute(); // router
+    let succsessUserIndex = '';
+    const router = useRouter();
+    const path = computed(() => route.path);
+    const currentUsersArray = ref([]);
+    const getCurrentRoleAccounts = async () => {
+      await axios
+        .get('https://localhost:3000/api/WorkerData/get', {
+          params: {
+            curentRole: role
+          }
+        })
+        .then(function (response) {
+          for (let i = 0; i < response.data.length; i++) {
+            currentUsersArray.value.push(response.data[i]);
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    };
 
+    const checkEnterData = () => {
+      const currentUser = currentUsersArray.value.find(
+        (obj) => obj.login === login.value
+      );
+      if (
+        currentUser !== undefined &&
+        currentUser.password === password.value
+      ) {
+        succsessUserIndex = currentUsersArray.value.indexOf(
+          currentUsersArray.value.find((obj) => obj.login === login.value)
+        );
+        enterInAccount();
+      } else {
+        store.dispatch('throwMessage', {
+          type: 'error',
+          name: 'notCorrectLogin'
+        });
+      }
+    };
     const enterInAccount = () => {
-      window.localStorage.setItem('firstName', firstName.value)
-      window.localStorage.setItem('lastName', lastName.value)
-      router.push('/' + path.value.split('/')[2])
-    }
+      window.localStorage.setItem(
+        'firstName',
+        currentUsersArray.value[succsessUserIndex].firstName
+      );
+      window.localStorage.setItem(
+        'lastName',
+        currentUsersArray.value[succsessUserIndex].secondName
+      );
+      window.localStorage.setItem('role', path.value.split('/')[2]);
+      router.push('/' + path.value.split('/')[2]);
+    };
 
     const returnHome = () => {
-      router.push('/')
-    }
+      router.push('/');
+    };
+
     const getRole = (path) => {
       switch (path.value) {
         case '/Login/Measurer':
-          return 'Измерителя'
+          return 'Измеритель';
 
         case '/Login/Admin':
-          return 'Администратора'
+          return 'Администратор';
 
         case '/Login/Technologist':
-          return 'Технолога'
+          return 'Технолог';
 
         default:
-          alert('Ошибка')
+          alert('Ошибка');
       }
-    }
-    let role = getRole(path)
+    };
 
+    const role = getRole(path);
+    getCurrentRoleAccounts();
     return {
       returnHome,
-      enterInAccount,
+      checkEnterData,
       path,
       role,
-      firstName,
+      login,
       firstNameRules: [
         (value) => {
-          if (value?.length > 3) return true
+          if (value?.length > 3) return true;
 
-          return 'Имя не может быть короче трех символов.'
-        },
+          return 'Имя не может быть короче трех символов.';
+        }
       ],
-      lastName,
+      password,
       lastNameRules: [
         (value) => {
-          if (/[^0-9]/.test(value)) return true
+          if (/[^0-9]/.test(value)) return true;
 
-          return 'Фамилия не должна содержать цифр.'
-        },
-      ],
-    }
-  },
-}
+          return 'Фамилия не должна содержать цифр.';
+        }
+      ]
+    };
+  }
+};
 </script>

@@ -29,11 +29,11 @@
 </template>
 <script>
 export default {
-  setup() {
+  setup () {
     return {
       date: new Date().toLocaleString('ru'),
-      text: 'Компонент Создан: ',
-    }
-  },
-}
+      text: 'Компонент Создан: '
+    };
+  }
+};
 </script>

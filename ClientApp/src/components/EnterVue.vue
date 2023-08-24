@@ -1,6 +1,9 @@
 <template>
-  <div style="height: 10em"></div>
-  <v-card class="mx-auto" max-width="70%">
+  <div style="height: 10em" />
+  <v-card
+    class="mx-auto"
+    max-width="70%"
+  >
     <v-list density="compact">
       <v-list-subheader>Добро пожаловать!</v-list-subheader>
 
@@ -15,40 +18,46 @@
         @click="chooserole($event)"
       >
         <template #prepend>
-          <v-icon :id="item.id" :icon="item.icon"></v-icon>
+          <v-icon
+            :id="item.id"
+            :icon="item.icon"
+          />
         </template>
 
-        <v-list-item-title :id="item.id" class="text-h5">{{
-          item.text
-        }}</v-list-item-title>
+        <v-list-item-title
+          :id="item.id"
+          class="text-h5"
+        >
+          {{ item.text }}
+        </v-list-item-title>
       </v-list-item>
     </v-list>
   </v-card>
 </template>
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
-import { ref } from 'vue'
-import axios from 'axios'
+import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+import axios from 'axios';
 export default {
-  setup() {
-    const router = useRouter()
-    const name = ref('')
+  setup () {
+    const router = useRouter();
+    const name = ref('');
 
     const chooserole = (data) => {
-      let a = data.target.id
-      if (a == '') alert('Ошибка')
-      router.push({ name: 'Login', params: { role: data.target.id } })
-    }
+      const a = data.target.id;
+      if (a == '') alert('Ошибка');
+      router.push({ name: 'Login', params: { role: data.target.id } });
+    };
     return {
       items: [
         { text: 'Измеритель', icon: 'mdi-scale', id: 'Measurer' },
         { text: 'Технолог', icon: 'mdi-pencil', id: 'Technologist' },
-        { text: 'Администратор', icon: 'mdi-account', id: 'Admin' },
+        { text: 'Администратор', icon: 'mdi-account', id: 'Admin' }
       ],
       name,
-      chooserole,
-    }
-  },
-}
+      chooserole
+    };
+  }
+};
 </script>
