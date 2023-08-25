@@ -30,6 +30,7 @@ public class WaferController : Controller
         var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Get,
             "http://192.168.11.10/public_api/wafer/all")
+            
         {
             Headers =
             {

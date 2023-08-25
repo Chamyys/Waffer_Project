@@ -8,15 +8,18 @@ import { useStore } from 'vuex';
 import ProgressCircular from './ProgressCircular.vue';
 import GraphicsComponent from './Graphics.vue';
 import MetaComp from './MetaComp.vue';
-import { getWafers } from '/home/egor/WAFERPATROL/ClientApp/SvrApiClient/svrApi.js';
+import {
+  getWafers,
+  getProcessByWafer
+} from '/home/egor/WAFERPATROL/ClientApp/SvrApiClient/svrApi.js';
 export default {
   components: {
     ProgressCircular,
     GraphicsComponent
   },
   setup () {
-    const localWafers = async () => {
-      console.log(await getWafers());
+    const getProcessByWaferProxy = async () => { //Тест новой функции api - вставить в логику и удалить 
+      console.log(await getProcessByWafer(createNewWafel.value));
     };
     const isDeleteButtonDisabled = ref(false);
     const configName = ref();
@@ -330,15 +333,11 @@ export default {
     )} ${window.localStorage.getItem('lastName')}`;
 
     const getWaferNumbers = async () => {
+      //функция на получение апи
       try {
-        const promise = await axios.get(
-          'https://localhost:3000/api/WaferInLab/Get'
-        );
-        const dataPromise = await promise;
-        const wafels = dataPromise.data;
-        allWaffelsInLabArray.value = dataPromise.data;
-        waferNumbers.value = wafels.map(function (item) {
-          return item.id;
+        allWaffelsInLabArray.value = await getWafers();
+        waferNumbers.value = allWaffelsInLabArray.value.map(function (item) {
+          return item.waferId;
         });
       } catch (error) {
         store.dispatch('throwMessage', {
@@ -682,6 +681,7 @@ export default {
     getWaferNumbers();
     getConfigObjects();
     return {
+      getProcessByWaferProxy,
       deleteConfig,
       chunks,
       textareatransition,
@@ -705,7 +705,6 @@ export default {
       configName,
       createNewElementsConfigFlag,
       startupNumber,
-      localWafers,
       currentMissionType,
       timeoutId,
       showCancelBtn,
@@ -948,8 +947,8 @@ export default {
       <ProgressCircular />
     </template>
   </v-snackbar>
-  <v-btn @click="localWafers()">
-    ryjgrf
+  <v-btn @click="getProcessByWaferProxy()">
+    Тест функции api - удалить
   </v-btn>
 </template>
 <style>

@@ -1,6 +1,3 @@
-
-
-
 namespace Models;
 
 public class  ApiKeyModel
@@ -9,8 +6,3 @@ public class  ApiKeyModel
     public string value {get ; set;}
 
 }
-   
-
-   
-
-

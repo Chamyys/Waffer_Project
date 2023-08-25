@@ -23,6 +23,7 @@ public void Post([FromBody] MT entity)
     _mongoRepository.Create(entity);
 }
 
+
  [HttpPost]
 public void Delete([FromBody] MT entity)
 {
@@ -38,8 +39,6 @@ public void Update([FromBody] MTController entity)
       _mongoRepository.Update(entity);
 }
   [HttpGet]
-
-  
   public  IList<MT>  Get()
   {
       _mongoRepository.setCollectionName("MT");
