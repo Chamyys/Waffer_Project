@@ -49,7 +49,6 @@ const vuetify = createVuetify({
 const app = createApp(App);
 app.use(store);
 app.config.globalProperties.$signalR = signalR;
-
 app.use(router);
 app.use(vuetify);
 app.use(Vue3Mq);

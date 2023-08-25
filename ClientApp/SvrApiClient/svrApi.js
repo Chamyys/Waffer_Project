@@ -1,20 +1,25 @@
 import axios from 'axios'
+//import config from './svrApiKey.json'
 
 const api = axios.create({
-  baseURL: 'https://ваш-базовый-URL-api.com',
+  baseURL: 'https://localhost:3000/api/proxy/',
 })
 
 export default api
 
-export const getUsers = async () => {
+export const getWafers = async () => {
   try {
-    const response = await api.get('/users')
+    const response = await api.get('wafer/all', {
+      // headers: {
+      //   'x-api-key': config.key,
+      //},
+    })
     return response.data
   } catch (error) {
     console.error(error)
   }
 }
-
+/*
 export const getUser = async (userId) => {
   try {
     const response = await api.get(`/users/${userId}`)
@@ -32,9 +37,4 @@ export const createUser = async (user) => {
     console.error(error)
   }
 }
-
-axios.get('https://api.example.com/data', {
-  headers: {
-    'Custom-Header': 'Value',
-  },
-})
+*/

@@ -1,5 +1,5 @@
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useThrottleFn } from '@vueuse/core';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
@@ -7,13 +7,17 @@ import crc32 from 'crc/crc32';
 import { useStore } from 'vuex';
 import ProgressCircular from './ProgressCircular.vue';
 import GraphicsComponent from './Graphics.vue';
-
+import MetaComp from './MetaComp.vue';
+import { getWafers } from '/home/egor/WAFERPATROL/ClientApp/SvrApiClient/svrApi.js';
 export default {
   components: {
     ProgressCircular,
     GraphicsComponent
   },
   setup () {
+    const localWafers = async () => {
+      console.log(await getWafers());
+    };
     const isDeleteButtonDisabled = ref(false);
     const configName = ref();
     const rules = ref([]);
@@ -701,6 +705,7 @@ export default {
       configName,
       createNewElementsConfigFlag,
       startupNumber,
+      localWafers,
       currentMissionType,
       timeoutId,
       showCancelBtn,
@@ -879,11 +884,10 @@ export default {
     </div>
     <div style="height: 15em" />
     <div
-
       style="width: 90%; padding-left: 10%"
       v-if="
         !textareatransition &&
-        createNewElementsConfig &&
+          createNewElementsConfig &&
           createNewElementsConfig.id !== '' &&
           waferChoosedFlag &&
           !isNewConfigInProgress &&
@@ -944,6 +948,9 @@ export default {
       <ProgressCircular />
     </template>
   </v-snackbar>
+  <v-btn @click="localWafers()">
+    ryjgrf
+  </v-btn>
 </template>
 <style>
 .column {

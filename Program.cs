@@ -16,7 +16,7 @@ using Microsoft.AspNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddHttpClient();
 // Add services to the container.
 
 /* 
@@ -32,15 +32,24 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
     options.Configuration = "localhost";
     options.InstanceName = "wafer_id_in_redis-";
 });
-
-
   builder.Services.AddSingleton<IWaferRedisService,WaferRedisService>();
   builder.Services.AddTransient<IChatHub,ChatHub>();
-  builder.Services.AddTransient<IRabbitMqConsumer>(provider => new RabbitMqConsumer("localhost","MyQueue",provider.GetService<IWaferRedisService>()));
+builder.Services.AddTransient<IRabbitMqConsumer>(provider => new RabbitMqConsumer("localhost", "MyQueue", provider.GetService<IWaferRedisService>()));
 
-  //builder.Services.AddHttpClient("SvrApiClient", httpClient =>
-  //{
-   // httpClient.BaseAddress = new Uri("https://api.svr.com/");
+
+
+
+builder.Configuration.AddJsonFile("/home/egor/WAFERPATROL/SvrApiKey.json");
+builder.Services.Configure<ApiKeyModel>(builder.Configuration.GetSection("SvrApiKey"));
+builder.Services.BuildServiceProvider();
+builder.Services.AddSingleton<ApiKeyModel>();
+
+
+builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
+
+            //builder.Services.AddHttpClient("SvrApiClient", httpClient =>
+//{
+// httpClient.BaseAddress = new Uri("https://api.svr.com/");
 
     // using Microsoft.Net.Http.Headers;
     // The GitHub API requires two headers.
@@ -48,7 +57,6 @@ builder.Services.AddSingleton<IMongoRepository>(sp =>
 
   builder.Services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
   builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(builder.Configuration.GetConnectionString("Mongo")));
-
 
 
 
